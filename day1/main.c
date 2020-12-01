@@ -3,7 +3,6 @@
 #include "../utils/util.h"
 
 /*
- *
  * The goal of day 1 is to find the two values in the input 
  * that sum to 2020 and calculate their product. 
  *
@@ -11,6 +10,13 @@
  * and calulating their product.
  *
  * Note that provided input has no negative values
+ *
+ * If I was to do this again, I think a better solution would be 
+ * to sort the inputs in an array first. Then you could binary 
+ * search for the value you want. If it didn't exist you move 
+ * on to the next value. This would only slightly help in part 2
+ * though as you would have to add the first two inputs then 
+ * search on their sum. Still better though. 
  */
 
 
