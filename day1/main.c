@@ -7,8 +7,8 @@
  * The goal of day 1 is to find the two values in the input 
  * that sum to 2020 and calculate their product. 
  *
- *
- *
+ * Part 2 has us looking for 3 values that sum to 2020
+ * and calulating their product.
  */
 
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		while(inputToAdd) {
 			int toAdd = atoi(inputToAdd->value);
 			if( (currValue + toAdd) == 2020 ) {
-				printf("Key: %d\n", toAdd * currValue);
+				printf("Part1 Key: %d\n", toAdd * currValue);
 				return 1;
 			}
 
