@@ -1,13 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "util.h"
 
-struct input {
-	char * value;		//value of input field
-	struct input * next;	//next input that was read in 
-};
-
-struct input * inputList = NULL;		//head of input list 
+struct input * inputList = NULL;		
 
 //Creates new input node and adds to end of input list
 //@param value -- pointer to input string to store
@@ -76,19 +72,3 @@ int readInput(char * inputfile) {
 }
 
 
-int main(int argc, char *argv[]) {
-
-	if(argc != 2) return -1;
-
-	char *input;
-		
-	//call read input for testing right now
-	readInput(argv[1]);
-
-	//verify that readInput works
-	struct input * curr = inputList;
-	while(curr) {
-		printf("Value stored: %s\n", curr->value);
-		curr = curr->next;
-	}
-}
