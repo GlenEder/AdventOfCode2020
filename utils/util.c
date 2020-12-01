@@ -54,7 +54,7 @@ int readInput(char * inputfile) {
 	
 	if(fp == NULL) return -1;	//ensure that file opened 
 
-	printf("File <%s> opened\n", inputfile);
+	//printf("File <%s> opened\n", inputfile);
 	
 	char * line;					//current line being read from file
 	size_t length = 0;				//holds address of variable that holds input buffer size	 	
@@ -62,7 +62,7 @@ int readInput(char * inputfile) {
 
 	//read file line by line 
 	while((lLength = getline(&line, &length, fp)) != -1) {
-		printf("Read line(%ld): %s", lLength, line);	//print read line for debugging		
+		//printf("Read line(%ld): %s", lLength, line);	//print read line for debugging		
 		addInputToList(line, lLength);
 	} 	
 	
