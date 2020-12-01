@@ -67,11 +67,8 @@ void part2() {
 			int secondInt = atoi(second->value);	//get int rep of second value
 			
 			//see if first two inputs are over 2020
-			if( (firstInt + secondInt) >= 2020) {
-				//move on because adding a third isnt going to help
-				second = second->next;
-			}	
-			else {
+			if( (firstInt + secondInt) < 2020) {
+			
 
 				//WE NEED MORE!!!!
 				struct input * third = second->next;		//get pointer to next input
@@ -89,13 +86,16 @@ void part2() {
 				}
 			}
 
-			//go to next node
+			//go to next node cause a third aint helping things
 			second = second->next;	
 		}
 
 		//go to next starting node
 		first = first->next;
 	}
+
+	//We fucked up didn't we
+	printf("No match found...\n");
 
 }
 
@@ -111,5 +111,5 @@ int main(int argc, char *argv[]) {
 	readInput(argv[1]);
 	
 	part1();
-	
+	part2();	
 }
