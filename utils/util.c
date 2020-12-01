@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct input {
 	char * value;		//value of input field
@@ -24,7 +25,7 @@ int addInputToList(char * value, ssize_t length) {
 
 	newInput->value = malloc(length * sizeof(char *));		//create memory to store value
 	if(newInput->value == NULL) { free(newInput); return -1; }	//free created node if value malloc fails	
-	newInput->value = value;					//set node value		
+	memcpy(newInput->value, value, length);				//set node value		
 
 	//check that there is something already in list
 	if(inputList) {
