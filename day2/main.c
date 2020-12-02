@@ -39,10 +39,21 @@ void part1() {
 		int passLength = strlength(curr->value) - colonIndex;			//calc length of password 		 	
 		char * password = substring(curr->value, colonIndex + 2, passLength);	//get password from input to check   
 		
-		printf("password: %s", password);
+		//Verify password
+		int reqCharsFound = 0;
+		for(int i = 0; i < passLength; i++) {
+			if(*(password + i) == reqChar) reqCharsFound++;			//check if char matches reqirement
+		}
+		
+		//check chars found against requirements
+		if(reqCharsFound >= minReq && reqCharsFound <= maxReq) numValid++;	//increase number of valid passwords counter
+
 		free(password);								//free memory password was using  
 		curr = curr->next;							//go to next input in list
 	}
+
+	//print results
+	printf("Number Valid Passwords: %u\n", numValid);	
 	
 }
 
