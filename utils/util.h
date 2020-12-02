@@ -7,6 +7,7 @@ struct input {
 };
 
 //Methods 
+void 	cleanup(void);
 int 	readInput(char *);
 char *	substring(char *, int, int);	
 int 	indexOfChar(char *, char, int);

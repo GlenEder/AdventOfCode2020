@@ -5,6 +5,17 @@
 
 struct input * inputList = NULL;		
 
+//Frees all memory taken in input list
+void cleanup() {
+	
+	while(inputList) {
+		struct input * toFree = inputList;	//get pointer to current list node
+		inputList = inputList->next;		//move looping pointer to next node
+		free(toFree);				//free nodes memory 
+	}
+	
+}
+
 //Creates new input node and adds to end of input list
 //@param value -- pointer to input string to store
 //@param length -- size of input string
