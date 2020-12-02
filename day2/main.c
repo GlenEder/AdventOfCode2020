@@ -9,7 +9,18 @@
  * Given input "1-3 a: abcde", there must contain at 
  * least 1 instance 'a' and at most 3 instances of 'a'
  * in the following passcode. Which in the provided input 
- * will pass. 
+ * will pass.
+ * 
+ * Part 2 has us instead checking to see if the chars at 
+ * the positions indicated by the values (originally the
+ * range 1-3 in prev example) are not equal, but one of 
+ * the two chars is equal to the required char. 
+ * 
+ * To improve upon this solution, I would move the bulk of 
+ * the input handling code (ie. substring calls and what not) 
+ * to a different method as both parts used the same code there.
+ * Ideally it could return a struct that contained the password, 
+ * first number, second number, and the required char.  
  */
 
 
