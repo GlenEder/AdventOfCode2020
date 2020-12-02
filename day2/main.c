@@ -11,6 +11,22 @@
  * in the following passcode. Which in the provided input 
  * will pass. 
  */
+
+
+void part1() {
+
+	struct input * curr = inputList;		//get pointer to beginning of input list
+	unsigned int numValid = 0;			//counter for valid passwords found
+	
+	//loop through input list
+	while(curr) {
+	
+		
+		curr = curr->next;			//go to next input in list
+	}
+	
+}
+
 int main(int argc, char *argv[]) {
 
 	//verify program args
@@ -22,6 +38,5 @@ int main(int argc, char *argv[]) {
 	//read input file
 	if( readInput(argv[1]) != 1 ) { return -1; } 	//exit program on read file error
 	
-
-	
+	part1();	
 }
