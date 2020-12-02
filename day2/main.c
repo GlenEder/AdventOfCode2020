@@ -21,12 +21,18 @@ void part1() {
 	//loop through input list
 	while(curr) {
 	
-		char * minReqStr = substring(curr->value, 0, indexOfChar(curr->value, '-', 0));		//get substring of first param
-		int minReq = atoi(minReqStr);		 
-		printf("minReq: %d\n", minReq);
-		free(minReqStr);
-
+		int dashIndex = indexOfChar(curr->value, '-', 0);			//get index of spliting dash '-' in input
+		char * minReqStr = substring(curr->value, 0, dashIndex);		//get substring of first param
+		int minReq = atoi(minReqStr);						//get int value of substring	 
+		free(minReqStr);							//free memory for substring
+		
+		int firstSpaceIndex = indexOfChar(curr->value, ' ', dashIndex);		//get index of first space in input
+		int maxReqLength = firstSpaceIndex - dashIndex + 1;			//calc substring length 
+		char * maxReqStr = substring(curr->value, dashIndex + 1, maxReqLength); //get second param value
+		int maxReq = atoi(maxReqStr);						//get int value of second param 
+		free(maxReqStr);							//free substring memory 
 	
+		printf("%d - %d\n", minReq, maxReq);	//debug info
 		curr = curr->next;			//go to next input in list
 	}
 	
