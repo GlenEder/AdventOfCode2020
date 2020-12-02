@@ -58,6 +58,49 @@ void part1() {
 	
 }
 
+void part2() {
+
+	struct input * curr = inputList;		//get pointer to beginning of input list
+	unsigned int numValid = 0;			//counter for valid passwords found
+	
+	//loop through input list
+	while(curr) {
+	
+		int dashIndex = indexOfChar(curr->value, '-', 0);			//get index of spliting dash '-' in input
+		char * minReqStr = substring(curr->value, 0, dashIndex);		//get substring of first param
+		int minReq = atoi(minReqStr);						//get int value of substring	 
+		free(minReqStr);							//free memory for substring
+		
+		int firstSpaceIndex = indexOfChar(curr->value, ' ', dashIndex);		//get index of first space in input
+		int maxReqLength = firstSpaceIndex - dashIndex + 1;			//calc substring length 
+		char * maxReqStr = substring(curr->value, dashIndex + 1, maxReqLength); //get second param value
+		int maxReq = atoi(maxReqStr);						//get int value of second param 
+		free(maxReqStr);							//free substring memory 
+				
+		int reqCharIndex = firstSpaceIndex + 1;					//index of char password requires 
+		char reqChar = *(curr->value + reqCharIndex);				//get char password requires 
+		
+		int colonIndex = indexOfChar(curr->value, ':', reqCharIndex);		//finde index of colon in input
+		int passLength = strlength(curr->value) - colonIndex;			//calc length of password 		 	
+		char * password = substring(curr->value, colonIndex + 2, passLength);	//get password from input to check   
+	
+			
+		//Verify password
+		char firstPosChar = *(password + minReq - 1);				//get char at first position 
+		char secPosChar = *(password + maxReq - 1);				//get char at second position 
+		if( (firstPosChar == reqChar || secPosChar == reqChar) && 
+		     firstPosChar != secPosChar) {
+			numValid++;							//increment number valid counter
+		}
+		
+		free(password);								//free memory password was using  
+		curr = curr->next;							//go to next input in list
+	}
+
+	//print results
+	printf("Number Valid Passwords(V2): %u\n", numValid);	
+}
+
 int main(int argc, char *argv[]) {
 
 	//verify program args
@@ -70,4 +113,5 @@ int main(int argc, char *argv[]) {
 	if( readInput(argv[1]) != 1 ) { return -1; } 	//exit program on read file error
 	
 	part1();	
+	part2();
 }
