@@ -38,7 +38,8 @@ void part1() {
 		int colonIndex = indexOfChar(curr->value, ':', reqCharIndex);		//finde index of colon in input
 		int passLength = strlength(curr->value) - colonIndex;			//calc length of password 		 	
 		char * password = substring(curr->value, colonIndex + 2, passLength);	//get password from input to check   
-		
+	
+			
 		//Verify password
 		int reqCharsFound = 0;
 		for(int i = 0; i < passLength; i++) {
