@@ -89,3 +89,34 @@ char * substring(char * string, int start, int length) {
 
 	return toReturn;
 }
+
+//Returns index of character in string 
+//@param string -- string to look in 
+//@param toFind -- character looking for 
+//@param start -- starting index to look for
+//
+//@return value of index, -1 if not found
+int indexOfChar(char * string, char toFind, int start) {
+
+	char * curr = string + start;		//get starting position
+	int index = 0;				//index tracker 
+	while(curr) {
+		if(*curr == toFind) {
+			return index;		//return index if char found
+		}
+	
+		index++;			//increment index tracker
+		curr++;				//go to next character
+	}
+
+	return -1;				//char not found
+}
+
+//Returns index of character in string starting at the beginning of string
+//@param string -- string to look in 
+//@param toFind -- char to look for
+//
+//@return index of char, -1 if not found
+int indexOfChar(char * string, char toFind) {
+	return indexOfChar(string, toFind, 0);	//call super method with start as 0
+}
