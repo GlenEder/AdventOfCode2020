@@ -71,4 +71,21 @@ int readInput(char * inputfile) {
 	return 1;			//return success signal 
 }
 
+//Returns pointer to c string that is substring of provided string 
+//@param string -- pointer to character array to get substring of 
+//@param start -- index of array to start at
+//@param length -- how far to go in string (includes start index value)
+//
+//@return pointer to desired substring 
+char * substring(char * string, int start, int length) {
+		
+	char * toReturn = malloc( (length + 1) * sizeof(char));		//create char array to store substring in 
+		
+	for(int i = 0; i < length; i++) {
+		*(toReturn + i)  = *(string + start + i);			//store characters in return array
+	}
 
+	*(toReturn + length + 1)  = '\0'; 					//set null term
+
+	return toReturn;
+}
