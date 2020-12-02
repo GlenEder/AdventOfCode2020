@@ -112,11 +112,3 @@ int indexOfChar(char * string, char toFind, int start) {
 	return -1;				//char not found
 }
 
-//Returns index of character in string starting at the beginning of string
-//@param string -- string to look in 
-//@param toFind -- char to look for
-//
-//@return index of char, -1 if not found
-int indexOfChar(char * string, char toFind) {
-	return indexOfChar(string, toFind, 0);	//call super method with start as 0
-}

@@ -9,6 +9,7 @@ struct input {
 //Methods 
 int 	readInput(char *);
 char *	substring(char *, int, int);	
+int 	indexOfChar(char *, char, int);
 
 //Global Variables
 extern struct input * inputList; 
