@@ -21,10 +21,12 @@ void part1() {
 	//loop through input list
 	while(curr) {
 	
-		char * params = substring(curr->value, 0, 3);
-		printf("param: %s\n", params);
+		char * minReqStr = substring(curr->value, 0, indexOfChar(curr->value, '-', 0));		//get substring of first param
+		int minReq = atoi(minReqStr);		 
+		printf("minReq: %d\n", minReq);
+		free(minReqStr);
 
-		free(params);			
+	
 		curr = curr->next;			//go to next input in list
 	}
 	
