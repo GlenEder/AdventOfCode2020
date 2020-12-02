@@ -85,7 +85,7 @@ char * substring(char * string, int start, int length) {
 		*(toReturn + i)  = *(string + start + i);			//store characters in return array
 	}
 
-	*(toReturn + length + 1)  = '\0'; 					//set null term
+	*(toReturn + length)  = '\0'; 					//set null term
 
 	return toReturn;
 }
