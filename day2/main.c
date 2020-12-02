@@ -21,7 +21,10 @@ void part1() {
 	//loop through input list
 	while(curr) {
 	
-		
+		char * params = substring(curr->value, 0, 3);
+		kprintf("param: %s\n", params);
+
+		free(params);			
 		curr = curr->next;			//go to next input in list
 	}
 	
