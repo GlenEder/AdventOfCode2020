@@ -100,7 +100,7 @@ int indexOfChar(char * string, char toFind, int start) {
 
 	char * curr = string + start;		//get starting position
 	int index = start;			//index tracker 
-	while(curr) {
+	while(*curr) {
 		if(*curr == toFind) {
 			return index;		//return index if char found
 		}
@@ -119,6 +119,6 @@ int indexOfChar(char * string, char toFind, int start) {
 //@return length of provided string
 int strlength(char * string) {
 	int length = 0;				//length counter
-	while(string + length) { length++; }	//increment counter
+	while(*(string++)) { length++; }		//increment counter
 	return length;				//return length counter
 }
