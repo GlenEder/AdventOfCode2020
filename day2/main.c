@@ -31,8 +31,13 @@ void part1() {
 		char * maxReqStr = substring(curr->value, dashIndex + 1, maxReqLength); //get second param value
 		int maxReq = atoi(maxReqStr);						//get int value of second param 
 		free(maxReqStr);							//free substring memory 
+				
+		int reqCharIndex = firstSpaceIndex + 1;					//index of char password requires 
+		printf("reqChar Index: %d\t", reqCharIndex);
+		char reqChar = *(curr->value + reqCharIndex);			//get char password requires 
+		
 	
-		printf("%d - %d\n", minReq, maxReq);	//debug info
+		printf("%d <= #%c <= %d\n", minReq, reqChar, maxReq);	//debug info
 		curr = curr->next;			//go to next input in list
 	}
 	
