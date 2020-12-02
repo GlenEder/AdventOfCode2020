@@ -33,13 +33,14 @@ void part1() {
 		free(maxReqStr);							//free substring memory 
 				
 		int reqCharIndex = firstSpaceIndex + 1;					//index of char password requires 
-		printf("reqChar Index: %d\t", reqCharIndex);
 		char reqChar = *(curr->value + reqCharIndex);				//get char password requires 
 		
 		int colonIndex = indexOfChar(curr->value, ':', reqCharIndex);		//finde index of colon in input
-		 	
-		//char * password = substring(curr->value, colonIndex + 2, passLength);	//get password from input to check   
+		int passLength = strlength(curr->value) - colonIndex;			//calc length of password 		 	
+		char * password = substring(curr->value, colonIndex + 2, passLength);	//get password from input to check   
 		
+		printf("password: %s", password);
+		free(password);								//free memory password was using  
 		curr = curr->next;							//go to next input in list
 	}
 	
