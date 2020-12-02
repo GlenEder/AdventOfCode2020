@@ -112,3 +112,13 @@ int indexOfChar(char * string, char toFind, int start) {
 	return -1;				//char not found
 }
 
+
+//Returns length of string provided
+//@param string -- string to find length of 
+//
+//@return length of provided string
+int strlength(char * string) {
+	int length = 0;				//length counter
+	while(string + length) { length++; }	//increment counter
+	return length;				//return length counter
+}
