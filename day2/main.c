@@ -13,6 +13,15 @@
  */
 int main(int argc, char *argv[]) {
 
+	//verify program args
+	if(argc != 2) { 
+		printf("Ussage: <program> <input file>\n");
+		return -1;
+	}
+
+	//read input file
+	if( readInput(argv[1]) != 1 ) { return -1; } 	//exit program on read file error
+	
 
 	
 }
