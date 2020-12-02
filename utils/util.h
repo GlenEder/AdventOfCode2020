@@ -7,8 +7,8 @@ struct input {
 };
 
 //Methods 
-int readInput(char *);
-
+int 	readInput(char *);
+char *	substring(char *, int, int);	
 
 //Global Variables
 extern struct input * inputList; 
