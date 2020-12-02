@@ -99,7 +99,7 @@ char * substring(char * string, int start, int length) {
 int indexOfChar(char * string, char toFind, int start) {
 
 	char * curr = string + start;		//get starting position
-	int index = 0;				//index tracker 
+	int index = start;			//index tracker 
 	while(curr) {
 		if(*curr == toFind) {
 			return index;		//return index if char found
