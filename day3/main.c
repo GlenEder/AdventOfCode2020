@@ -20,37 +20,13 @@
  * 1 right, 2 down (what a surprise)
  */
 
-void part1() {
-	int lLength = strlength(inputList->value);	//get length of input line
-	lLength--;					//account for null term
-	int rightMovement = 3;				//how far right we move each row
-	int currPos = 0;				//curret x position on map 
-	
-	int numTrees = 0;				//tree counter 
-	struct input * curr = inputList;		//get pointer to beginning of list
-		
-	//loop through lines, checking for those cheeky tress
-	while(curr) {
-	
-		//printf("Pos: %d, charAt: %c, row: %s\n", currPos, *(curr->value + currPos), curr->value); 	
-		
-		//see if current position is a good old tree
-		if(*(curr->value + currPos) == '#') numTrees++;
-		
-		currPos += rightMovement;		//increase position of sled
-		currPos %= lLength;			//go back to zero if at end	
-		curr = curr->next;
-	}
 
-	//have to go one extra row for problem 
-	if(*(inputList->value + currPos) == '#') numTrees++;	
-
-	printf("Number of trees we ran into: %d\n", numTrees);
-}
-
-
+//Returns number of trees ran into on provided slope
+//@param x -- movement in x dir each step
+//@param y -- movement in y dir (downward) each step
+//
+//@return number of trees ran into
 int checkSlope(int x, int y) {
-
 	
 	int lLength = strlength(inputList->value);	//get length of input line
 	lLength--;					//account for null term
@@ -94,8 +70,14 @@ int checkSlope(int x, int y) {
 	//check for one last tree
 	if( *(curr->value + currPos) == '#') numTrees++; 
 
+	//return total trees hit
 	return numTrees;
 }
+
+void part1() {
+	printf("Number of trees we ran into: %d\n", checkSlope(3, 1));
+}
+
 
 void part2() {
 
