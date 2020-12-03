@@ -99,8 +99,6 @@ int checkSlope(int x, int y) {
 
 void part2() {
 
-	printf("trees3: %d\n", checkSlope(3, 1));
-	return;
 	
 	//find trees hit on each slope
 	int trees1 = checkSlope(1, 1);
