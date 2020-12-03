@@ -15,11 +15,26 @@
 
 void part1() {
 	int lLength = strlength(inputList->value);	//get length of input line
-	lLength--;					//account for terminating char	
 	int rightMovement = 3;				//how far right we move each row
 	int currPos = 0;				//curret x position on map 
 	
-	
+	int numTrees = 0;				//tree counter 
+	struct input * curr = inputList;		//get pointer to beginning of list
+		
+	//loop through lines, checking for those cheeky tress
+	while(curr) {
+		
+		//see if current position is a good old tree
+		if(*(curr->value + currPos) == '#') {
+			numTrees++;
+		}
+
+		currPos += rightMovement;		//increase position of sled
+		currPos %= lLength;			//go back to zero if at end	
+		curr = curr->next;
+	}	
+
+	printf("Number of trees we ran into: %d\n", numTrees);
 }
 
 int main(int argc, char *argv[]) {
