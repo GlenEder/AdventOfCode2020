@@ -18,6 +18,12 @@
  * 5 right, 1 down 
  * 7 right, 1 down 
  * 1 right, 2 down (what a surprise)
+ * 
+ * After completeing this day, I think making 
+ * the fucntion checkSlope first instead of doing 
+ * it in part 1's method would have saved some
+ * time. But other than that, I'm pretty proud of 
+ * of this implementation. 
  */
 
 
