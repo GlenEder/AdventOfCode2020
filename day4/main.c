@@ -35,32 +35,32 @@ void setField(char * fieldData, struct passport * pass) {
 	char c = *fieldData;	
 	switch(c) {
 		case 'b':							//birth year field
-			memcpy(pass->byr, data, strlength(data));
+			pass->byr = data;
 			break;
 		case 'i':							//issue year field
-			memcpy(pass->iyr, data, strlength(data));
+			pass->iyr = data;
 			break;
 		case 'e':
 			if(*(fieldData + 1) == 'y') {				//expiration year field
-				memcpy(pass->eyr, data, strlength(data));
+				pass->eyr = data;
 			}
 			else {
-				memcpy(pass->ecl, data, strlength(data));	//eye color field
+				pass->ecl = data;				//eye color field
 			}
 			break;
 		case 'h':							
 			if(*(fieldData + 1) == 'c') {				//hair color field
-				memcpy(pass->hcl, data, strlength(data));
+				pass->hcl = data;
 			}
 			else {							//height field
-				memcpy(pass->hgt, data, strlength(data));
+				pass->hgt = data;
 			}
 			break;
 		case 'p':							//passport id field
-			memcpy(pass->pid, data, strlength(data));
+			pass->pid = data;
 			break;
 		case 'c':							//country code field 
-			memcpy(pass->cid, data, strlength(data));
+			pass->cid = data;
 			break;
 	}	
 	
@@ -89,8 +89,7 @@ int getNextPassport(struct passport * pass) {
 				int subLength = end - start;						//calc length of substring
 				char * fieldString = substring(currInput->value, start, subLength);	//get substring for field
 				setField(fieldString, pass); 						//handle the field string 		
-				start = i + 1;								//update start of next field
-				free(fieldString);							//free substring memory 	
+				start = i + 1;								//update start of next field 	
 			}
 		}
 
@@ -117,6 +116,7 @@ void resetPassport(struct passport * pass) {
 	pass->cid = NULL;
 }
 
+
 void part1() {
 	
 	//initalize passport struct 
@@ -129,9 +129,28 @@ void part1() {
 	currPass->ecl = malloc(sizeof(char *));
 	currPass->pid = malloc(sizeof(char *));
 	currPass->cid = malloc(sizeof(char *));
+
+	int validPassports = 0;	
+
 	
 	resetPassport(currPass);
-	getNextPassport(currPass);
+	//while( getNextPassport(currPass) == 1 ) {
+	if(getNextPassport(currPass)) {
+		//check for null values, this indicates incomplete passport
+		if(	currPass->byr &&
+			currPass->iyr &&
+			currPass->eyr &&
+			currPass->hgt &&
+			currPass->hcl &&
+			currPass->ecl &&
+			currPass->pid &&
+			currPass->cid 
+		  ) {
+			validPassports++;
+		}
+	} 
+
+	printf("Valid Passports: %d\n", validPassports);
 }
 
 int main(int argc, char *argv[]) {
