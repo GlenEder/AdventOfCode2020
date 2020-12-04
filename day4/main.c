@@ -69,7 +69,12 @@ void setField(char * fieldData, struct passport * pass) {
 
 //goes through input list and fills passport struct 
 //@param passport * -- pointer to passport object to fill  
-void getNextPassport(struct passport * pass) {
+//
+//@return 1 if successful in getting new passport, -1 if fail
+int getNextPassport(struct passport * pass) {
+
+	//base case to get out 
+	if(currInput == NULL) { return -1; }
 
 	//go through input lines till new line is hit 
 	while(*(currInput->value) != '\n') {
@@ -94,6 +99,8 @@ void getNextPassport(struct passport * pass) {
 	
 	//move currInput one more time for next time this is called
 	currInput = currInput->next;
+
+	return 1;
 }
 
 
