@@ -26,7 +26,13 @@ struct input * currInput;
 
 //Looks at the string passed to it and sets the corrisponding field in pass
 void setField(char * fieldData, struct passport * pass) {
-	printf("Analyzing %s\n", fieldData);
+	printf("Analyzing %s --- ", fieldData);
+
+	char * data = substring(fieldData, 4, strlength(fieldData) - 4);
+	printf("Data = %s\n", data); 
+	
+	
+	
 }
 
 //goes through input list and fills passport struct 
