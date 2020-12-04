@@ -173,6 +173,7 @@ int isValid(struct passport * pass) {
 	if(pass->byr) {
 		int year = atoi(pass->byr);				//get year in int form 
 		if(year < 1920 || year > 2002) { return 0; }		//see if out of vaild range
+		printf("Valid Birth Year:");
 	}
 	else { return 0; }
 
@@ -180,6 +181,7 @@ int isValid(struct passport * pass) {
 	if(pass->iyr) {
 		int year = atoi(pass->iyr);				//get year in int form 
 		if( year < 2010 || year > 2020 ) { return 0; }		//check if in range
+		printf("Valid Issue Year:");
 	}
 	else { return 0; }
 	
@@ -187,6 +189,7 @@ int isValid(struct passport * pass) {
 	if(pass->eyr) {
 		int year = atoi(pass->eyr);				//once again get the int form 
 		if( year < 2020 || year > 2030 ) { return 0; }		//and check the range
+		printf("Valid Exp Year:");
 	}
 	else { return 0; }
 
@@ -221,6 +224,7 @@ int isValid(struct passport * pass) {
 		}	
 
 		free(type);									//free substring memory
+		if(!notValid) printf("Valid Height:");
 		if(notValid) return 0;								//return 0 if not valid 
 	}	
 	else { return 0; } 
@@ -234,8 +238,9 @@ int isValid(struct passport * pass) {
 			
 			//set good eye
 			isGoodEye = 1;
+			printf("Vaild Eye Color:");
 		}	
-
+		
 		if(!isGoodEye) return 0;
 	}
 	else { return 0; }	
@@ -245,12 +250,14 @@ int isValid(struct passport * pass) {
 	if(pass->pid) {
 		int pidLength = strlength(pass->pid);
 		if(pidLength != 10) return 0;
-		for(int i = 0; i < pidLength; i++) {
-			if(*(pass->pid + i) < '0' && *(pass->pid + i) > '9') return 0;
+		for(int i = 0; i < pidLength - 1; i++) {
+			if(*(pass->pid + i) < '0' || *(pass->pid + i) > '9') return 0;
 		}
+		printf("Valid PID");
 	}
 	else {return 0;}
 
+	printf("\n");
 
 	//is valid 
 	return 1;
@@ -277,7 +284,7 @@ void part2() {
 		//Check part 2 extra conditions
 		if(isValid(currPass)) { validPassports++; }
 		
-		printf("\rPassports Checked: %d", ++passesChecked);
+		printf("Passports Checked: %d\n", ++passesChecked);
 		resetPassport(currPass);
 	} 
 	
