@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../utils/util.h"
 
 /*
@@ -26,11 +27,42 @@ struct input * currInput;
 
 //Looks at the string passed to it and sets the corrisponding field in pass
 void setField(char * fieldData, struct passport * pass) {
-	printf("Analyzing %s --- ", fieldData);
 
+	//get data part of line 
 	char * data = substring(fieldData, 4, strlength(fieldData) - 4);
-	printf("Data = %s\n", data); 
 	
+	//get first char of field to switch on 		
+	char c = *fieldData;	
+	switch(c) {
+		case 'b':							//birth year field
+			memcpy(pass->byr, data, strlength(data));
+			break;
+		case 'i':							//issue year field
+			memcpy(pass->iyr, data, strlength(data));
+			break;
+		case 'e':
+			if(*(fieldData + 1) == 'y') {				//expiration year field
+				memcpy(pass->eyr, data, strlength(data));
+			}
+			else {
+				memcpy(pass->ecl, data, strlength(data));	//eye color field
+			}
+			break;
+		case 'h':							
+			if(*(fieldData + 1) == 'c') {				//hair color field
+				memcpy(pass->hcl, data, strlength(data));
+			}
+			else {							//height field
+				memcpy(pass->hgt, data, strlength(data));
+			}
+			break;
+		case 'p':							//passport id field
+			memcpy(pass->pid, data, strlength(data));
+			break;
+		case 'c':							//country code field 
+			memcpy(pass->cid, data, strlength(data));
+			break;
+	}	
 	
 	
 }
@@ -64,9 +96,34 @@ void getNextPassport(struct passport * pass) {
 	currInput = currInput->next;
 }
 
-void part1() {
 
-	struct passport * currPass = malloc(sizeof(struct passport));	//create passport 
+//Sets all the fields of the given passport to null
+//@param pass -- passport struct to reset
+void resetPassport(struct passport * pass) {
+	pass->byr = NULL;
+	pass->iyr = NULL;
+	pass->eyr = NULL;
+	pass->hgt = NULL;
+	pass->hcl = NULL;
+	pass->ecl = NULL;
+	pass->pid = NULL;
+	pass->cid = NULL;
+}
+
+void part1() {
+	
+	//initalize passport struct 
+	struct passport * currPass = malloc(sizeof(struct passport)); 
+	currPass->byr = malloc(sizeof(char *));
+	currPass->iyr = malloc(sizeof(char *));
+	currPass->eyr = malloc(sizeof(char *));
+	currPass->hgt = malloc(sizeof(char *));
+	currPass->hcl = malloc(sizeof(char *));
+	currPass->ecl = malloc(sizeof(char *));
+	currPass->pid = malloc(sizeof(char *));
+	currPass->cid = malloc(sizeof(char *));
+	
+	resetPassport(currPass);
 	getNextPassport(currPass);
 }
 
