@@ -9,6 +9,22 @@
  * 
  */
 
+struct passport {
+ 	char * byr;	//birth year
+	char * iyr;	//issue year
+	char * eyr;	//expiration year
+	char * hgt;	//height 
+	char * hcl;	//hair color
+	char * ecl;	//eye color
+	char * pid;	//passport id
+	char * cid;	//country id
+};
+
+//goes through input list and creates passport 
+void genPassports() {
+
+}
+
 void part1() {
 
 }
