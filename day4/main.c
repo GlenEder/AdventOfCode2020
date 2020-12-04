@@ -192,7 +192,9 @@ int isValid(struct passport * pass) {
 
 	//check height 
 	if(pass->hgt) {
-		
+	
+		printf("Checking Height: %s\t", pass->hgt);
+			
 		//get substring of height type (cm or in)
 		char * type = substring(pass->hgt, strlength(pass->hgt) - 2, 2);
 		int notValid = 0;								//if height is not valid
@@ -220,7 +222,8 @@ int isValid(struct passport * pass) {
 		}	
 
 		free(type);									//free substring memory
-		if(!notValid) printf("Valid height\n");
+		if(!notValid) printf("VALID\n");
+		else printf("NOT VALID\n");
 		if(notValid) return 0;								//return 0 if not valid 
 	}	
 	else { return 0; } 
@@ -239,19 +242,40 @@ int isValid(struct passport * pass) {
 		if(!isGoodEye) return 0;
 	}
 	else { return 0; }	
+
+
+	//check hair color
+	if(pass->hcl) {
 	
+		//check that it starts with #
+		if(*(pass->hcl) != '#') { return 0; } 
+			
+		//check that it only contains 6 chars 
+		int l = strlength(pass->hcl);
+		if(l != 7 ) { return 0; }
+	
+	
+		for(int i = 1; i < l; i++) {
+			char c = *(pass->hcl + i);	//get char at position 
+						
+			if( c < '0' ) return 0;
+			if( c > 'z' ) return 0;
+			if( c > '9' && c < 'a') return 0; 
+		}
+		
+	}	
+	else {return 0;}
 
 	//check pid
 	if(pass->pid) {
+		
 		int pidLength = strlength(pass->pid);
-		if(pidLength != 10) return 0;
-		for(int i = 0; i < pidLength - 1; i++) {
+		if(pidLength != 9) return 0;
+		for(int i = 0; i < pidLength; i++) {
 			if(*(pass->pid + i) < '0' || *(pass->pid + i) > '9') return 0;
 		}
 	}
 	else {return 0;}
-
-	printf("\n");
 
 	//is valid 
 	return 1;
@@ -303,4 +327,6 @@ int main(int argc, char *argv[]) {
 	currInput = inputList;	//reset pointer back to beginning of input list
 	part2();		//call part2 implementation 
 	cleanup();		//clean up input list
+
+	printf("%d\n", strcompare("abc", "abcd"));
 }

@@ -141,7 +141,7 @@ int strlength(char * string) {
 //@return 0 if same, 1 if s1 is greater, -1 if s2 is greater
 int strcompare(char * s1, char * s2) {
 	int l = strlength(s1);		//get length of string 
-	for(int i = 0; i < l; i++) {
+	for(int i = 0; i < l+1; i++) {
 		if(*(s1 + i) > *(s2 + i)) {
 			return 1;
 		}
