@@ -42,10 +42,12 @@ void getNextPassport(struct passport * pass) {
 		for(int i = 0; i < lineLength; i++) {
 			char c = *(currInput->value + i);	//get char at position i
 			if(c == ' ' || c == '\n') { 	
-				end = i;							//set end of param
-				int subLength = end - start;
-				setField(substring(currInput->value, start, subLength), pass); 	//handle the field string 		
-				start = i + 1;							//update start of next field
+				end = i;								//set end pos of param
+				int subLength = end - start;						//calc length of substring
+				char * fieldString = substring(currInput->value, start, subLength);	//get substring for field
+				setField(fieldString, pass); 						//handle the field string 		
+				start = i + 1;								//update start of next field
+				free(fieldString);							//free substring memory 	
 			}
 		}
 
