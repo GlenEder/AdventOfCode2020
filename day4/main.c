@@ -195,13 +195,11 @@ int isValid(struct passport * pass) {
 		
 		//get substring of height type (cm or in)
 		char * type = substring(pass->hgt, strlength(pass->hgt) - 2, 2);
-		printf("Height data: %s;\t", pass->hgt); 
-		printf("height type: %s\n", type);		
 		int notValid = 0;								//if height is not valid
 
 		//check for cm 
 		if(*type == 'c' && *(type + 1) == 'm') {
-			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 3);	//get height substring
+			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 2);	//get height substring
 			int height = atoi(hstring);						//convert to int
 			if(height < 150 || height > 193) { 					//check range
 				notValid = 1;							//set not valid
@@ -210,7 +208,7 @@ int isValid(struct passport * pass) {
 		}
 		//check for inches 
 		else if( *type == 'i' && *(type + 1) == 'n' ) {
-			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 3);	//get height substring
+			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 2);	//get height substring
 			int height = atoi(hstring);						//convert to int
 			if(height < 59 || height > 76) { 					//check range
 				notValid = 1;							//set not valid
@@ -222,6 +220,7 @@ int isValid(struct passport * pass) {
 		}	
 
 		free(type);									//free substring memory
+		if(!notValid) printf("Valid height\n");
 		if(notValid) return 0;								//return 0 if not valid 
 	}	
 	else { return 0; } 
@@ -279,7 +278,7 @@ void part2() {
 		//Check part 2 extra conditions
 		if(isValid(currPass)) { validPassports++; }
 		
-		printf("Passports Checked: %d\n", ++passesChecked);
+//		printf("Passports Checked: %d\n", ++passesChecked);
 		resetPassport(currPass);
 	} 
 	
