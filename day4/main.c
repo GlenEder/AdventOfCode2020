@@ -225,9 +225,35 @@ int isValid(struct passport * pass) {
 	}	
 	else { return 0; } 
 
-	
 	//check eye color 
+	if(pass->ecl) {
+		int isGoodEye = 0;
+		if( 	!strcompare(pass->ecl, "amb") || !strcompare(pass->ecl, "blu") ||
+			!strcompare(pass->ecl, "gry") || !strcompare(pass->ecl, "grn") ||
+			!strcompare(pass->ecl, "hzl") || !strcompare(pass->ecl, "oth")  ) {
+			
+			//set good eye
+			isGoodEye = 1;
+		}	
+
+		if(!isGoodEye) return 0;
+	}
+	else { return 0; }	
 	
+
+	//check pid
+	if(pass->pid) {
+		int pidLength = strlength(pass->pid);
+		if(pidLength != 10) return 0;
+		for(int i = 0; i < pidLength; i++) {
+			if(*(pass->pid + i) < '0' && *(pass->pid + i) > '9') return 0;
+		}
+	}
+	else {return 0;}
+
+
+	//is valid 
+	return 1;
 
 }
 
@@ -273,6 +299,7 @@ int main(int argc, char *argv[]) {
 	
 	currInput = inputList;	//initalize currInput 
 	part1();		//call part1 implementation 
+	currInput = inputList;	//reset pointer back to beginning of input list
 	part2();		//call part2 implementation 
 	cleanup();		//clean up input list
 }

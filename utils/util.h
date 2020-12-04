@@ -12,6 +12,7 @@ int 	readInput(char *);
 char *	substring(char *, int, int);	
 int 	indexOfChar(char *, char, int);
 int 	strlength(char *);
+int 	strcompare(char *, char *);
 
 //Global Variables
 extern struct input * inputList; 
