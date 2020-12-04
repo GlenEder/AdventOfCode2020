@@ -167,6 +167,97 @@ void part1() {
 	printf("\nValid Passports: %d\n", validPassports);
 }
 
+int isValid(struct passport * pass) {
+
+	//check birth year 
+	if(pass->byr) {
+		int year = atoi(pass->byr);				//get year in int form 
+		if(year < 1920 || year > 2002) { return 0; }		//see if out of vaild range
+	}
+	else { return 0; }
+
+	//check issue year
+	if(pass->iyr) {
+		int year = atoi(pass->iyr);				//get year in int form 
+		if( year < 2010 || year > 2020 ) { return 0; }		//check if in range
+	}
+	else { return 0; }
+	
+	//check expiration year
+	if(pass->eyr) {
+		int year = atoi(pass->eyr);				//once again get the int form 
+		if( year < 2020 || year > 2030 ) { return 0; }		//and check the range
+	}
+	else { return 0; }
+
+	//check height 
+	if(pass->hgt) {
+		
+		//get substring of height type (cm or in)
+		char * type = substring(pass->hgt, strlength(pass->hgt) - 3, 2);
+		
+		int notValid = 0;								//if height is not valid
+
+		//check for cm 
+		if(*type == 'c' && *(type + 1) == 'm') {
+			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 3);	//get height substring
+			int height = atoi(hstring);						//convert to int
+			if(height < 150 || height > 193) { 					//check range
+				notValid = 1;							//set not valid
+			}
+			free(hstring);								//free substring memory
+		}
+		//check for inches 
+		else if( *type == 'i' && *(type + 1) == 'n' ) {
+			char * hstring = substring(pass->hgt, 0, strlength(pass->hgt) - 3);	//get height substring
+			int height = atoi(hstring);						//convert to int
+			if(height < 59 || height > 76) { 					//check range
+				notValid = 1;							//set not valid
+			}
+			free(hstring);								//free substring memory 						
+		}  	
+		else {
+			notValid = 1;								//set not valid if invalid ending
+		}	
+
+		free(type);									//free substring memory
+		if(notValid) return 0;								//return 0 if not valid 
+	}	
+	else { return 0; } 
+
+
+
+}
+
+void part2() {
+	//initalize passport struct 
+	struct passport * currPass = malloc(sizeof(struct passport)); 
+	currPass->byr = malloc(sizeof(char *));
+	currPass->iyr = malloc(sizeof(char *));
+	currPass->eyr = malloc(sizeof(char *));
+	currPass->hgt = malloc(sizeof(char *));
+	currPass->hcl = malloc(sizeof(char *));
+	currPass->ecl = malloc(sizeof(char *));
+	currPass->pid = malloc(sizeof(char *));
+	currPass->cid = malloc(sizeof(char *));
+
+	int validPassports = 0;	
+	int passesChecked = 0;
+	
+	while( getNextPassport(currPass) == 1 ) {
+		
+		//Check part 2 extra conditions
+		if(isValid(currPass)) { validPassports++; }
+		
+		printf("\rPassports Checked: %d", ++passesChecked);
+		resetPassport(currPass);
+	} 
+	
+	//free up passport struct 
+	free(currPass);
+	printf("\nValid Passports: %d\n", validPassports);
+}
+
 int main(int argc, char *argv[]) {
 
 	//check for args 
@@ -180,5 +271,6 @@ int main(int argc, char *argv[]) {
 	
 	currInput = inputList;	//initalize currInput 
 	part1();		//call part1 implementation 
+	part2();		//call part2 implementation 
 	cleanup();		//clean up input list
 }
