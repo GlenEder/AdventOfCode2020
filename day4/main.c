@@ -72,13 +72,15 @@ void setField(char * fieldData, struct passport * pass) {
 //
 //@return 1 if successful in getting new passport, -1 if fail
 int getNextPassport(struct passport * pass) {
+	
 
 	//base case to get out 
 	if(currInput == NULL) { return -1; }
 
-	//go through input lines till new line is hit 
-	while(*(currInput->value) != '\n') {
 	
+	//go through input lines till new line is hit 
+	while(currInput && *(currInput->value) != '\n') {		
+
 		int start = 0;					//start of passport param 
 		int end = 0;					//end of passport param 
 		int lineLength = strlength(currInput->value);	//get input line length 
@@ -90,6 +92,7 @@ int getNextPassport(struct passport * pass) {
 				char * fieldString = substring(currInput->value, start, subLength);	//get substring for field
 				setField(fieldString, pass); 						//handle the field string 		
 				start = i + 1;								//update start of next field 	
+				free(fieldString);							//free memory of substring
 			}
 		}
 
@@ -97,22 +100,30 @@ int getNextPassport(struct passport * pass) {
 	}
 	
 	//move currInput one more time for next time this is called
-	currInput = currInput->next;
+	if(currInput) currInput = currInput->next;
 
 	return 1;
 }
 
 
-//Sets all the fields of the given passport to null
+//Sets all the fields of the given passport to null and frees the memory of the data there
 //@param pass -- passport struct to reset
 void resetPassport(struct passport * pass) {
+	free(pass->byr);
 	pass->byr = NULL;
+	free(pass->iyr);
 	pass->iyr = NULL;
+	free(pass->eyr);
 	pass->eyr = NULL;
+	free(pass->hgt);
 	pass->hgt = NULL;
+	free(pass->hcl);
 	pass->hcl = NULL;
+	free(pass->ecl);
 	pass->ecl = NULL;
+	free(pass->pid);
 	pass->pid = NULL;
+	free(pass->cid);
 	pass->cid = NULL;
 }
 
@@ -131,11 +142,9 @@ void part1() {
 	currPass->cid = malloc(sizeof(char *));
 
 	int validPassports = 0;	
-
+	int passesChecked = 0;
 	
-	resetPassport(currPass);
-	//while( getNextPassport(currPass) == 1 ) {
-	if(getNextPassport(currPass)) {
+	while( getNextPassport(currPass) == 1 ) {
 		//check for null values, this indicates incomplete passport
 		if(	currPass->byr &&
 			currPass->iyr &&
@@ -148,9 +157,14 @@ void part1() {
 		  ) {
 			validPassports++;
 		}
-	} 
 
-	printf("Valid Passports: %d\n", validPassports);
+		printf("\rPassports Checked: %d", ++passesChecked);
+		resetPassport(currPass);
+	} 
+	
+	//free up passport struct 
+	free(currPass);
+	printf("\nValid Passports: %d\n", validPassports);
 }
 
 int main(int argc, char *argv[]) {
