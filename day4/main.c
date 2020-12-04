@@ -8,7 +8,8 @@
  * A valid passport must have all eight fields 
  * present. A passport is all the lines of input
  * that are between two new lines. 
- * 
+ *
+ * Note that a only missing a cid field is valid still 
  */
 
 struct passport {
@@ -152,8 +153,7 @@ void part1() {
 			currPass->hgt &&
 			currPass->hcl &&
 			currPass->ecl &&
-			currPass->pid &&
-			currPass->cid 
+			currPass->pid 
 		  ) {
 			validPassports++;
 		}
