@@ -193,7 +193,6 @@ int isValid(struct passport * pass) {
 	//check height 
 	if(pass->hgt) {
 	
-		printf("Checking Height: %s\t", pass->hgt);
 			
 		//get substring of height type (cm or in)
 		char * type = substring(pass->hgt, strlength(pass->hgt) - 2, 2);
@@ -222,8 +221,6 @@ int isValid(struct passport * pass) {
 		}	
 
 		free(type);									//free substring memory
-		if(!notValid) printf("VALID\n");
-		else printf("NOT VALID\n");
 		if(notValid) return 0;								//return 0 if not valid 
 	}	
 	else { return 0; } 
@@ -233,13 +230,14 @@ int isValid(struct passport * pass) {
 		int isGoodEye = 0;
 		if( 	!strcompare(pass->ecl, "amb") || !strcompare(pass->ecl, "blu") ||
 			!strcompare(pass->ecl, "gry") || !strcompare(pass->ecl, "grn") ||
-			!strcompare(pass->ecl, "hzl") || !strcompare(pass->ecl, "oth")  ) {
-			
+			!strcompare(pass->ecl, "hzl") || !strcompare(pass->ecl, "oth") || 
+			!strcompare(pass->ecl, "brn") 
+		){	
 			//set good eye
 			isGoodEye = 1;
 		}	
 		
-		if(!isGoodEye) return 0;
+		if(!isGoodEye) return 0;							//signal fail 
 	}
 	else { return 0; }	
 
@@ -302,13 +300,13 @@ void part2() {
 		//Check part 2 extra conditions
 		if(isValid(currPass)) { validPassports++; }
 		
-//		printf("Passports Checked: %d\n", ++passesChecked);
+		printf("\rPassports Checked: %d", ++passesChecked);
 		resetPassport(currPass);
 	} 
 	
 	//free up passport struct 
 	free(currPass);
-	printf("\nValid Passports: %d\n", validPassports);
+	printf("\nValid Passports(V2): %d\n", validPassports);
 }
 
 int main(int argc, char *argv[]) {
@@ -328,5 +326,4 @@ int main(int argc, char *argv[]) {
 	part2();		//call part2 implementation 
 	cleanup();		//clean up input list
 
-	printf("%d\n", strcompare("abc", "abcd"));
 }
