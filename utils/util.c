@@ -133,3 +133,23 @@ int strlength(char * string) {
 	while(*(string++)) { length++; }		//increment counter
 	return length;				//return length counter
 }
+
+//Compares the two strings provided 
+//@param s1 -- first string
+//@param s2 -- second string 
+//
+//@return 0 if same, 1 if s1 is greater, -1 if s2 is greater
+int strcompare(char * s1, char * s2) {
+	int l = strlength(s1);		//get length of string 
+	for(int i = 0; i < l; i++) {
+		if(*(s1 + i) > *(s2 + i)) {
+			return 1;
+		}
+		else if (*(s1 + i) < *(s2 + i)) {
+			return -1;
+		}	
+	}
+
+	return 0;
+
+}

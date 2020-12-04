@@ -225,7 +225,9 @@ int isValid(struct passport * pass) {
 	}	
 	else { return 0; } 
 
-
+	
+	//check eye color 
+	
 
 }
 
