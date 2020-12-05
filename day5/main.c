@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "../utils/util.h"
 
 /*
@@ -15,6 +16,13 @@
  * plane. To do this, we need to find the gap 
  * between two seats. 
  */
+
+struct seat {
+	int id;			//seat's id
+	struct seat * next; 	//pointer to next seat
+};
+
+struct seat * head = NULL;	//head of seat list
 
 int getSeatId(char * seatId) {
 
@@ -70,8 +78,75 @@ void part1() {
 
 }
 
-void part2() {
+//adds seat struct to list
+//@param seat -- seat struct node pointer
+void addSeatToList(struct seat * newSeat) {
+	
+	printf("Adding seat %d to list\n", newSeat->id);
+	
+	//set first node if needed
+	if(head == NULL) {
+		head = newSeat;
+		return;
+	}
 
+	//add in order of value of id increasing 
+	if(newSeat->id < head->id) {
+		newSeat->next = head;	//set next to head 
+		head = newSeat;		//update to new head of list
+		return;
+	}
+
+	struct seat * lastSeat = head;
+	struct seat * currSeat = head->next;
+	while(currSeat) {
+		if(newSeat->id > currSeat->id) {
+			lastSeat = currSeat;		//update last seat node 
+			currSeat = currSeat->next; 	//go to next node 
+		}
+		else {
+			
+			//add new seat to list here 
+			lastSeat->next = newSeat;	//set previous node's next to new seat node
+			newSeat->next = currSeat;	//set new seat's next to current node
+			return;
+		}
+	}
+
+	printf("Adding to end of list\n");
+
+	//at end of list, therefore add to end of list 
+	lastSeat->next = newSeat;
+
+}
+
+
+void part2() {
+	
+	struct input * curr = inputList;		//current input node
+	while(curr) {
+		int id = getSeatId(curr->value);	//get id 
+		
+		//create seat node 
+		struct seat * newSeat = malloc(sizeof(struct seat));	//malloc seat pointer
+		newSeat->id = id;					//set seat id 
+		newSeat->next = NULL;					//init next to null for saftey 
+		
+		//add to list 
+		addSeatToList(newSeat);
+
+		curr = curr->next;			//go to next input node
+	}	
+
+	printf("Printing seat list...\n");
+	struct seat * currSeat = head;
+	while(currSeat) {
+		printf("Seat ID: %d\n", currSeat->id);
+		struct seat * toFree = currSeat;
+		currSeat = currSeat->next;
+		free(toFree);
+	}
+	
 }
 
 int main(int argc, char *argv[]) {
