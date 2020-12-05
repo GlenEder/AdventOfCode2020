@@ -10,6 +10,16 @@
  * that are between two new lines. 
  *
  * Note that a only missing a cid field is valid still 
+ * 
+ * Part 2 has us verifying the acutal values that go 
+ * along with indicated field. Once again, the cid 
+ * field does not matter 
+ * 
+ * After completeing this days challenge, I wish I had 
+ * tested each verification as I created them. Instead I 
+ * went all out and spent probably an extra 2 hours
+ * debugging (Literally spent an hour looking to find out
+ * that I never checked for brn eye color).   
  */
 
 struct passport {
