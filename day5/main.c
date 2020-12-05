@@ -82,8 +82,6 @@ void part1() {
 //@param seat -- seat struct node pointer
 void addSeatToList(struct seat * newSeat) {
 	
-	printf("Adding seat %d to list\n", newSeat->id);
-	
 	//set first node if needed
 	if(head == NULL) {
 		head = newSeat;
@@ -113,7 +111,6 @@ void addSeatToList(struct seat * newSeat) {
 		}
 	}
 
-	printf("Adding to end of list\n");
 
 	//at end of list, therefore add to end of list 
 	lastSeat->next = newSeat;
@@ -138,14 +135,23 @@ void part2() {
 		curr = curr->next;			//go to next input node
 	}	
 
-	printf("Printing seat list...\n");
-	struct seat * currSeat = head;
+	struct seat * currSeat = head;			//get pointer to first node in id list
+	int prevSeatId = currSeat->id;			//save last seat id 
+	int mySeat = -1;				//my seat's id
+	currSeat = currSeat->next;			//go to next node to start comparisons
+	free(head);					//free first node in lists memory 
 	while(currSeat) {
-		printf("Seat ID: %d\n", currSeat->id);
-		struct seat * toFree = currSeat;
-		currSeat = currSeat->next;
-		free(toFree);
+		
+		if(currSeat->id - prevSeatId == 2){ 	//check if two seats have a gap between the two
+			mySeat = prevSeatId + 1; 	//set my seats id
+		}
+		prevSeatId = currSeat->id;		//update prev seats id
+		struct seat * toFree = currSeat;	//save pointer to current seat 
+		currSeat = currSeat->next;		//go to next node in seat list
+		free(toFree);				//free memory of previous seat node
 	}
+
+	printf("My seat's id: %d\n", mySeat);
 	
 }
 
