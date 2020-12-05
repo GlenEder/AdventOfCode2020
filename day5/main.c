@@ -11,6 +11,9 @@
  * 
  * Seat Id = Row * 8 + Column
  *
+ * Part 2 involves us finding our seat on the 
+ * plane. To do this, we need to find the gap 
+ * between two seats. 
  */
 
 int getSeatId(char * seatId) {
@@ -67,6 +70,10 @@ void part1() {
 
 }
 
+void part2() {
+
+}
+
 int main(int argc, char *argv[]) {
 
 	//check program args
@@ -79,4 +86,6 @@ int main(int argc, char *argv[]) {
 	readInput(argv[1]);
 	
 	part1();
+	part2();
+	cleanup();
 }
