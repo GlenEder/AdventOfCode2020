@@ -59,7 +59,6 @@ void part1() {
 	//loop through input calculating seat ids
 	while(curr) {
 		int id = getSeatId(curr->value);	//get seat id
-		printf("Seats Id: %d\n", id);
 		if(id > maxId) maxId = id;		//set max if greater than current max id
 		curr = curr->next;			//go to next input node
 	}	
