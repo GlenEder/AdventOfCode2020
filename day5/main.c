@@ -14,7 +14,16 @@
  *
  * Part 2 involves us finding our seat on the 
  * plane. To do this, we need to find the gap 
- * between two seats. 
+ * between two seats.
+ *
+ * After completing today's challenge I can say
+ * that I have learned from previous short commings.
+ * I can't remember the exact day, but I recall 
+ * stating that I wish I sorted the list instead 
+ * of brute forcing it. Well today was that day!
+ * In part 2, as each node was added to the linked 
+ * list, they were added in ascending order making 
+ * finding the empty seat trivial subtraction.  
  */
 
 struct seat {
@@ -51,10 +60,7 @@ int getSeatId(char * seatId) {
 			maxCol -= (maxCol - minCol) / 2;	//go to left side
 		}
 
-			
-		//printf("minR: %d, maxR: %d\n", minRow, maxRow);
 	}
-
 
 	//Return calculated seat id
 	return (minRow * 8) + minCol;
@@ -95,8 +101,8 @@ void addSeatToList(struct seat * newSeat) {
 		return;
 	}
 
-	struct seat * lastSeat = head;
-	struct seat * currSeat = head->next;
+	struct seat * lastSeat = head;			//pointer to previous node in seat list
+	struct seat * currSeat = head->next;		//pointer to current node in seat list
 	while(currSeat) {
 		if(newSeat->id > currSeat->id) {
 			lastSeat = currSeat;		//update last seat node 
