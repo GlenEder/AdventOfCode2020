@@ -11,15 +11,18 @@
  * Note that the input is all lower case
  */
 
+struct input * input = NULL;		//global input list pointer 
 
 //Finds the number of questions that every member in the group said yes to
 //@param input -- starting line of groups input 
 //
 //@return number of questions answered yes by group
-int getNumGroupYes(struct input * input) {
+int getNumGroupYes() {
 	
+	if(input == NULL) { return -1; } 	//signal done with input list	
+
 	int total = 0;				//number of questions everyone in group answered yes 
-	int groupQ = pow(2, 27) - 1;		//bit wise value to keep track of groups questions 
+	int groupQ = 0;				//bit wise value to keep track of groups questions 
 	
 	//loop through groups 
 	while(input && *(input->value) != '\n') {
@@ -39,11 +42,12 @@ int getNumGroupYes(struct input * input) {
 			}
 		}
 
-		groupQ = groupQ & answer;			//preform AND operation to keep values everyone has answered 
+		groupQ = groupQ | answer;			//preform OR operation to keep values everyone has answered 
 		input = input->next;				//go to next input node
 	} 
-	
-	printf("Group Q: %d\n", groupQ);
+
+	//go to next node for next call of this method
+	if(input) input = input->next;	
 
 	//calc total questions answered by all
 	while(groupQ) {
@@ -57,8 +61,12 @@ int getNumGroupYes(struct input * input) {
 void part1() {
 
 	int sum = 0;				//sum of all group answered questions
-	struct input * curr = inputList;	//get pointer to first input node
-	sum += getNumGroupYes(curr);	
+	int groupsVal = 0;			//number of questions to add to sum 
+	input = inputList;			//set input global to front of input list
+	while((groupsVal = getNumGroupYes()) >= 0) {
+		printf("Groups Value: %d\n", groupsVal);
+		sum += groupsVal;	
+	}
 	
 	printf("Sum: %d\n", sum);
 }
