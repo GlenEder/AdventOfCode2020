@@ -64,11 +64,11 @@ void part1() {
 	int groupsVal = 0;			//number of questions to add to sum 
 	input = inputList;			//set input global to front of input list
 	while((groupsVal = getNumGroupYes()) >= 0) {
-		printf("Groups Value: %d\n", groupsVal);
-		sum += groupsVal;	
+		//printf("Groups Value: %d\n", groupsVal);
+		sum += groupsVal;		//add groups value to total sum
 	}
 	
-	printf("Sum: %d\n", sum);
+	printf("Sum: %d\n", sum);		//output resuts 
 }
 
 void part2() {
