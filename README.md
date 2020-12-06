@@ -10,7 +10,7 @@ $ cd day1
 
 Compile that good stuff
 ```
-$ gcc -o superCoolProgram main.c ../utils/util.c
+$ gcc -o superCoolProgram main.c ../utils/util.c -lm
 ```
 Run it with provided input (if you use different input I cannot guarantee results)
 ```
