@@ -2,6 +2,14 @@
 #include "../utils/util.h"
 
 
+void part1() {
+
+}
+
+void part2() {
+
+}
+
 int main(int argc, char *argv[]) {
 
 	//check program args
@@ -12,5 +20,10 @@ int main(int argc, char *argv[]) {
 
 	//read the input file
 	readInput(argv[1]);
+	
+	part1();
+	part2();	
 
+	//free memory in input list
+	cleanup();
 }
