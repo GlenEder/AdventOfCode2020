@@ -15,6 +15,16 @@
  * that is, if everyone answered yes to 'a'
  * then they get 1, not just if one person said 
  * yes to 'a' (that was part 1)
+ *
+ * For my concluding remarks on today's challenge
+ * I really just want to thank myself for using 
+ * bitwise operations on this task instead of 
+ * trying to use solely arrays. It works faster 
+ * and better. (Note I still used a local array 
+ * for checking duplicate answers, although I 
+ * could probably use a AND comparison with the 
+ * bit at the desired location to see if it was 
+ * already set)
  */
 
 struct input * input = NULL;		//global input list pointer 
