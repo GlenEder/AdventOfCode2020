@@ -9,21 +9,30 @@
  * each member in the group answered yes to. 
  * 
  * Note that the input is all lower case
+ * 
+ * Part 2 has us checking what questions 
+ * everyone in the group answered yes to, 
+ * that is, if everyone answered yes to 'a'
+ * then they get 1, not just if one person said 
+ * yes to 'a' (that was part 1)
  */
 
 struct input * input = NULL;		//global input list pointer 
 
 //Finds the number of questions that every member in the group said yes to
-//@param input -- starting line of groups input 
+//@param everyoneAnswered -- if we are getting number of questions everyone answered or just any questions 
 //
 //@return number of questions answered yes by group
-int getNumGroupYes() {
+int getNumGroupYes(int everyoneAnswered) {
 	
 	if(input == NULL) { return -1; } 	//signal done with input list	
 
 	int total = 0;				//number of questions everyone in group answered yes 
+	
 	int groupQ = 0;				//bit wise value to keep track of groups questions 
 	
+	if(everyoneAnswered) groupQ = pow(2, 27) - 1;	//set binary of 26 1's to AND with 
+
 	//loop through groups 
 	while(input && *(input->value) != '\n') {
 		
@@ -42,7 +51,13 @@ int getNumGroupYes() {
 			}
 		}
 
-		groupQ = groupQ | answer;			//preform OR operation to keep values everyone has answered 
+
+		if(everyoneAnswered) {
+			groupQ = groupQ & answer;		//perform & opeation to find answers everyone did 
+		}
+		else {
+			groupQ = groupQ | answer;		//preform OR operation to keep values everyone has answered 
+		}
 		input = input->next;				//go to next input node
 	} 
 
@@ -63,7 +78,7 @@ void part1() {
 	int sum = 0;				//sum of all group answered questions
 	int groupsVal = 0;			//number of questions to add to sum 
 	input = inputList;			//set input global to front of input list
-	while((groupsVal = getNumGroupYes()) >= 0) {
+	while((groupsVal = getNumGroupYes(0)) >= 0) {
 		//printf("Groups Value: %d\n", groupsVal);
 		sum += groupsVal;		//add groups value to total sum
 	}
@@ -73,6 +88,15 @@ void part1() {
 
 void part2() {
 
+	int sum = 0;				//sum of all group answered questions
+	int groupsVal = 0;			//number of questions to add to sum 
+	input = inputList;			//set input global to front of input list
+	while((groupsVal = getNumGroupYes(1)) >= 0) {
+		//printf("Groups Value: %d\n", groupsVal);
+		sum += groupsVal;		//add groups value to total sum
+	}
+	
+	printf("Sum V2: %d\n", sum);		//output resuts 
 }
 
 int main(int argc, char *argv[]) {
