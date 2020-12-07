@@ -72,14 +72,14 @@ char * getBagNameFromInput(char * bagInfo) {
 
 //Recusive function that may haunt me 
 int canHoldOurBag(char * bagName) {
+
+	//printf("Checking bag %s\n", bagName);
+
 	/* void if looking at our bag */
 	if(!strcompare(bagName, "shiny gold"))  {
 		return 0;
 	}
 
-	/* Check if current bag is already in list */
- 	if(bagIsInList(bagName)) return 1;
-	
 	
 	//go through input list and find bag info line
 	struct input * currLine = inputList;
@@ -90,7 +90,7 @@ int canHoldOurBag(char * bagName) {
 		if(res) {
 			if(res - currLine->value == 0) {
 				bagInfo = currLine->value;		//set local pointer
-				printf("Bag Info: %s\n", bagInfo);
+				//printf("Bag Info: %s\n", bagInfo);
 				break;					//get out of loop
 			}
 		}
@@ -121,6 +121,7 @@ int canHoldOurBag(char * bagName) {
 
 	int indexOfComma = -2;
 	int done = 0;
+	int canHoldBag = 0;
 	while(!done) {
 		int start = indexOfComma + 2;
 		indexOfComma = indexOfChar(bags, ',', start);		//get new position of the comma 
@@ -141,30 +142,47 @@ int canHoldOurBag(char * bagName) {
 			continue;
 		} 
 
-		printf("Subbag: %s\n", bagName);
-			
+		
+		char * res = strstr(bagName, "bag");
+		int end = res - bagName - 1;	
+		int numberOffset = 2;
+		char * subBagName = substring(bagName, numberOffset, end - numberOffset);
+		
+		
+		//Check if current bag is already in list 
+		if(bagIsInList(subBagName)) {
+			free(subBagName);
+			canHoldBag = 1;
+			continue;
+		} 
 
+		int canHold = canHoldOurBag(subBagName);
+		if(canHold) canHoldBag = 1;
 		free(bagName); 
 	}
 	
 	free(bags);
-	return 0;
+	return canHoldBag;
 
 }
 
 void part1() {
 
 	struct input * curr = inputList;	//get pointer to first input node
+	int total = 0;				//total number of bags that can be on outside
 	while(curr) {
 		char * currBag = getBagNameFromInput(curr->value);
 		if(canHoldOurBag(currBag)) {
-			printf("Can hold our bag!\n");
+			total++;
+			//printf("Bag can hold our bag!\n\n\n");
 		}
 		else {
 			free(currBag);	
 		}
-		curr = curr->next;	
+		curr = curr->next;
 	}
+
+	printf("Total: %d\n", total);
 
 }
 
