@@ -39,6 +39,10 @@ void addBag(struct shinyBag * newBag) {
 
 }
 
+//Checks to see if the bag name provided is in the bag list
+//@param name -- name of bag to check 
+//
+//@return 1 if in list, 0 if not
 int bagIsInList(char * name) {
 
 	struct shinyBag * curr = firstBag;		//get pointer to first bag in list
