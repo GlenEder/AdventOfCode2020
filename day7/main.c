@@ -97,9 +97,6 @@ int canHoldOurBag(char * bagName) {
 		currLine = currLine->next;				//go to next node 		
 	}
 
-	
-	return 0;
-
 
 	/* Check if bag can directly hold our bag */
 	char *shinyBag = strstr(bagInfo, "shiny gold bag");
@@ -138,7 +135,13 @@ int canHoldOurBag(char * bagName) {
 		}
 
 		
-		
+		//see if back holds no other bags		
+		if(strstr(bagName, "no other bag"))  {
+			free(bagName);
+			continue;
+		} 
+
+		printf("Subbag: %s\n", bagName);
 			
 
 		free(bagName); 
