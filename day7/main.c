@@ -11,7 +11,21 @@
  *
  * Note every line follows the pattern:
  * 	<name of bag> contain <number> <another bag name>, <number> <another bag name>, ...
+ * 	The numbers are all single digit 
+ *  
+ * Part 2 is asking how many bags are inside 
+ * our shiny gold bag, the opposite of part 1
+ * basically. 
  * 
+ * After completeing this day I can promise you 
+ * that there are much better solutions than what 
+ * I did. Part 1 runs considerably slower than 
+ * part 2 does. Giving the code for part 1 a once 
+ * over I can see that I failed to properly
+ * implement the list of bags that are known to 
+ * hold our bag. I only ever added the ones that 
+ * can directly hold our bag, instead of adding 
+ * every bag that was in the recusive chain. 
  */
 
 //linked list node that holds name of bag that can directly/or indirectly hold our bag
