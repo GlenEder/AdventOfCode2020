@@ -1,8 +1,27 @@
 #include <stdio.h>
 #include "../utils/util.h"
 
+/*
+ * Part1 for day 7 has us back checking. We
+ * must find how many bags our bag can go in
+ * using the rules for bags. These rules are 
+ * the input. 
+ *
+ * Note every line follows the pattern:
+ * 	<name of bag> contain <number> <another bag name>, <number> <another bag name>, ...
+ * 
+ */
+
+//linked list node that holds name of bag that can directly/or indirectly hold our bag
+struct shinyBag {
+	char * name;			//name of bag that can hold our shiny gold bag
+	struct shinuBag * next;		//next bag that can hold our shingy bag
+};
+
 
 void part1() {
+
+	
 
 }
 
