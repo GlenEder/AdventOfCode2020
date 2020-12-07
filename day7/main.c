@@ -186,7 +186,92 @@ void part1() {
 
 }
 
+//returns the totatl number of bags that are held inside the provided bag 
+//@param bagName -- name of bag to find how many bags are inside 
+//
+//@return number of total bags inside given bag
+int getBagsInsideBag(char * bagName) {
+
+	printf("Checking for bags inside bag: %s\n", bagName);
+
+	/* Go through input list and find bag info line */
+	struct input * currLine = inputList;
+	char * bagInfo;							//place to store the bags info 
+	while(currLine) {
+		
+		char *res = strstr(currLine->value, bagName);		//get pointer to bag name
+		if(res) {
+			if(res - currLine->value == 0) {
+				bagInfo = currLine->value;		//set local pointer
+				//printf("Bag Info: %s\n", bagInfo);
+				break;					//get out of loop
+			}
+		}
+		currLine = currLine->next;				//go to next node 		
+	}
+
+
+	/* We now have the bags info */
+
+	/* Recursivly check bags */
+	char *backHalf = strstr(bagInfo, "contain");			//get pointer to back 
+	int indexOfBack = backHalf - bagInfo;				//get index of contain in input string
+	indexOfBack += 8;						//adjust to get first bag it contains 
+	
+	int endOfInput = indexOfChar(bagInfo, '.', 0);				//get index of end of line
+	char *bags = substring(bagInfo, indexOfBack, endOfInput - indexOfBack); 
+	
+
+	int indexOfComma = -2;
+	int done = 0;
+	int totalBags = 0;
+	while(!done) {
+		int start = indexOfComma + 2;
+		indexOfComma = indexOfChar(bags, ',', start);		//get new position of the comma 
+		char * bagName;						//bag name to look further into 
+		if(indexOfComma < 0) {
+			int end = strlength(bags);
+			bagName = substring(bags, start, end - start); 
+			done = 1;
+		}
+		else {
+			bagName = substring(bags, start, indexOfComma);
+		}
+
+		
+		//see if back holds no other bags		
+		if(strstr(bagName, "no other bag"))  {
+			free(bagName);
+			continue;
+		} 
+
+		
+		printf("Subbag info: %s\n", bagName);
+		totalBags += *bagName - '0';		//convert char to int value we want 	
+			
+		
+		free(bagName); 
+	}
+	
+	free(bags);
+	return totalBags;
+	
+
+}
+
 void part2() {
+
+	/* need to find line about our bag first */
+	struct input * currLine = inputList;
+	while(currLine) {
+		char * bagname = getBagNameFromInput(currLine->value);
+		if(!strcompare(bagname, "shiny gold")) {
+			printf("Total inner bags: %d\n", getBagsInsideBag(bagname));
+			free(bagname);
+			return;
+		}
+		currLine = currLine->next;
+	}
 
 }
 
