@@ -56,34 +56,62 @@ int bagIsInList(char * name) {
 	return 0;
 }
 
-//Recusive function that may haunt me 
-int canHoldOurBag(char * bagInfo) {
+
+//Returns the bags name for the given input line 
+//@param bagInfo -- input line about bag
+//
+//@return pointer to sub string of the bag name
+char * getBagNameFromInput(char * bagInfo) {
 
 	char *frontHalf = strstr(bagInfo, "bags ");			//get pointer to end of bag name
 	int indexOfFront = frontHalf - bagInfo - 1;			//get index of end of name
 	char *currBagName = substring(bagInfo, 0, indexOfFront);	//get bag name
 
-	printf("Looking at bag: %s\n", currBagName);	
+	return currBagName;
+}
 
+//Recusive function that may haunt me 
+int canHoldOurBag(char * bagName) {
 	/* void if looking at our bag */
-	if(!strcompare(currBagName, "shiny gold"))  {
-		free(currBagName);
+	if(!strcompare(bagName, "shiny gold"))  {
 		return 0;
 	}
+
+	/* Check if current bag is already in list */
+ 	if(bagIsInList(bagName)) return 1;
+	
+	
+	//go through input list and find bag info line
+	struct input * currLine = inputList;
+	char * bagInfo;
+	while(currLine) {
+		
+		char *res = strstr(currLine->value, bagName);		//get pointer to bag name
+		if(res) {
+			if(res - currLine->value == 0) {
+				bagInfo = currLine->value;		//set local pointer
+				printf("Bag Info: %s\n", bagInfo);
+				break;					//get out of loop
+			}
+		}
+		currLine = currLine->next;				//go to next node 		
+	}
+
+	
+	return 0;
+
 
 	/* Check if bag can directly hold our bag */
 	char *shinyBag = strstr(bagInfo, "shiny gold bag");
 	if(shinyBag) {	
 		//Add current bag to list of bags that can hold ours 
 		struct shinyBag * newBag = malloc(sizeof(struct shinyBag *));
-		newBag->name = currBagName;
+		newBag->name = bagName;
 		newBag->next = NULL;
 		addBag(newBag);
 		return 1;
 	}
 	
-	/* Check if current bag is already in list */
- 	if(bagIsInList(currBagName)) return 1;
 
 	/* Recursivly check bags */
 	char *backHalf = strstr(bagInfo, "contain");			//get pointer to back 
@@ -99,7 +127,7 @@ int canHoldOurBag(char * bagInfo) {
 	while(!done) {
 		int start = indexOfComma + 2;
 		indexOfComma = indexOfChar(bags, ',', start);		//get new position of the comma 
-		char * bagName;
+		char * bagName;						//bag name to look further into 
 		if(indexOfComma < 0) {
 			int end = strlength(bags);
 			bagName = substring(bags, start, end - start); 
@@ -108,11 +136,15 @@ int canHoldOurBag(char * bagInfo) {
 		else {
 			bagName = substring(bags, start, indexOfComma);
 		}
+
+		
+		
+			
+
 		free(bagName); 
 	}
 	
 	free(bags);
-	free(currBagName);
 	return 0;
 
 }
@@ -121,10 +153,13 @@ void part1() {
 
 	struct input * curr = inputList;	//get pointer to first input node
 	while(curr) {
-		if(canHoldOurBag(curr->value)) {
+		char * currBag = getBagNameFromInput(curr->value);
+		if(canHoldOurBag(currBag)) {
 			printf("Can hold our bag!\n");
 		}
-	
+		else {
+			free(currBag);	
+		}
 		curr = curr->next;	
 	}
 
