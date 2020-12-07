@@ -187,19 +187,18 @@ void part1() {
 }
 
 //returns the totatl number of bags that are held inside the provided bag 
-//@param bagName -- name of bag to find how many bags are inside 
+//@param bag -- name of bag to find how many bags are inside 
 //
 //@return number of total bags inside given bag
-int getBagsInsideBag(char * bagName) {
+int getBagsInsideBag(char * bag) {
 
-	printf("Checking for bags inside bag: %s\n", bagName);
 
 	/* Go through input list and find bag info line */
 	struct input * currLine = inputList;
 	char * bagInfo;							//place to store the bags info 
 	while(currLine) {
 		
-		char *res = strstr(currLine->value, bagName);		//get pointer to bag name
+		char *res = strstr(currLine->value, bag);		//get pointer to bag name
 		if(res) {
 			if(res - currLine->value == 0) {
 				bagInfo = currLine->value;		//set local pointer
@@ -219,8 +218,7 @@ int getBagsInsideBag(char * bagName) {
 	indexOfBack += 8;						//adjust to get first bag it contains 
 	
 	int endOfInput = indexOfChar(bagInfo, '.', 0);				//get index of end of line
-	char *bags = substring(bagInfo, indexOfBack, endOfInput - indexOfBack); 
-	
+	char *bags = substring(bagInfo, indexOfBack, endOfInput - indexOfBack); 	
 
 	int indexOfComma = -2;
 	int done = 0;
@@ -233,6 +231,7 @@ int getBagsInsideBag(char * bagName) {
 			int end = strlength(bags);
 			bagName = substring(bags, start, end - start); 
 			done = 1;
+			free(bags);
 		}
 		else {
 			bagName = substring(bags, start, indexOfComma);
@@ -242,18 +241,25 @@ int getBagsInsideBag(char * bagName) {
 		//see if back holds no other bags		
 		if(strstr(bagName, "no other bag"))  {
 			free(bagName);
-			continue;
+			return 0;
 		} 
 
+		int innerBags = *bagName - '0';		//convert char to int value we want 	
+	
+					
+		char * res = strstr(bagName, "bag");
+		int end = res - bagName - 1;	
+		int numberOffset = 2;
+		char * subBagName = substring(bagName, numberOffset, end - numberOffset);
+	
+		totalBags += innerBags + (innerBags * getBagsInsideBag(subBagName));
+	
+		//printf("Bag %s holds %d bags\n", bag, totalBags);
 		
-		printf("Subbag info: %s\n", bagName);
-		totalBags += *bagName - '0';		//convert char to int value we want 	
-			
-		
+		free(subBagName);
 		free(bagName); 
 	}
 	
-	free(bags);
 	return totalBags;
 	
 
