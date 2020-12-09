@@ -31,17 +31,56 @@ void initPreamble(int size) {
 	}
 }
 
+//Checks preamble's sums for the provided sum
+//@param sum -- sum to find
+//
+//@return 1 if has sum, 0 otherwise
+int preambleHasSum(int sum) {
 
-void part1() {
+	struct node * first = preamble;			//outer pointer 
+	struct node * sec = preamble->next;		//inner node pointer
 	
-	initPreamble(5);
-	struct node * curr = preamble;
-	while(curr) {
-		printf("%d\n", *(int *)curr->value);
-		curr = curr->next;
+	while(first->next) {
+		int firstVal = *(int *)first->value;			//get value of out
+		while(sec) {
+			int secVal = *(int *)sec->value;		//get innner value 
+			if(firstVal + secVal == sum) { return 1; }	//sum exists
+			sec = sec->next;				//go to next inner value
+		}
+
+		first = first->next;					//go to next node
+		sec = first->next;					//set inner node to next node
 	}
 
-	deleteList(preamble);
+	return 0;
+}
+
+
+void part1() {	
+	int preambleSize = 5;			//size of preamble
+	initPreamble(preambleSize);		//initalize preamble list
+	struct input * curr = inputList;	//pointer to first input line
+
+	/* skip over initalized preamble values */
+	for(int i = 0; i < preambleSize; i++) {
+		curr = curr->next;		
+	}
+
+	while(curr) {
+	
+		int sumToFind = atoi(curr->value);			//get value of current node 
+		if(!preambleHasSum) { 					//check if preamble has the sum
+			printf("Illegal Value: %d\n", sumToFind); 	//print invalid value
+			deleteList(preamble);				//free list memory 
+			return;						//get out of here
+		}
+	
+	
+		printf("Preamble has sum\n");
+		break;
+	
+	}
+
 }
 
 void part2() {
