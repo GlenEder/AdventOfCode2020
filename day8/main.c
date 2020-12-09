@@ -100,6 +100,26 @@ int lineHasBeenVisited(int line) {
 	return 0;
 }
 
+//Frees all nodes in visited list past number provided 
+void resetVisitedList(int nodeNumber) {
+
+	struct lineVisited * curr = visitedLines;
+	for(int i = 0; i < nodeNumber - 1; i++) {
+		curr = curr->next;
+	}
+	
+	struct lineVisited * toNullifyNext = curr;	//save pointer to set next to null in future 
+	curr = curr->next;				//go to next node
+		
+	while(curr) {					//free that shit
+		struct lineVisited * toFree = curr;
+		curr = curr->next;
+		free(toFree);
+	}
+	
+	toNullifyNext->next = NULL;			//set next to null 
+}
+
 //Follows instructions from start and checks for loops
 //@param accumulator -- value to continue on with 
 //@param lineNumber -- current linenumber 
@@ -111,9 +131,7 @@ int continueInstructions(int accumulator, int lineNumber,  struct input * start,
 	
 	struct input * curr = start;
 	while(curr) {
-		
-		printf("Handling line %s\n", curr->value);		
-
+	
 		//check for loops 
 		if(lineHasBeenVisited(lineNumber)) { *flag = 0; return accumulator; }
 
@@ -160,6 +178,15 @@ int continueInstructions(int accumulator, int lineNumber,  struct input * start,
 	return accumulator;
 }
 
+void printVisitedList() {
+	struct lineVisited * curr = visitedLines;
+	while(curr) {
+		printf("%d\n", curr->lineNumber);
+		curr = curr->next;
+	}
+
+}
+
 void part2() {
 	
 	struct input * curr = inputList;		//get pointer to first instruction 
@@ -172,7 +199,11 @@ void part2() {
 	int result = continueInstructions(accumulator, lineNumber, curr, &pathFound);
 	
 	if(!pathFound) printf("Result: %d\n", result);
-
+	
+	printVisitedList();
+	resetVisitedList(1);
+	printf("==============\n");
+	printVisitedList();
 }
 
 int main(int argc, char *argv[]) {
