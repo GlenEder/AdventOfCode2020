@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include "../utils/util.h"
 
+/*
+ * The problem for day 8 is to find the value 
+ * of the accumulator right before the input 
+ * instructs repeat. There are commands: nop,
+ * acc, and jmp. The instrutions follow the 
+ * format of <opcod> <+-><number>. 
+ *
+ */
+
 
 void part1() {
 
