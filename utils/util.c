@@ -11,6 +11,7 @@ void cleanup() {
 	while(inputList) {
 		struct input * toFree = inputList;	//get pointer to current list node
 		inputList = inputList->next;		//move looping pointer to next node
+		free(toFree->value);			//free value memory 
 		free(toFree);				//free nodes memory 
 	}
 	
