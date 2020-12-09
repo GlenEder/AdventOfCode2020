@@ -22,18 +22,16 @@ void part1() {
 
 		//check if visited 
 		if(curr->visited) break;
-		
+			
 		//set visited value for current node 
 		curr->visited = 1;
 
 		//check for nop command
 		if(strstr(curr->value, "nop")) { 
-			printf("here\n"); 
-			//curr = curr->next; 
+			curr = curr->next; 
 			continue;
 		}
 
-		printf("Also here\n");
 
 		int jumping = 0;						//jumping flag	
 		if(strstr(curr->value, "jmp")) { jumping = 1; }			//set flag for jump instruction 
@@ -45,16 +43,17 @@ void part1() {
 		int offset = 5;							//offset to go over opp code
 		char * toAdd = substring(curr->value, offset, l-offset); 	//get substring for add/sub
 		offset  = atoi(toAdd);						//get int value of add/sub value 
+		free(toAdd);							//free substring memory 
 			
-		if(jumping) {
-				
+		if(jumping) {	
+			for(int i = 0; i < offset; i++) {
+				curr = adding ? curr->next : curr->prev;	//got to next or previous instruction 	
+			}
 		}
 		else {
 			accumulator = adding ? accumulator + offset : accumulator - offset;		//add or subtract value to accumlator 
 			curr = curr->next;								//go to next instruction 
 		}
-
-		free(toAdd);
 	}
 
 	printf("Accumulator: %d\n", accumulator);
