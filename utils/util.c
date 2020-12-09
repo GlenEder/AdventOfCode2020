@@ -31,6 +31,7 @@ int addInputToList(char * value, ssize_t length) {
 		return -1;
 	}
 
+	newInput->visited = 0;						//set visited to 0
 	newInput->value = malloc(length * sizeof(char *));		//create memory to store value
 	if(newInput->value == NULL) { free(newInput); return -1; }	//free created node if value malloc fails	
 	memcpy(newInput->value, value, length);				//set node value		
