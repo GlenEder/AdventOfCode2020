@@ -14,6 +14,7 @@
  * our input. 
  */
 
+int preambleSize = 25;					//size of preamble
 struct node * preamble = NULL;				//preamble queue
 
 //Initalizes preamble queue 
@@ -56,8 +57,7 @@ int preambleHasSum(int sum) {
 }
 
 
-void part1() {	
-	int preambleSize = 25;			//size of preamble
+int part1() {	
 	initPreamble(preambleSize);		//initalize preamble list
 	struct input * curr = inputList;	//pointer to first input line
 
@@ -72,7 +72,7 @@ void part1() {
 		if(!preambleHasSum(sumToFind)) { 			//check if preamble has the sum
 			printf("Illegal Value: %d\n", sumToFind); 	//print invalid value
 			deleteList(preamble);				//free list memory 
-			return;						//get out of here
+			return sumToFind;				//get out of here
 		}
 	
 		
@@ -84,7 +84,34 @@ void part1() {
 	}
 }
 
-void part2() {
+void part2(int sum) {
+
+	struct input * begin = inputList;
+	struct input * end = inputList->next;
+		
+	while(begin->next) {
+		
+		int beginVal = atoi(begin->value);
+		int total = beginVal;
+		int max = beginVal;
+		int min = beginVal;
+		while(end) {
+			int endVal = atoi(end->value);	
+			if(endVal > max) max = endVal;
+			if(endVal < min) min = endVal;
+			total += endVal;
+			if(total == sum) {
+				printf("Key: %d\n", min + max);
+				return;
+			}
+			
+			if(total > sum) { break; }
+			end = end->next;
+		}
+
+		begin = begin->next;
+		end = begin->next;
+	}
 
 }
 
@@ -98,9 +125,9 @@ int main(int argc, char *argv[]) {
 
 	//read the input file
 	readInput(argv[1]);
-	
-	part1();
-	part2();	
+		
+	int inval = part1();	
+	part2(inval);	
 
 	//free memory in input list
 	cleanup();
