@@ -43,15 +43,17 @@ int addInputToList(char * value, ssize_t length) {
 
 		//get to end of list
 		while(currInput) {
-			lastInput = currInput; 
-			currInput = currInput->next;
+			lastInput = currInput; 		//update last pointer
+			currInput = currInput->next;	//go to next node in list
 		}	
-
+		newInput->prev = lastInput;	//set prev pointer 
 		lastInput->next = newInput;	//add new input to end of list
 	}
 	
 	//input list is empty
 	else {
+		newInput->prev = NULL;		//set prev to null
+		newInput->next = NULL;		//set next to null
 		inputList = newInput;		//set first node in list
 	}
 

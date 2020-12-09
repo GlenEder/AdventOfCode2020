@@ -5,6 +5,7 @@ struct input {
 	char * value;		//value of input field
 	int visited;		//if node has been visited before or not
 	struct input * next;	//next input that was read in 
+	struct input * prev;	//previous input that was read in 
 };
 
 //Methods 
