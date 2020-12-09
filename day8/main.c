@@ -10,6 +10,26 @@
  * acc, and jmp. The instrutions follow the 
  * format of <opcod> <+-><number>. 
  *
+ * Part 2 was a doozy. We are to find the 
+ * one jmp or nop opcode that needs to be 
+ * flipped to the other respective opcode to 
+ * have the program exit by having no futher 
+ * instruction line below the last call. 
+ * 
+ * Post completing this day I can say that part
+ * 1 and 2 are on whole different levels. Part 
+ * 1 was straight forward to implement after 
+ * adding a prev, and visited field to the input 
+ * struct. After almost restarting part 2 to 
+ * just do a simple brute force, I was able to get 
+ * the tree branch style to work. Basically I 
+ * follow the instructions and if the jmp or 
+ * nop comes along, we act as if they are the 
+ * other and have a method run the rest fo the 
+ * course and tell us if it worked. This took 
+ * much longer than anticipated to code, but 
+ * the result was much faster and makes me feel 
+ * smart, so hah!
  */
 struct lineVisited {
 	int lineNumber;			//line number that was visited 
