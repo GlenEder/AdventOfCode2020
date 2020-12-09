@@ -11,7 +11,13 @@
  * must be a sum of two of the previous 25 
  * values. For part 1, we are to find the fisrt
  * number that does not follow this rule in 
- * our input. 
+ * our input.
+ *
+ * Part 2 wants us to find a continous string
+ * of values in the input that sum to our 
+ * invalid sum. Then spit out the sum of the 
+ * max and min values in the string. 
+ * 
  */
 
 int preambleSize = 25;					//size of preamble
@@ -86,31 +92,31 @@ int part1() {
 
 void part2(int sum) {
 
-	struct input * begin = inputList;
-	struct input * end = inputList->next;
+	struct input * begin = inputList;				//outer looper 
+	struct input * end = inputList->next;				//inner node looper
 		
 	while(begin->next) {
 		
-		int beginVal = atoi(begin->value);
-		int total = beginVal;
-		int max = beginVal;
-		int min = beginVal;
-		while(end) {
-			int endVal = atoi(end->value);	
-			if(endVal > max) max = endVal;
-			if(endVal < min) min = endVal;
-			total += endVal;
-			if(total == sum) {
-				printf("Key: %d\n", min + max);
-				return;
+		int beginVal = atoi(begin->value);			//get beginning node value
+		int total = beginVal;					//init total sum value
+		int max = beginVal;					//init max 
+		int min = beginVal;					//init min
+		while(end) {		
+			int endVal = atoi(end->value);			//get inner node value	
+			if(endVal > max) max = endVal;			//check for max
+			if(endVal < min) min = endVal;			//check for min
+			total += endVal;				//add value to sum
+			if(total == sum) {				//check for our sum
+				printf("Key: %d\n", min + max);		//print key
+				return;					//get out
 			}
 			
-			if(total > sum) { break; }
-			end = end->next;
+			if(total > sum) { break; }			//get out of this string if total has passed sum
+			end = end->next;				//go to next inner node
 		}
 
-		begin = begin->next;
-		end = begin->next;
+		begin = begin->next;					//go to next outer node
+		end = begin->next;					//set inner node to next of outer node
 	}
 
 }
