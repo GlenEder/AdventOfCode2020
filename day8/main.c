@@ -178,14 +178,6 @@ int continueInstructions(int accumulator, int lineNumber,  struct input * start,
 	return accumulator;
 }
 
-void printVisitedList() {
-	struct lineVisited * curr = visitedLines;
-	while(curr) {
-		printf("%d\n", curr->lineNumber);
-		curr = curr->next;
-	}
-
-}
 
 void part2() {
 	
@@ -197,7 +189,7 @@ void part2() {
 
 	while(curr) {
 	
-		//add to list 
+		//add to list and track node we're at 
 		addLineVisited(lineNumber);	
 		nodeCount++;
 
@@ -205,7 +197,7 @@ void part2() {
 		//handle nop 
 		if(strstr(curr->value, "nop")) {
 
-			//treat like jump 
+			/* treat like jump */ 
 			int adding = 0;							//add/sub flag
 			if( *(curr->value + 4) == '+' ) { adding = 1; }			//set adding flag
 
@@ -223,15 +215,15 @@ void part2() {
 				tempLineNumber = adding ? tempLineNumber + 1: tempLineNumber - 1;	//increment line number 
 			}
 
-			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);
-			if(pathFound) {
-				printf("Result: %d\n", result);
-				return;
+			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);	//test path with alternate operation 
+			if(pathFound) {			
+				printf("Result: %d\n", result);							//print result
+				return;										//exit program
 			}else {
-				resetVisitedList(nodeCount);
-				curr = curr->next; 
-				lineNumber++;
-				continue;
+				resetVisitedList(nodeCount);							//reset visited list to our current node 
+				curr = curr->next; 								//proceed like nothing ever happened 
+				lineNumber++;									//increment line number
+				continue;									//skip rest of code for iterration 
 			}
  
 		}
@@ -240,17 +232,17 @@ void part2() {
 		int jumping = 0;						//jumping flag	
 		if(strstr(curr->value, "jmp")) { 
 			
-			//treat jump like nop
-			struct input * temp = curr->next;
-			int tempLineNumber = lineNumber + 1;
-			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);
+			/* treat jmp like nop */
+			struct input * temp = curr->next;			//set temp pointer to next instruction 
+			int tempLineNumber = lineNumber + 1;			//set temp line number to next line number
+			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);	//test path 
 			if(pathFound) {
-				printf("Result: %d\n", result);
-				return;
+				printf("Result: %d\n", result);				//print result
+				return;							//exit 
 			}
 			else {
 				jumping = 1;						//set flag for jumping  
-				resetVisitedList(nodeCount);	
+				resetVisitedList(nodeCount);				//reset visited list 
 			}
 		}		
 
