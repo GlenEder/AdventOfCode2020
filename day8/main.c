@@ -24,7 +24,7 @@ void part1() {
 	struct input * curr = inputList;		//get pointer to first command
 	int accumulator = 0;				//accumulator tracker 
 	
-	while(1) {
+	while(curr) {
 
 		//check if visited 
 		if(curr->visited) break;
@@ -191,19 +191,95 @@ void part2() {
 	
 	struct input * curr = inputList;		//get pointer to first instruction 
 	int accumulator = 0;				//current accumulator value
-	int instructions = 0;				//number of instructions gone to 
-	int instrBefore = 0;				//number of instructions before devitation 
 	int lineNumber = 0;				//current line number 
 	int pathFound = 1;				//if correct path found
+	int nodeCount = 0;				//number of nodes in visited list to keep
+
+	while(curr) {
 	
-	int result = continueInstructions(accumulator, lineNumber, curr, &pathFound);
+		//add to list 
+		addLineVisited(lineNumber);	
+		nodeCount++;
+
+
+		//handle nop 
+		if(strstr(curr->value, "nop")) {
+
+			//treat like jump 
+			int adding = 0;							//add/sub flag
+			if( *(curr->value + 4) == '+' ) { adding = 1; }			//set adding flag
+
+			int l = strlength(curr->value);					//get length of string
+			int offset = 5;							//offset to go over opp code
+			char * toAdd = substring(curr->value, offset, l-offset); 	//get substring for add/sub
+			offset  = atoi(toAdd);						//get int value of add/sub value 
+			free(toAdd);							//free substring memory 
+		
+			struct input * temp = curr;					//create temp pointer for testing jump 
+			int tempLineNumber = lineNumber;				//temp line number for testing jump
+			
+			for(int i = 0; i < offset; i++) {
+				temp = adding ? temp->next : temp->prev;				//got to next or previous instruction 	
+				tempLineNumber = adding ? tempLineNumber + 1: tempLineNumber - 1;	//increment line number 
+			}
+
+			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);
+			if(pathFound) {
+				printf("Result: %d\n", result);
+				return;
+			}else {
+				resetVisitedList(nodeCount);
+				curr = curr->next; 
+				lineNumber++;
+				continue;
+			}
+ 
+		}
+
+
+		int jumping = 0;						//jumping flag	
+		if(strstr(curr->value, "jmp")) { 
+			
+			//treat jump like nop
+			struct input * temp = curr->next;
+			int tempLineNumber = lineNumber + 1;
+			int result = continueInstructions(accumulator, tempLineNumber, temp, &pathFound);
+			if(pathFound) {
+				printf("Result: %d\n", result);
+				return;
+			}
+			else {
+				jumping = 1;						//set flag for jumping  
+				resetVisitedList(nodeCount);	
+			}
+		}		
+
+		int adding = 0;							//add/sub flag
+		if( *(curr->value + 4) == '+' ) { adding = 1; }			//set adding flag
+
+		int l = strlength(curr->value);					//get length of string
+		int offset = 5;							//offset to go over opp code
+		char * toAdd = substring(curr->value, offset, l-offset); 	//get substring for add/sub
+		offset  = atoi(toAdd);						//get int value of add/sub value 
+		free(toAdd);							//free substring memory 
+			
+		if(jumping) {	
+			for(int i = 0; i < offset; i++) {
+				curr = adding ? curr->next : curr->prev;		//got to next or previous instruction 	
+				lineNumber = adding ? lineNumber + 1: lineNumber - 1;	//increment line number 
+			}
+		}
+		else {
+			accumulator = adding ? accumulator + offset : accumulator - offset;		//add or subtract value to accumlator 
+			curr = curr->next;								//go to next instruction 
+			lineNumber++;									//increment line number
+		}
+		
 	
-	if(!pathFound) printf("Result: %d\n", result);
+
+	}
+
 	
-	printVisitedList();
-	resetVisitedList(1);
-	printf("==============\n");
-	printVisitedList();
 }
 
 int main(int argc, char *argv[]) {
