@@ -17,7 +17,19 @@
  * of values in the input that sum to our 
  * invalid sum. Then spit out the sum of the 
  * max and min values in the string. 
- * 
+ *
+ * It only took me nine days to decide to finally 
+ * make a generic linked list system in the utils
+ * so that I can stop creating them in each main 
+ * file. This was by far the longest part of the 
+ * day to implement as I had to learn about void 
+ * pointers. In terms of the actual problem, part 
+ * 1 screamed queue. Instead of back tracking 
+ * through the input list constantly, I put the 
+ * preamble in a queue and queued/dequeued as 
+ * needed. I almost did the same for part 2, but 
+ * just keeping a local min and max value was much 
+ * more efficent and memory saving.  
  */
 
 int preambleSize = 25;					//size of preamble
