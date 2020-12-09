@@ -14,33 +14,34 @@
  * our input. 
  */
 
+struct node * preamble = NULL;				//preamble queue
 
-
-//Given the size of the preable provided, finds the frist wrong
-//value in the input file
-//@param preamble -- size of preamble buffer
-void findWrongSum(int preamble) {
-
-	int sumOptions[preamble] = {0};		//create array for checking sums
-	struct input * curr = inputList;	//get pointer to first input line
-
-	//fill preamble data 
-	for(int i = 0; i < preamble; i++) {
-		sumOptions[i] = atoi(curr->value);	//convert input to int
-		curr = curr->next;			//go to next node
-	}
-
-	//loop through input, find sum error
-	while(curr) {
-		int sumToFind = atoi(curr->value);	//get int value of next input 
+//Initalizes preamble queue 
+void initPreamble(int size) {
+	struct input * curr = inputList;		//get pointer to first input
+	int value = atoi(curr->value);			//get first value 
+	curr = curr->next;				//go to next input node
+	preamble = createList(&value, sizeof(int));	//create preamble queue
 		
-	}
 
+	for(int i = 0; i < size; i++) {
+		int v = atoi(curr->value);		//get int rep of input 
+		addNewNode(preamble, &v, sizeof(int));	//add new node to list
+		curr = curr->next;			//go to next input 
+	}
 }
 
 
 void part1() {
+	
+	initPreamble(5);
+	struct node * curr = preamble;
+	while(curr) {
+		printf("%d\n", *(int *)curr->value);
+		curr = curr->next;
+	}
 
+	deleteList(preamble);
 }
 
 void part2() {

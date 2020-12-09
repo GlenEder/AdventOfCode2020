@@ -3,7 +3,7 @@
 #include <string.h>
 #include "util.h"
 
-struct input * inputList = NULL;		
+struct input * inputList = NULL;		//initalize inputList header
 
 //Frees all memory taken in input list
 void cleanup() {
@@ -157,3 +157,89 @@ int strcompare(char * s1, char * s2) {
 	return 0;
 
 }
+
+//Creates a new node and returns pointer to node
+//@param value -- void pointer to value 
+//@param size -- size of value to store
+//
+//@return pointer to new node, null if error occured 
+struct node * createList(void * value, size_t size) {
+
+	struct node * newNode = malloc(sizeof(struct node));		//create memory for new node
+	if(newNode) {	
+		newNode->value = malloc(size);				//get memory for value
+		if(newNode->value == NULL) return NULL;			//memory check 
+		memcpy(newNode->value, value, size);			//init value
+		newNode->next = NULL;					//init next
+	}
+	return newNode;							//return pointer to new node
+}
+
+//Adds a new node to the end of the list provided 
+//@param list -- linked list to add node to
+//@param value -- value of new node
+//@param size -- size of value to store
+//
+//@return pointer to new node, null on error
+struct node * addNewNode(struct node * list, void * value, size_t size) {
+
+	if(list == NULL) return NULL;					//check that list provided is not null 
+
+	struct node * newNode = malloc(sizeof(struct node));		//create memory for new node
+	if(newNode == NULL) { return NULL; }				//check for memory error
+
+	newNode->value = malloc(size);					//get memory for value
+	if(newNode->value == NULL) return NULL;				//memory check 
+	memcpy(newNode->value, value, size);				//init value
+	newNode->next = NULL;
+	
+	while(list->next) { list = list->next; }			//go to end of list
+	list->next = newNode;						//add node to end of list
+		
+	return newNode;							//return pointer to new node			
+}
+
+//Adds a new node to the front of the provided list
+//@param head -- head of list to prepend node to 
+//@param value -- value of new node	
+//@param size -- size of value to store
+//
+//@return 
+struct node * prependNewNode(struct node * head, void * value, size_t size) {
+
+	if(head == NULL) return NULL;					//check that list provided is not null
+
+	struct node * newNode = malloc(sizeof(struct node));		//get memory for node
+	if(newNode == NULL) return NULL;				//check for error with memory get
+
+	newNode->value = malloc(size);					//get memory for value
+	if(newNode->value == NULL) return NULL;				//memory check 
+	memcpy(newNode->value, value, size);				//init value
+	newNode->next = head;						//add to front of list
+		
+	return newNode;							//return pointer to new node
+}
+
+//Frees memory of all nodes in providied list 
+//@param list -- first node to delete in list
+void deleteList(struct node * list) {
+	while(list) {
+		struct node * toFree = list;		//get pointer to current node
+		list = list->next;			//move to next node
+		free(toFree->value);			//free this node value memory 
+		free(toFree);				//free node memory 
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
