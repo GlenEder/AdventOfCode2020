@@ -220,6 +220,17 @@ struct node * prependNewNode(struct node * head, void * value, size_t size) {
 	return newNode;							//return pointer to new node
 }
 
+//Removes the first node from list and frees its content
+//@param head -- first node in list 
+//
+//@return pointer to new head of list
+struct node * removeFirstNode(struct node * head) {
+	struct node * toReturn = head->next;		//save next pointer
+	free(head->value);				//free head nodes value memory 
+	free(head);					//free head node memory
+	return toReturn;				//return new heads pointer
+}
+
 //Frees memory of all nodes in providied list 
 //@param list -- first node to delete in list
 void deleteList(struct node * list) {

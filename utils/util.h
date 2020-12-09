@@ -32,6 +32,7 @@ int 	addIntNode(int);
 struct node * 	createList(void *, size_t);
 struct node * 	addNewNode(struct node *, void *, size_t);
 struct node * 	prependNewNode(struct node *, void *, size_t);
+struct node * 	removeFirstNode(struct node *);
 void 		deleteList(struct node *);
 
 //Global Variables

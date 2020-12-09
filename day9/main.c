@@ -57,7 +57,7 @@ int preambleHasSum(int sum) {
 
 
 void part1() {	
-	int preambleSize = 5;			//size of preamble
+	int preambleSize = 25;			//size of preamble
 	initPreamble(preambleSize);		//initalize preamble list
 	struct input * curr = inputList;	//pointer to first input line
 
@@ -69,18 +69,19 @@ void part1() {
 	while(curr) {
 	
 		int sumToFind = atoi(curr->value);			//get value of current node 
-		if(!preambleHasSum) { 					//check if preamble has the sum
+		if(!preambleHasSum(sumToFind)) { 			//check if preamble has the sum
 			printf("Illegal Value: %d\n", sumToFind); 	//print invalid value
 			deleteList(preamble);				//free list memory 
 			return;						//get out of here
 		}
 	
-	
-		printf("Preamble has sum\n");
-		break;
-	
+		
+		/* preamble has sum so adjust preamble to take new sum */
+		preamble = removeFirstNode(preamble);			//remove first node in queue
+		addNewNode(preamble, &sumToFind, sizeof(int));		//add new sum to end of list 
+		
+		curr = curr->next;					//go to next input line
 	}
-
 }
 
 void part2() {
