@@ -29,8 +29,32 @@ struct node * createSortedList() {
 			newNode->next = first;						//set next to old head
 			first = newNode;						//upate head node
 		}
-	
+		else {
+			
+			/* loop through current sorted list to find spot to add */
+			struct node * currSorted = first->next;				//get pointer to next node in sorted list
+			struct node * prevSorted = first;				//save pointer to prev for when adding node
+			int added = 0;							//flag for adding at end
+			while(currSorted) {
+				
+				if(nodeValue < *(int *)currSorted->value) {
+					struct node * newNode = createList(&nodeValue, sizeof(int));	//create new node for list
+					newNode->next = currSorted;					//set next for new node
+					prevSorted->next = newNode;					//set next for prev node
+					added = 1;							//flag added node
+					break;								//get out of loop
+				}
+				
+				/* handle going to next node in list */ 
+				prevSorted = currSorted;					
+				currSorted = currSorted->next;				
+			}
 
+			
+			if(!added) { addNewNode(prevSorted, &nodeValue, sizeof(int)); } 			//add new node to end of list
+			
+		}
+	
 		currInput = currInput->next;				//go to next input 
 	}
 
@@ -41,8 +65,12 @@ struct node * createSortedList() {
 void part1() {
 
 	struct node * adapters = createSortedList();			//get sorted list of adapters 
-	printf("First node: %d\n", *(int *)adapters->value);		
-
+	struct node * curr = adapters;
+	while(curr) {
+		printf("%d\n", *(int *)curr->value);	
+		curr = curr->next;
+	}	
+	
 	deleteList(adapters);	
 }
 
