@@ -21,10 +21,16 @@ struct node * createSortedList() {
 	
 	//add rest of input	
 	struct input * currInput = inputList->next;			//get pointer to next input in list
-	while(currInput) {
-
+	while(currInput) {		
 		
+		nodeValue = atoi(currInput->value);			//get in value of current input 
+		if(nodeValue < *(int *)first->value) {
+			struct node * newNode = createList(&nodeValue, sizeof(int));	//create new head node
+			newNode->next = first;						//set next to old head
+			first = newNode;						//upate head node
+		}
 	
+
 		currInput = currInput->next;				//go to next input 
 	}
 
