@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include "../utils/util.h"
 
+/*
+ * Day 10 has us violating saftey standards 
+ * and daisy chaining adapters together. 
+ * Part 1 wants us to chain all adapters 
+ * together and find the number of 1 difference 
+ * and 3 difference adapters. 
+ * 
+ */
 
 void part1() {
 
