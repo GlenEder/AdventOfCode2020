@@ -58,6 +58,7 @@ struct node * createSortedList() {
 		currInput = currInput->next;				//go to next input 
 	}
 
+
 	//return pointer to beginning of sorted list
 	return first;
 }
@@ -65,13 +66,34 @@ struct node * createSortedList() {
 void part1() {
 
 	struct node * adapters = createSortedList();			//get sorted list of adapters 
-	struct node * curr = adapters;
-	while(curr) {
-		printf("%d\n", *(int *)curr->value);	
-		curr = curr->next;
-	}	
+	struct node * curr = adapters;					//pointer for looping through list of adapters
+
+	//Add phone's built in adapter to end
+	while(curr->next) { curr = curr->next; }			//go to end of list
+	int phonesAdapterVal = 3 + *(int *)curr->value;			//calc phones value
+	addNewNode(curr, &phonesAdapterVal, sizeof(int));		//add to list
 	
-	deleteList(adapters);	
+	curr = adapters;						//reset looping pointer to front of list
+
+	int oneDifs = 0;						//number of 1 jolt differences 
+	int threeDifs = 0;						//number of 3 jolt differences
+	int currJolt = 0;						//starting number of jolts	
+
+	while(curr) {
+		
+		int adapterVal = *(int *)curr->value;			//get value of current adapter in list
+		int joltDif = adapterVal - currJolt;			//calc difference between adapter and current jolts 
+		if(joltDif == 1) { oneDifs++; }				//increment one jolt dif count
+		if(joltDif == 3) { threeDifs++; }			//increment three jolt dif count 			
+
+		if(joltDif > 3) break;					//don't have any adapter that will connect so exit 
+		
+		currJolt = adapterVal;					//update current jolt level
+		curr = curr->next;					//go to next adapter in list
+	}	
+
+	printf("Results:\n\tOne Difs: %d\n\tThree Difs: %d\n\tProduct %d\n",oneDifs, threeDifs,  oneDifs * threeDifs);	//print result 
+	deleteList(adapters);								//cleanup memory 
 }
 
 void part2() {
