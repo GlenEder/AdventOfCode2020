@@ -11,8 +11,33 @@
  * 
  */
 
+//Creates a sorted node list using the input values
+//@return pointer to first node in list
+struct node * createSortedList() {
+	
+	//Create first node in list
+	int nodeValue = atoi(inputList->value);				//get int value of input
+	struct node * first = createList(&nodeValue, sizeof(int));	//create first node
+	
+	//add rest of input	
+	struct input * currInput = inputList->next;			//get pointer to next input in list
+	while(currInput) {
+
+		
+	
+		currInput = currInput->next;				//go to next input 
+	}
+
+	//return pointer to beginning of sorted list
+	return first;
+}
+
 void part1() {
 
+	struct node * adapters = createSortedList();			//get sorted list of adapters 
+	printf("First node: %d\n", *(int *)adapters->value);		
+
+	deleteList(adapters);	
 }
 
 void part2() {
