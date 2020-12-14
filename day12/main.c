@@ -19,13 +19,15 @@ void part1() {
 	struct input * curr = inputList;	//get pointer to first input 
 	while(curr) {
 	
-		char c = *curr->value;
-		char * amountString = substring(curr->value, 1, strlength(curr->value) - 1);
-		int  amount = atoi(amountString);
-		free(amountString);
-		switch(c) {
-			case 'N': 			
-				northSouth += amount;
+		char c = *curr->value;								//get direction char
+		char * amountString = substring(curr->value, 1, strlength(curr->value) - 1);	//get value substring
+		int  amount = atoi(amountString);						//get int representation 
+		free(amountString);								//free substring memory 
+		
+		/* Handle Directions */
+		switch(c) {					
+			case 'N': 				
+				northSouth += amount;	
 				break;
 			case 'S':
 				northSouth -= amount;
@@ -38,11 +40,11 @@ void part1() {
 				break;
 			case 'R':
 				heading += amount;
-				heading %= 360;
+				heading %= 360;			//handle overflow
 				break;
 			case 'L':
 				heading -= amount;
-				if(heading < 0) heading += 360;
+				if(heading < 0) heading += 360;	//handler underflow?
 				break;
 			case 'F':
 				if(heading == 90) { eastWest += amount; }
@@ -52,12 +54,13 @@ void part1() {
 				else { printf("HEADING ERROR\n"); }				
 		}
 	
-		printf("Dir: %c, Amt: %d, New Heading: %d, Updated Cords: (%d, %d)\n", c, amount, heading, eastWest, northSouth);	
+		//printf("Dir: %c, Amt: %d, New Heading: %d, Updated Cords: (%d, %d)\n", c, amount, heading, eastWest, northSouth);	
 	
-		curr = curr->next;
+		curr = curr->next;				//go to next input node
 	} 
 
-	printf("Manhattan Distance: %d\n", abs(northSouth) + abs(eastWest));
+	//print results
+	printf("Manhattan Distance: %d\n", abs(northSouth) + abs(eastWest));	
 
 }
 
