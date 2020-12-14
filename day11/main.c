@@ -89,15 +89,32 @@ int updateMap(char * map, int od, int id) {
 			else {
 				newMap[mapPos] = map[mapPos];
 			}
-
-			printf("%c", newMap[mapPos]); 
 		}
-		printf("\n");
 	}
 
-	map = newMap;
+
+	//set map to new map
+	for(int i = 0; i < od; i++) {
+		for(int j = 0; j < id; j++) {
+			int mapPos = i * od + j;
+			map[mapPos] = newMap[mapPos];
+		}	
+	}
 	return numChanges;
 
+}
+
+//Counts the number of taken seats in the map 
+//@param map -- pointer to map
+//@param size -- size of map 
+//
+//@return number of taken seats in map 
+int countTakenSeats(char * map, int size) {
+	int numTaken = 0;
+	for(int i = 0; i < size; i++) {
+		if(map[i] == TAKEN) numTaken++;
+	}
+	return numTaken;
 }
 
 void part1() {
@@ -120,9 +137,12 @@ void part1() {
 		curr = curr->next;			//go to next counter
 	}
 
-	printMap(map, HEIGHT, WIDTH);			//print map
-	updateMap(map, HEIGHT, WIDTH);
-	printMap(map, HEIGHT, WIDTH);	
+	//printMap(map, HEIGHT, WIDTH);			//print inital map
+	while(updateMap(map, HEIGHT, WIDTH))  {
+		//printMap(map, HEIGHT, WIDTH);	
+	}
+
+	printf("Taken seats: %d\n", countTakenSeats(map, HEIGHT * WIDTH));
 }
 
 void part2() {
