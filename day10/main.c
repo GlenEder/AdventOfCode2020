@@ -8,7 +8,10 @@
  * Part 1 wants us to chain all adapters 
  * together and find the number of 1 difference 
  * and 3 difference adapters. 
- * 
+ *  
+ * Part 2 wants us to find the number of different 
+ * ways we can arrange our adapters to plug from 
+ * the wall into the phone. 
  */
 
 //Creates a sorted node list using the input values
@@ -96,8 +99,36 @@ void part1() {
 	deleteList(adapters);								//cleanup memory 
 }
 
+
+
+int numberOfCombos(struct node * start) {
+
+	/* base case of start node being the phone */
+	if(start->next == NULL) return 1;
+	
+	int numberOfCombos = 0;
+
+
+	return numberOfCombos;	
+
+}
+
 void part2() {
 
+	struct node * adapters = createSortedList();			//get sorted list of adapters 
+	struct node * curr = adapters;					//pointer for looping through list of adapters
+
+	//Add phone's built in adapter to end
+	while(curr->next) { curr = curr->next; }			//go to end of list
+	int phonesAdapterVal = 3 + *(int *)curr->value;			//calc phones value
+	addNewNode(curr, &phonesAdapterVal, sizeof(int));		//add to list
+	
+	curr = adapters;						//reset looping pointer to front of list
+
+	printf("Number of combos: %d\n", numberOfCombos(curr));
+	
+	
+	
 }
 
 int main(int argc, char *argv[]) {
