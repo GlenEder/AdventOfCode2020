@@ -102,7 +102,7 @@ void part1() {
 //Combo struct to help reduce recurion load
 struct Combo {
 	int key;			
-	int numCombos;
+	unsigned long numCombos;
 	struct Combo * next;
 };
 
@@ -112,17 +112,17 @@ void printComboList() {
 	printf("===Combo List===\n");
 	struct Combo * curr = comboList;
 	while(curr) {
-		printf("\tKey: %d, Combos: %d\n", curr->key, curr->numCombos);
+		printf("\tKey: %d, Combos: %lu\n", curr->key, curr->numCombos);
 		curr = curr->next;
 	}
 }
 
-int numberOfCombos(struct node * start) {
+unsigned long numberOfCombos(struct node * start) {
 
 	/* base case of start node being the phone */
 	if(start->next == NULL) return 1;
 	
-	int numCombs = 0;						//number of combos current node has 
+	unsigned long numCombs = 0;						//number of combos current node has 
 	
 	/* check comboList for this adapter */
 	struct Combo * currCombo = comboList;
@@ -164,7 +164,7 @@ int numberOfCombos(struct node * start) {
 	while(currCombo->next) { currCombo = currCombo->next; }		//go to last combo in list
 	currCombo->next = newCombo;					//add new combo to list
 
-	//printComboList();
+	printComboList();
 
 	/* return number of combos found */
 	return numCombs;	
@@ -188,9 +188,8 @@ void part2() {
 	curr = adapters;						//reset looping pointer to front of list
 	
 
-	printf("Number of combos: %d\n", numberOfCombos(curr));
-	deleteList(adapters);	
-	
+	printf("Number of combos: %lu\n", numberOfCombos(curr));
+	deleteList(adapters);		
 }
 
 int main(int argc, char *argv[]) {
