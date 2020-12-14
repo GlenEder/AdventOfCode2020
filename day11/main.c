@@ -6,7 +6,21 @@
  * Day 11 is musical chairs; well not really. 
  * We are to find the number of empty seats 
  * after the given rules result in no change 
- * of seating arragement. 
+ * of seating arragement.
+ * 
+ * Part 2 is a bit more interresting as we 
+ * have to look down channels in every 
+ * direction to check for chairs. 
+ * 
+ * This problem shouldn't have been as hard 
+ * as I made it. For part 2, I tried to
+ * reinvent the wheel to check for the chairs
+ * on past the original surrounding chairs. 
+ * After deleting 100 lines of whacky code, 
+ * I was able to make a working solution with 
+ * little modifications to the method used in  
+ * part 1. What I've learned you ask? Don't 
+ * overcomplicate such a simple task.  
  */
 
 #define FLOOR '.'
