@@ -9,9 +9,23 @@
  * of seating arragement. 
  */
 
-#define FLOOR 0
-#define FREE 1
-#define TAKEN 2
+#define FLOOR '.'
+#define FREE 'L'
+#define TAKEN '#'
+
+//Prints the map provided 
+//@param map -- map to be printed
+void printMap(char * map, int od, int id) {
+
+	printf("===Printing Map===\n");
+	for(int i = 0; i < od; i++) {
+		for(int j = 0; j < id; j++) {
+			printf("%c", map[i * id + j]);
+		}
+		printf("\n");
+	}
+
+}
 
 void part1() {
 
@@ -21,8 +35,19 @@ void part1() {
 	while(curr) { HEIGHT++; curr = curr->next; }	//find height of grid
 
 	//initalize map	
-	int map[WIDTH][HEIGHT];
+	char map[HEIGHT * WIDTH];			//map array
+	int y = 0;					//current y level
+	curr = inputList;				//reset pointer to first input 
+	while(curr) {
+		for(int i = 0; i < WIDTH; i++) {
+			char c = *(curr->value + i);	//get char at position
+			map[y * WIDTH + i] = c;		//set map
+		}
+		y++;					//increment y level
+		curr = curr->next;			//go to next counter
+	}
 
+	printMap(map, HEIGHT, WIDTH);			//print map
 
 }
 
