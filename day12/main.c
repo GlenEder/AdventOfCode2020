@@ -8,6 +8,17 @@
  * on a boat. The days problem has us navigating 
  * the waters and findinding the Manhattan 
  * distance the boat has traveled.  
+ * 
+ * Part 2 works with a waypoint that we 
+ * adjust and move towards instead of straight
+ * directions the whole time. This was pretty 
+ * straight forward to handle, being very 
+ * similar to part 1.
+ * 
+ * After finishing day 12, I have to say this
+ * has to be the easiest challenge so far this 
+ * Advent of Code. This was just simple input 
+ * reading and basic algebra. 
  */
 
 void part1() {
