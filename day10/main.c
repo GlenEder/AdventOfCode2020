@@ -99,17 +99,81 @@ void part1() {
 	deleteList(adapters);								//cleanup memory 
 }
 
+//Combo struct to help reduce recurion load
+struct Combo {
+	int key;			
+	int numCombos;
+	struct Combo * next;
+};
 
+struct Combo * comboList = NULL;
+
+void printComboList() {
+	printf("===Combo List===\n");
+	struct Combo * curr = comboList;
+	while(curr) {
+		printf("\tKey: %d, Combos: %d\n", curr->key, curr->numCombos);
+		curr = curr->next;
+	}
+}
 
 int numberOfCombos(struct node * start) {
 
 	/* base case of start node being the phone */
 	if(start->next == NULL) return 1;
 	
-	int numberOfCombos = 0;
+	int numCombs = 0;						//number of combos current node has 
 
+	printf("Checking for adpater: %d\n", *(int *)start->value);
+	
+	/* check comboList for this adapter */
+	struct Combo * currCombo = comboList;
+	while(currCombo) {
+		if(currCombo->key == *(int *)start->value) {
+			 return currCombo->numCombos; 			//if adapter has already been calc'd return its combos 
+		}		
+		currCombo = currCombo->next;
+	}
 
-	return numberOfCombos;	
+	printf("Combo not in list yet...\n");
+
+	/* combo hasn't been checked yet, time for recursion */
+	int startingVal = *(int *)start->value;				//save jolt rating of starting node
+	struct node * nextAdapter = start->next;
+	while(nextAdapter) { 
+		printf("\tAdding combos of %d\n", *(int *)nextAdapter->value);
+		if(*(int *)nextAdapter->value - startingVal < 4) {		//check that adapters can connect 
+			numCombs += numberOfCombos(nextAdapter);		//recursion call
+		}
+		else { break; }						//get out of loop
+		nextAdapter = nextAdapter->next;			//go to next adapter
+	}
+	
+	printf("Adding new combo struct\n");
+
+		
+	/* create combo struct */
+	struct Combo * newCombo = malloc(sizeof(struct Combo));		//create memory for new combo 
+	newCombo->key = startingVal;					//set key
+	newCombo->numCombos = numCombs;					//set num combos 
+	newCombo->next = NULL;
+
+	printf("\tNew Combo made.\n");
+	
+	/* add combo to combo list */
+	if(comboList == NULL) { 					//handle adding first combo to list
+		comboList = newCombo;
+		printComboList(); 
+		return numCombs; 
+	}
+	currCombo = comboList;						//reset currCombo pointer to front of list
+	while(currCombo->next) { currCombo = currCombo->next; }		//go to last combo in list
+	currCombo->next = newCombo;					//add new combo to list
+
+	printComboList();
+
+	/* return number of combos found */
+	return numCombs;	
 
 }
 
@@ -123,11 +187,15 @@ void part2() {
 	int phonesAdapterVal = 3 + *(int *)curr->value;			//calc phones value
 	addNewNode(curr, &phonesAdapterVal, sizeof(int));		//add to list
 	
+
+	//Add wall(0) to adapters list 
+	int wall = 0;							//value of wall jolts
+	adapters = prependNewNode(adapters, &wall, sizeof(int));	//add wall to front of list
 	curr = adapters;						//reset looping pointer to front of list
+	
 
 	printf("Number of combos: %d\n", numberOfCombos(curr));
-	
-	
+	deleteList(adapters);	
 	
 }
 
