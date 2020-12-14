@@ -164,7 +164,7 @@ unsigned long numberOfCombos(struct node * start) {
 	while(currCombo->next) { currCombo = currCombo->next; }		//go to last combo in list
 	currCombo->next = newCombo;					//add new combo to list
 
-	printComboList();
+	//printComboList();
 
 	/* return number of combos found */
 	return numCombs;	
