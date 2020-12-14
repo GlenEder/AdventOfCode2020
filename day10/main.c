@@ -11,7 +11,15 @@
  *  
  * Part 2 wants us to find the number of different 
  * ways we can arrange our adapters to plug from 
- * the wall into the phone. 
+ * the wall into the phone.
+ *
+ * After completing this days challenges, I want to 
+ * comliment myself for not taking wind of the hint 
+ * that I was going to need to use the unsigned long
+ * to complete this when the description stated it 
+ * would be in the trillions. Also, thank the lord 
+ * that I used the combo list or this would have taken 
+ * years to compute.  
  */
 
 //Creates a sorted node list using the input values
