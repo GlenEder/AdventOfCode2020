@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "../utils/util.h"
 
+/*
+ * 
+ */
 
 void part1() {
 
