@@ -123,8 +123,6 @@ int numberOfCombos(struct node * start) {
 	if(start->next == NULL) return 1;
 	
 	int numCombs = 0;						//number of combos current node has 
-
-	printf("Checking for adpater: %d\n", *(int *)start->value);
 	
 	/* check comboList for this adapter */
 	struct Combo * currCombo = comboList;
@@ -135,13 +133,11 @@ int numberOfCombos(struct node * start) {
 		currCombo = currCombo->next;
 	}
 
-	printf("Combo not in list yet...\n");
 
 	/* combo hasn't been checked yet, time for recursion */
 	int startingVal = *(int *)start->value;				//save jolt rating of starting node
 	struct node * nextAdapter = start->next;
 	while(nextAdapter) { 
-		printf("\tAdding combos of %d\n", *(int *)nextAdapter->value);
 		if(*(int *)nextAdapter->value - startingVal < 4) {		//check that adapters can connect 
 			numCombs += numberOfCombos(nextAdapter);		//recursion call
 		}
@@ -149,7 +145,6 @@ int numberOfCombos(struct node * start) {
 		nextAdapter = nextAdapter->next;			//go to next adapter
 	}
 	
-	printf("Adding new combo struct\n");
 
 		
 	/* create combo struct */
@@ -158,19 +153,18 @@ int numberOfCombos(struct node * start) {
 	newCombo->numCombos = numCombs;					//set num combos 
 	newCombo->next = NULL;
 
-	printf("\tNew Combo made.\n");
 	
 	/* add combo to combo list */
 	if(comboList == NULL) { 					//handle adding first combo to list
 		comboList = newCombo;
-		printComboList(); 
+		//printComboList(); 
 		return numCombs; 
 	}
 	currCombo = comboList;						//reset currCombo pointer to front of list
 	while(currCombo->next) { currCombo = currCombo->next; }		//go to last combo in list
 	currCombo->next = newCombo;					//add new combo to list
 
-	printComboList();
+	//printComboList();
 
 	/* return number of combos found */
 	return numCombs;	
