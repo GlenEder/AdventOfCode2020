@@ -26,7 +26,7 @@ void part1() {
 		int bus = atoi(token);
 		int timeWaiting = bus - ourWaitTime % bus;
 		
-		printf("Time to wait on Bus %d: %d\n", bus, timeWaiting); 
+		//printf("Time to wait on Bus %d: %d\n", bus, timeWaiting); 
 
 		if(timeWaiting < timeWaitingOnBus) {
 			idealBusID = bus;
@@ -39,8 +39,48 @@ void part1() {
 
 }
 
+
+struct BusStop {
+	int id;
+	int minAfter;	
+	struct BusStop * next;
+};
+
+struct BusStop * firstStop = NULL;
+
 void part2() {
 
+	char * token;
+	int timeBetweenStop = 0;
+	while((token = strsep(&inputList->next->value, ","))) {
+		if(*token == 'x') {
+			timeBetweenStop++;
+		}
+		else {
+			int bus = atoi(token);
+			struct BusStop * newStop = malloc(sizeof(struct BusStop));
+			newStop->id = bus;
+			newStop->minAfter = timeBetweenStop;
+			newStop->next = NULL;
+
+			timeBetweenStop = 0;
+			if(firstStop == NULL) {
+				firstStop = newStop;
+			}
+			else {
+				struct BusStop * currStop = firstStop;
+				while(currStop->next) {
+					currStop = currStop->next;
+				}	
+				currStop->next = newStop;
+			}
+		}
+	}
+
+	while(firstStop) {
+		printf("Bus Stop: %d, Time After Previous: %d\n", firstStop->id, firstStop->minAfter);
+		firstStop = firstStop->next;
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -52,9 +92,11 @@ int main(int argc, char *argv[]) {
 	}	
 
 	//read the input file
-	readInput(argv[1]);
-	
+	readInput(argv[1]);	
 	part1();
+	cleanup();
+	//reset input list because of strsep 
+	readInput(argv[1]);
 	part2();	
 
 	//free memory in input list
