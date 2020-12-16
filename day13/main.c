@@ -48,10 +48,35 @@ struct BusStop {
 
 struct BusStop * firstStop = NULL;
 
+
+//Recusive function to see if the stops in the list are following each other
+int areConnected(unsigned long timestamp, struct BusStop * stop) {
+
+	//base case, if null end of list 
+	if(stop == NULL) return 1;
+	
+	//printf("Checking stop: %d, against timestamp: %lu + %d = %lu\n", stop->id, timestamp, stop->minAfter, (timestamp + stop->minAfter) % stop->id); 	
+	if((timestamp + stop->minAfter) % stop->id == 0) {
+		return areConnected(timestamp + stop->minAfter, stop->next);
+	} 
+
+	return 0;
+}
+
+void printBuses(struct BusStop * bus) {
+	
+	printf("===Bus Stops===\n");
+	while(bus) {
+		printf("\tBus %d, minAfter: %d\n", bus->id, bus->minAfter);
+		bus = bus->next;
+	}
+
+}
+
 void part2() {
 
 	char * token;
-	int timeBetweenStop = 0;
+	int timeBetweenStop = 1;
 	while((token = strsep(&inputList->next->value, ","))) {
 		if(*token == 'x') {
 			timeBetweenStop++;
@@ -63,9 +88,10 @@ void part2() {
 			newStop->minAfter = timeBetweenStop;
 			newStop->next = NULL;
 
-			timeBetweenStop = 0;
+			timeBetweenStop = 1;
 			if(firstStop == NULL) {
 				firstStop = newStop;
+				firstStop->minAfter = 0;
 			}
 			else {
 				struct BusStop * currStop = firstStop;
@@ -77,10 +103,24 @@ void part2() {
 		}
 	}
 
-	while(firstStop) {
-		printf("Bus Stop: %d, Time After Previous: %d\n", firstStop->id, firstStop->minAfter);
-		firstStop = firstStop->next;
+	unsigned long timestamp = firstStop->id;
+	
+	printBuses(firstStop);
+
+	//find biggest stop interval 
+	int bigInterval = 0;
+	struct BusStop * currStop = firstStop;
+	while(currStop) {
+		if(currStop->id > bigInterval) bigInterval = currStop->id;
+		currStop = currStop->next;
 	}
+
+	while(!areConnected(timestamp, firstStop)) {
+		timestamp += firstStop->id;
+		printf("\rChecking timestamp: %lu", timestamp); 
+	}
+	printf("\nResult %lu\n", timestamp);
+
 }
 
 int main(int argc, char *argv[]) {
@@ -100,5 +140,5 @@ int main(int argc, char *argv[]) {
 	part2();	
 
 	//free memory in input list
-	cleanup();
+	//cleanup();
 }
