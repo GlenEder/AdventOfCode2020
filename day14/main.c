@@ -20,13 +20,22 @@ void part1() {
 	char * currentMask = NULL;			//pointer to current mask 
 	while(curr) {
 			
-		if(strstr(curr->value, "mask")) {	//check for mask input 
-			if(currentMask) { free(currentMask); }
-			int indexOfMask = indexOfChar(curr->value, '=', 0) + 1; 
-			currentMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask);
-			printf("New mask: %s\n", currentMask);
+		/* handle mask input */
+		if(strstr(curr->value, "mask")) {									//check for mask input 
+			if(currentMask) { free(currentMask); }								//free previous substring memory if exists
+			int indexOfMask = indexOfChar(curr->value, '=', 0) + 1; 					//get index of start of substring
+			currentMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1);	//get mask substring
+			printf("New mask: %s\n", currentMask);								//print mask for debugging
 		} 
-		
+
+		/* handle memory input */
+		else {
+			int frontOfMem = indexOfChar(curr->value, '[', 0) + 1;				//get index of memory address
+			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);			//get index of end of memory address
+			char * memAddy = substring(curr->value, frontOfMem, endOfMem - frontOfMem);	//get substring of memory address
+			int memAddress = atoi(memAddy);							//get in rep of memory address		
+			printf("Mem: %d\n", memAddress);
+		}
 
 		curr = curr->next;			//go to next input 
 	}
