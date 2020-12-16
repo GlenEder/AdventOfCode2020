@@ -49,12 +49,12 @@ void part1() {
 
 
 struct BusStop {
-	int id;
-	int minAfter;	
-	struct BusStop * next;
+	int id;				//bus stops id, also how often it comes by
+	int minAfter;			//offset for timestamp from previous bus in list
+	struct BusStop * next;		//pointer to next bus stop
 };
 
-struct BusStop * firstStop = NULL;
+struct BusStop * firstStop = NULL;	//head of bus stop list
 
 
 //Recusive function to see if the stops in the list are following each other
@@ -93,75 +93,70 @@ void printBuses(struct BusStop * bus) {
 
 void part2() {
 
-	char * token;
-	int timeBetweenStop = 1;
-	while((token = strsep(&inputList->next->value, ","))) {
-		if(*token == 'x') {
-			timeBetweenStop++;
+	char * token;							//pointer to future tokens 
+	int timeBetweenStop = 1;					//starting time between stops
+	while((token = strsep(&inputList->next->value, ","))) {		//loop through and tokenize the input 
+		if(*token == 'x') {					
+			timeBetweenStop++;						//increment offset for stop
 		}
 		else {
-			int bus = atoi(token);
-			struct BusStop * newStop = malloc(sizeof(struct BusStop));
-			newStop->id = bus;
-			newStop->minAfter = timeBetweenStop;
-			newStop->next = NULL;
+			int bus = atoi(token);						//get bus id
+			struct BusStop * newStop = malloc(sizeof(struct BusStop));	//create memory for bus stop
+			newStop->id = bus;						//set id for bus
+			newStop->minAfter = timeBetweenStop;				//set offset for busstop
+			newStop->next = NULL;						//init next to NULL
 
-			timeBetweenStop = 1;
-			if(firstStop == NULL) {
-				firstStop = newStop;
-				firstStop->minAfter = 0;
+			timeBetweenStop = 1;						//reset offset counter 
+			if(firstStop == NULL) {		
+				firstStop = newStop;					//set first stop for list
+				firstStop->minAfter = 0;				//set first stops offset 
 			}
 			else {
-				struct BusStop * currStop = firstStop;
-				while(currStop->next) {
-					currStop = currStop->next;
+				struct BusStop * currStop = firstStop;			//get pointer to first bus stop
+				while(currStop->next) {					//get to end of bus stop list
+					currStop = currStop->next;			
 				}	
-				currStop->next = newStop;
+				currStop->next = newStop;				//add new bus stop to end of list
 			}
 		}
 	}
 
 	
-	printBuses(firstStop);
+	//printBuses(firstStop);							//print buses for debugging			
  
 	/* Get last bus stop id */
-	struct BusStop * currStop = firstStop;
-	int numStops = 0;
-	while(currStop) {
+	struct BusStop * currStop = firstStop;						//bus stop interator 
+	int numStops = 0;								//number of stops counter 
+	while(currStop) {								//count number of stops we have
 		currStop = currStop->next;
 		numStops++;
 	}
-	unsigned long timestamp = firstStop->id;
-	unsigned long increment = firstStop->id;
-	int numStopsConnected = 1;
-	while(numStopsConnected != numStops) {
+	unsigned long timestamp = firstStop->id;					//inital timestamp to check 
+	unsigned long increment = firstStop->id;					//inital increment for timestamp
+	int numStopsConnected = 1;							//tracker of number of stops connected 
+	while(numStopsConnected != numStops) {						//loop until all stops are connceted 
 
-		printf("\rChecking timestamp: %lu", timestamp); 
-		int numConnected = areConnected(timestamp, firstStop, 0);
-		if(numConnected > numStopsConnected) {
+		printf("\rChecking timestamp: %lu", timestamp);				//print over itself to show its running  		
+		int numConnected = areConnected(timestamp, firstStop, 0);		//call recursive method  
+		if(numConnected > numStopsConnected) {					//see if we connected more stops
 	
-			currStop = firstStop;
-			for(int i = 0; i < numConnected; i++) {
+			currStop = firstStop;						//move stop pointer back to beginnning 
+			for(int i = 0; i < numConnected; i++) {				//go to all stops that are connected 
 						
-				if(i >= numStopsConnected) {
-					increment *= currStop->id;
+				if(i >= numStopsConnected) {				
+					increment *= currStop->id;			//if new stop connected, product in its stop id
 				}
 								
-				currStop = currStop->next;
+				currStop = currStop->next;				//go to next bus stop
 			}
 	
-			numStopsConnected = numConnected;
+			numStopsConnected = numConnected;				//update number of buses connected 
 		}
-				
-		
-		//printf("Checking timestamp: %lu, numMatched: %d, newIncement: %lu\n", timestamp, numConnected, increment); 
-	
-		timestamp += increment;	
+					
+		timestamp += increment;							//increment timestamp 
 	}
 
-
-	printf("\nResult %lu\n", timestamp - increment);
-
+	printf("\nResult %lu\n", timestamp - increment);				//print result (adjust for extra timestamp addition)
 }
 
 int main(int argc, char *argv[]) {
