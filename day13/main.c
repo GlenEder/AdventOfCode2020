@@ -58,6 +58,11 @@ struct BusStop * firstStop = NULL;
 
 
 //Recusive function to see if the stops in the list are following each other
+//@param timestamp -- current timestamp to check against
+//@param stop -- pointer to stop to check 
+//@param numConnected -- number of connected stops to this timestamp
+//
+//@return the number of connected bus stops at the timestamp 
 int areConnected(unsigned long timestamp, struct BusStop * stop, int numConnected) {
 
 	//base case, if null end of list 
@@ -65,12 +70,17 @@ int areConnected(unsigned long timestamp, struct BusStop * stop, int numConnecte
 	
 	//printf("Checking stop: %d, against timestamp: %lu + %d = %lu\n", stop->id, timestamp, stop->minAfter, (timestamp + stop->minAfter) % stop->id); 	
 	if((timestamp + stop->minAfter) % stop->id == 0) {
+			
+		//recusive call to check next stop with adjusted timestamp for offset 
 		return areConnected(timestamp + stop->minAfter, stop->next, numConnected + 1);
 	} 
 
+	//return number of currently connceted buses
 	return numConnected;
 }
 
+//Method to print bus data
+//@param bus -- pointer to start of bus list
 void printBuses(struct BusStop * bus) {
 	
 	printf("===Bus Stops===\n");
@@ -125,18 +135,11 @@ void part2() {
 	unsigned long increment = firstStop->id;
 	int numStopsConnected = 1;
 	while(numStopsConnected != numStops) {
-	
-/*
-	int iters = 14;
-	for(int j = 0; j < iters; j++) {
-*/
 
 		printf("\rChecking timestamp: %lu", timestamp); 
 		int numConnected = areConnected(timestamp, firstStop, 0);
-//		printf("NumConnected:%d >? numStopsConnect:%d\n", numConnected, numStopsConnected);			
 		if(numConnected > numStopsConnected) {
 	
-			//get bus id of last connected
 			currStop = firstStop;
 			for(int i = 0; i < numConnected; i++) {
 						
@@ -151,10 +154,12 @@ void part2() {
 		}
 				
 		
-//		printf("Checking timestamp: %lu, numMatched: %d, newIncement: %lu\n", timestamp, numConnected, increment); 
+		//printf("Checking timestamp: %lu, numMatched: %d, newIncement: %lu\n", timestamp, numConnected, increment); 
 	
 		timestamp += increment;	
 	}
+
+
 	printf("\nResult %lu\n", timestamp - increment);
 
 }
