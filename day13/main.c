@@ -13,13 +13,38 @@
  * Our goal is to find the bus we have to  
  * wait the least amount of time on. 
  *
+ * Note: All bus stops are prime numbers
+ *
  * Part 2 appears much harder as we need to 
  * find the time stamp at which all the buses 
  * appeared right after each other (with their 
  * respective offsets of course). They already 
  * told us that it would be an extremely large 
  * number. 
- *  
+ *
+ * This one was hard. Not hard to do, but hard 
+ * to do quickly. The first time I attempted this
+ * I only incremented by the looping of the first 
+ * bus stop (In my case, 17). This was horribly 
+ * slow. Then after looking around and thinking 
+ * on it, I tried a method where I incremented by 
+ * the highest matched bus stop as it would have the 
+ * biggest impact on matching. This was considerbly 
+ * faster than the previous method (roughly 33X
+ * quicker). This however was still not enough, and 
+ * my laptop was not happy with me at this point. 
+ * So I checked AOC's reddit and saw lots of mentions 
+ * of the Chinese Remainder Theroem. How this was 
+ * implemented in this was by understanding that 
+ * once the next stop was matched, the next time this
+ * matching would happen would be the addition of their 
+ * product added to the current timestamp. So once our 
+ * 17 is matched with 37, the new increment will be
+ * 629. Then on the next match (my case 571), the 
+ * new increment is now 359159. As you can see 
+ * this makes the process speed up extremely fast. 
+ * This only works because the bus stops are all 
+ * prime numbers, as noted above.   
  */
 
 void part1() {
