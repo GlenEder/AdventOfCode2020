@@ -14,6 +14,12 @@
  * value provided. 
  */
 
+long applyMask(char * mask, int value) {
+
+	
+	
+}
+
 void part1() {
 
 	struct input * curr = inputList;		//get pointer to first input node
