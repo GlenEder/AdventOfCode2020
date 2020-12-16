@@ -50,17 +50,17 @@ struct BusStop * firstStop = NULL;
 
 
 //Recusive function to see if the stops in the list are following each other
-int areConnected(unsigned long timestamp, struct BusStop * stop) {
+int areConnected(unsigned long timestamp, struct BusStop * stop, int numConnected) {
 
 	//base case, if null end of list 
-	if(stop == NULL) return 1;
+	if(stop == NULL) return numConnected;
 	
 	//printf("Checking stop: %d, against timestamp: %lu + %d = %lu\n", stop->id, timestamp, stop->minAfter, (timestamp + stop->minAfter) % stop->id); 	
 	if((timestamp + stop->minAfter) % stop->id == 0) {
-		return areConnected(timestamp + stop->minAfter, stop->next);
+		return areConnected(timestamp + stop->minAfter, stop->next, numConnected + 1);
 	} 
 
-	return 0;
+	return numConnected;
 }
 
 void printBuses(struct BusStop * bus) {
@@ -103,23 +103,51 @@ void part2() {
 		}
 	}
 
-	unsigned long timestamp = firstStop->id;
 	
 	printBuses(firstStop);
-
-	//find biggest stop interval 
-	int bigInterval = 0;
+ 
+	/* Get last bus stop id */
 	struct BusStop * currStop = firstStop;
+	int numStops = 0;
 	while(currStop) {
-		if(currStop->id > bigInterval) bigInterval = currStop->id;
 		currStop = currStop->next;
+		numStops++;
 	}
+	unsigned long timestamp = firstStop->id;
+	unsigned long increment = firstStop->id;
+	int numStopsConnected = 1;
+	while(numStopsConnected != numStops) {
+	
+/*
+	int iters = 14;
+	for(int j = 0; j < iters; j++) {
+*/
 
-	while(!areConnected(timestamp, firstStop)) {
-		timestamp += firstStop->id;
 		printf("\rChecking timestamp: %lu", timestamp); 
+		int numConnected = areConnected(timestamp, firstStop, 0);
+//		printf("NumConnected:%d >? numStopsConnect:%d\n", numConnected, numStopsConnected);			
+		if(numConnected > numStopsConnected) {
+	
+			//get bus id of last connected
+			currStop = firstStop;
+			for(int i = 0; i < numConnected; i++) {
+						
+				if(i >= numStopsConnected) {
+					increment *= currStop->id;
+				}
+								
+				currStop = currStop->next;
+			}
+	
+			numStopsConnected = numConnected;
+		}
+				
+		
+//		printf("Checking timestamp: %lu, numMatched: %d, newIncement: %lu\n", timestamp, numConnected, increment); 
+	
+		timestamp += increment;	
 	}
-	printf("\nResult %lu\n", timestamp);
+	printf("\nResult %lu\n", timestamp - increment);
 
 }
 
