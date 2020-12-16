@@ -11,7 +11,15 @@
  * the second line are the intervals at 
  * which the buses come, all starting at 0. 
  * Our goal is to find the bus we have to  
- * wait the least amount of time on.  
+ * wait the least amount of time on. 
+ *
+ * Part 2 appears much harder as we need to 
+ * find the time stamp at which all the buses 
+ * appeared right after each other (with their 
+ * respective offsets of course). They already 
+ * told us that it would be an extremely large 
+ * number. 
+ *  
  */
 
 void part1() {
