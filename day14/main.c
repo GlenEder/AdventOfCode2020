@@ -15,8 +15,12 @@
  */
 
 long applyMask(char * mask, int value) {
-
 	
+	printf("Value as binary: ");
+	for(int i = sizeof(value) * 8 - 1; i >= 0; i--) {
+		(value & (1 << i)) ? printf("1") : printf("0"); 
+	}	
+	printf("\n");
 	
 }
 
@@ -47,7 +51,7 @@ void part1() {
 			char * valueString = substring(curr->value, indexOfValue, l - indexOfValue);	//get substring
 			int value = atoi(valueString);							//get int rep of value
 			free(valueString);								//free substring memory 
-			printf("Value %d\n", value);		
+			applyMask(currentMask, value);
 		}	
 
 		curr = curr->next;			//go to next input 
