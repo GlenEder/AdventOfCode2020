@@ -34,8 +34,15 @@ void part1() {
 			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);			//get index of end of memory address
 			char * memAddy = substring(curr->value, frontOfMem, endOfMem - frontOfMem);	//get substring of memory address
 			int memAddress = atoi(memAddy);							//get in rep of memory address		
-			printf("Mem: %d\n", memAddress);
-		}
+			free(memAddy);									//free substring memory 
+			
+			int indexOfValue = indexOfChar(curr->value, '=', endOfMem) + 1; 		//get index of start of substring
+			int l = strlength(curr->value) - 1;
+			char * valueString = substring(curr->value, indexOfValue, l - indexOfValue);	//get substring
+			int value = atoi(valueString);							//get int rep of value
+			free(valueString);								//free substring memory 
+			printf("Value %d\n", value);		
+		}	
 
 		curr = curr->next;			//go to next input 
 	}
