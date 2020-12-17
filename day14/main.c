@@ -14,13 +14,29 @@
  * value provided. 
  */
 
-long applyMask(char * mask, int value) {
+char * applyMask(char * mask, int value) {
 	
-	printf("Value as binary: ");
-	for(int i = sizeof(value) * 8 - 1; i >= 0; i--) {
-		(value & (1 << i)) ? printf("1") : printf("0"); 
+	char * result = malloc(sizeof(char) * 37);		//create memory for new value  
+	char passedVal[37] = {0};				//create temp array for storing value bits
+	for(int i = 0; i < 4; i++) { passedVal[i] = '0'; }	//init extra four to 0
+	
+	int j = 4;
+	for(int i = sizeof(value) * 8 - 1; i >= 0; i--, j++) {
+		passedVal[j] = (value & (1 << i)) ? '1' : '0';
+	}
+
+	printf("\nValue: %s\n", passedVal);	
+	printf("Mask:  %s\n", mask);
+	int length = strlength(mask);
+	for(int i = 0; i < length; i++) {
+		char maskChar = *(mask + i);						//get mask char 
+		*(result + i) = maskChar == 'X' ? passedVal[i] : maskChar;		//set result value based on mask 
+		
+		//printf("Val: %c, Mask: %c, Result: %c\n", passedVal[i], maskChar, *(result + i));
 	}	
-	printf("\n");
+	
+	printf("Result:%s\n", result);
+	return result;	
 	
 }
 
@@ -33,9 +49,9 @@ void part1() {
 		/* handle mask input */
 		if(strstr(curr->value, "mask")) {									//check for mask input 
 			if(currentMask) { free(currentMask); }								//free previous substring memory if exists
-			int indexOfMask = indexOfChar(curr->value, '=', 0) + 1; 					//get index of start of substring
+			int indexOfMask = indexOfChar(curr->value, '=', 0) + 2; 					//get index of start of substring
 			currentMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1);	//get mask substring
-			printf("New mask: %s\n", currentMask);								//print mask for debugging
+			//printf("New mask: %s\n", currentMask);								//print mask for debugging
 		} 
 
 		/* handle memory input */
