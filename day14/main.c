@@ -13,6 +13,15 @@
  * we are to edit "memory address"'s 
  * values, utilizing the mask with the
  * value provided. 
+ *
+ * Note: All values to set fit in an int
+ *
+ * Part 1 should not have taken so long, 
+ * however I am dumb and forget to init
+ * the next pointer to null when creating
+ * new nodes.
+ * 
+ * 
  */
 
 struct MemoryData {
@@ -27,9 +36,7 @@ struct MemoryData * firstMemoryData = NULL;	//head pointer for memory blocks
 //@parma value -- value to be masked
 //
 //@return bit string result of mask on value
-char * applyMask(char * mask, int value) {
-
-	
+char * applyMask(char * mask, int value) {	
 	
 	char * result = malloc(sizeof(char) * 37);		//create memory for new value  
 	char passedVal[37] = {0};				//create temp array for storing value bits
@@ -49,8 +56,8 @@ char * applyMask(char * mask, int value) {
 	}	
 
 	*(result + 36) = 0;
-	
-/*	printf("\nValue: %s\n", passedVal);	
+/*	
+	printf("\nValue: %s\n", passedVal);	
 	printf("Mask:  %s\n", mask);
 	printf("Result:%s\n", result);
 */
@@ -81,16 +88,16 @@ unsigned long getSum() {
 
 void part1() {
 
-	struct input * curr = inputList;		//get pointer to first input node
-	char * currentMask = NULL;			//pointer to current mask 
+	struct input * curr = inputList;			//get pointer to first input node
+	char * currentMask = malloc(sizeof(char) * 38);		//pointer to current mask 
 	while(curr) {
 			
 		/* handle mask input */
 		if(strstr(curr->value, "mask")) {									//check for mask input 
-			if(currentMask) { memcpy(currentMask, curr->value, strlength(curr->value) + 1); }		//free previous substring memory if exists
 			int indexOfMask = indexOfChar(curr->value, '=', 0) + 2; 					//get index of start of substring
-			currentMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1);	//get mask substring
-			//printf("New mask: %s\n", currentMask);								//print mask for debugging
+			char * newMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1);	//get mask substring
+			memcpy(currentMask, newMask, strlength(newMask) + 1); 						//copy new mask into masks memory 
+			free(newMask);
 		} 
 
 		/* handle memory input */
@@ -114,10 +121,10 @@ void part1() {
 			int updatedFlag = 0;								//flag for if memory was updated or not
 			while(currMem) {
 				if(currMem->key == memAddress) {		
-printf("Updating memory value\n");
+//printf("Updating memory value\n");
 					memcpy(currMem->value, newValue, strlength(newValue) + 1);	//update value stored 
 					free(newValue);							//free new value memory 
-					//printf("Updated Value: %s\n", currMem->value);
+//printf("Updated Value: %s\n", currMem->value);
 					updatedFlag++;							//set updated flag
 					break;
 				}
@@ -126,13 +133,14 @@ printf("Updating memory value\n");
 			}				
 
 			if(!updatedFlag) {
-				//printf("Creating new memory data\n\taddress: %d, value: %s\n", memAddress, newValue);
+//printf("Creating new memory data\n\taddress: %d, value: %s\n", memAddress, newValue);
 				struct MemoryData * newData = malloc(sizeof(struct MemoryData));	//create memory for new node
 				newData->key = memAddress;						//set key
+				newData->next = NULL;							//set next to null
 				newData->value = malloc(sizeof(char) * (strlength(newValue) + 1));	//create memory for value string
 				memcpy(newData->value, newValue, strlength(newValue) + 1);		//copy value info 
 				free(newValue);								//free newValue memory				
-
+//printf("Adding to list\n");
 				if(firstMemoryData) {
 					currMem = firstMemoryData;					//set to head node
 					while(currMem->next) { currMem = currMem->next; }		//go to end of list
@@ -143,17 +151,17 @@ printf("Updating memory value\n");
 				}
 			}
 		}	
-	
+//printf("Going to next input line\n");	
 		curr = curr->next;			//go to next input 
 	}
 
-	//print memory list at end for debugging
+/*	//print memory list at end for debugging
 	struct MemoryData * currMem = firstMemoryData;
 	while(currMem) {
 		printf("memAddress: %d, value: %s\n", currMem->key, currMem->value);
 		currMem = currMem->next;
 	}
-
+*/
 	printf("Total Sum: %lu\n", getSum());
 }
 
