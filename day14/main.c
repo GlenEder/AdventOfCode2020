@@ -65,6 +65,8 @@ char * applyMask(char * mask, int value) {
 	
 }
 
+//Calculates the sum of the values in the memory list
+//@return sum of memory list
 unsigned long getSum() {
 	
 	unsigned long sum = 0;
@@ -163,6 +165,64 @@ void part1() {
 
 
 
+//Applys the given mask to the value 
+//@param mask -- mask to use on value
+//@parma value -- value to be masked
+//
+//@return bit string result of mask on value
+char * applyMaskV2(char * mask, int value) {	
+	
+	char * result = malloc(sizeof(char) * 37);		//create memory for new value  
+	char passedVal[37] = {0};				//create temp array for storing value bits
+	for(int i = 0; i < 4; i++) { passedVal[i] = '0'; }	//init extra four to 0
+	
+	int j = 4;
+	for(int i = sizeof(value) * 8 - 1; i >= 0; i--, j++) {
+		passedVal[j] = (value & (1 << i)) ? '1' : '0';		//shift through bits and assign value
+	}
+
+	int length = strlength(mask);							//get length of mask 
+	for(int i = 0; i < length; i++) {
+		char maskChar = *(mask + i);						//get mask char 
+		*(result + i) = maskChar == '0' ? passedVal[i] : maskChar;		//set result value based on mask 
+		
+		//printf("Val: %c, Mask: %c, Result: %c\n", passedVal[i], maskChar, *(result + i));
+	}	
+
+	*(result + 36) = 0;
+
+	printf("\nValue: %s\n", passedVal);	
+	printf("Mask:  %s\n", mask);
+	printf("Result:%s\n", result);
+
+	return result;	
+	
+}
+
+//Calculates the sum of the values in the memory list
+//@return sum of memory list
+unsigned long getSumV2() {
+
+	return 0;
+	
+	unsigned long sum = 0;
+	struct MemoryData * curr = firstMemoryData;
+	while(curr) {
+		unsigned long val = 0;		
+		int l = strlength(curr->value);
+		for(int i = 0; i < l; i++) {
+			if(*(curr->value + i) == '1') {
+				val += pow(2, l - i - 1); 
+			}
+		}
+			
+		sum += val;
+		curr = curr->next;
+	}
+
+	return sum;
+
+}
 void part2() {
 
 	struct input * curr = inputList;			//get pointer to first input node
@@ -191,7 +251,7 @@ void part2() {
 			int value = atoi(valueString);							//get int rep of value
 			free(valueString);								//free substring memory 
 			
-			char * newValue = applyMask(currentMask, value);				//apply mask to value provided
+			char * newValue = applyMaskV2(currentMask, value);				//apply mask to value provided
 			
 			/* Handle adding to list/updating node */
 			struct MemoryData * currMem = firstMemoryData;					//get pointer to head of list
@@ -235,7 +295,7 @@ void part2() {
 		currMem = currMem->next;
 	}
 */
-	printf("Total Sum: %lu\n", getSum());
+	printf("Total Sum: %lu\n", getSumV2());
 }
 
 int main(int argc, char *argv[]) {
