@@ -205,19 +205,30 @@ char * applyMaskV2(char * mask, int value) {
 //@param power -- current power to eval 
 //
 //@return sum of string 
-unsigned long getValue(char * value, int power) {
+unsigned long getValue(char * value, int power, int numXs) {
+
 	
 	char c = *value;
+	int xOptions = pow(2, numXs);
+
+	printf("C: %c, Pow: %d, Num X's: %d\n", c, power, numXs);
+	if(power == 0) {
+		if(c == 'X') return xOptions / 2;
+		if(c == '1') return 1 * xOptions;
+		return 0;
+	}
+
 	if(c == 'X') {
-		return pow(2, power) + 2 * getValue(value + 1, power - 1);
+		return pow(2, power) * xOptions / 2 + getValue(value + 1, power - 1, numXs);
 	}
 	else if (c == '1') {
-		return pow(2, power) + getValue(value + 1, power - 1);
+		return pow(2, power) * xOptions + getValue(value + 1, power - 1, numXs);
 	}
 	else if (c == '0') {
-		return getValue(value + 1, power - 1);
+		return getValue(value + 1, power - 1, numXs);
 	}
-	
+
+	printf("How did i get here...\n");	
 	return 0;
 }
 
@@ -228,7 +239,16 @@ unsigned long getSumV2() {
 	unsigned long sum = 0;
 	struct MemoryData * curr = firstMemoryData;
 	while(curr) {
-		sum += getValue(curr->value, 36);
+		
+		char * pos = curr->value;
+		int numXs = 0;
+		while(*pos != 0) { 
+   			if(*pos == 'X') numXs++; 	
+			pos++; 
+    		}
+		unsigned long toAdd = getValue(curr->value, 35, numXs);
+		printf("Adding %lu\n", toAdd);
+		sum += toAdd;
 		curr = curr->next;
 	}
 
