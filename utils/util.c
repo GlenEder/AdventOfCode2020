@@ -191,12 +191,33 @@ struct node * addNewNode(struct node * list, void * value, size_t size) {
 	newNode->value = malloc(size);					//get memory for value
 	if(newNode->value == NULL) return NULL;				//memory check 
 	memcpy(newNode->value, value, size);				//init value
-	newNode->next = NULL;
+	newNode->key = NULL;								//init key
+	newNode->next = NULL;								//init next
 	
 	while(list->next) { list = list->next; }			//go to end of list
 	list->next = newNode;						//add node to end of list
 		
 	return newNode;							//return pointer to new node			
+}
+
+
+//Adds a new node to the end of the list provided with key field
+//@param list -- linked list to add node to
+//@param key -- value of key for node
+//@param value -- value of new node
+//@param keySize -- size of key
+//@param valueSize -- size of value to store
+//
+//@return pointer to new node, null on error
+struct node * addNewKeyedNode(struct node * list, void * key, void * value, size_t keySize, size_t valueSize) {
+
+	struct node * newNode = addNewNode(list, value, valueSize);			//utilize legacy node creation
+	if(newNode == NULL) return NULL;									//error check from node creation
+	newNode->key = malloc(keySize);										//create memory for key
+	if(newNode->key == NULL) return NULL;								//memory creation error check
+	memcpy(newNode->key, key, keySize);									//copy value into memory
+
+	return newNode;														//return new node with key
 }
 
 //Adds a new node to the front of the provided list
@@ -220,15 +241,36 @@ struct node * prependNewNode(struct node * head, void * value, size_t size) {
 	return newNode;							//return pointer to new node
 }
 
+//Adds a new node to the front of the provided list with key
+//@param list -- linked list to add node to
+//@param key -- value of key for node
+//@param value -- value of new node
+//@param keySize -- size of key
+//@param valueSize -- size of value to store
+//
+//@return pointer to new node, null on error
+struct node * prependNewKeyedNode(struct node * head, void * key, void * value, size_t keySize, size_t valueSize) {
+
+	struct node * newNode = prependNewNode(head, value, valueSize);		//utilize legacy code
+	if(newNode == NULL) return NULL;									//error check from node creation call
+
+	newNode->key = malloc(keySize);										//create memory for key
+	if(newNode->key == NULL) return NULL;								//error check
+	memcpy(newNode->key, key, keySize);									//fill key memory
+
+	return newNode;														//return new node
+}
+
 //Removes the first node from list and frees its content
 //@param head -- first node in list 
 //
 //@return pointer to new head of list
 struct node * removeFirstNode(struct node * head) {
 	struct node * toReturn = head->next;		//save next pointer
-	free(head->value);				//free head nodes value memory 
-	free(head);					//free head node memory
-	return toReturn;				//return new heads pointer
+	free(head->key);							//free head nodes key memory
+	free(head->value);							//free head nodes value memory
+	free(head);									//free head node memory
+	return toReturn;							//return new heads pointer
 }
 
 //Frees memory of all nodes in providied list 
@@ -236,9 +278,10 @@ struct node * removeFirstNode(struct node * head) {
 void deleteList(struct node * list) {
 	while(list) {
 		struct node * toFree = list;		//get pointer to current node
-		list = list->next;			//move to next node
-		free(toFree->value);			//free this node value memory 
-		free(toFree);				//free node memory 
+		list = list->next;					//move to next node
+		free(toFree->key);					//free this node's key memory
+		free(toFree->value);				//free this node's value memory
+		free(toFree);						//free node memory
 	}
 }
 

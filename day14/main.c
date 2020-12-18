@@ -27,12 +27,7 @@
  * that the mask emits.  
  */
 
-struct MemoryData {
-	int key;			//mem address 
-	char * value;			//value as bit string
-	struct MemoryData * next;	//pointer to next memory address
-};
-struct MemoryData * firstMemoryData = NULL;	//head pointer for memory blocks
+struct node * firstMem = NULL;
 
 //Applys the given mask to the value 
 //@param mask -- mask to use on value
@@ -73,12 +68,12 @@ char * applyMask(char * mask, int value) {
 unsigned long getSum() {
 	
 	unsigned long sum = 0;
-	struct MemoryData * curr = firstMemoryData;
+	struct node * curr = firstMem;
 	while(curr) {
 		unsigned long val = 0;		
-		int l = strlength(curr->value);
+		int l = strlength((char *)curr->value);
 		for(int i = 0; i < l; i++) {
-			if(*(curr->value + i) == '1') {
+			if(*((char *)curr->value + i) == '1') {
 				val += pow(2, l - i - 1); 
 			}
 		}
@@ -93,36 +88,36 @@ unsigned long getSum() {
 
 void part1() {
 
-	struct input * curr = inputList;			//get pointer to first input node
+	struct input * curr = inputList;			        //get pointer to first input node
 	char * currentMask = malloc(sizeof(char) * 38);		//pointer to current mask 
 	while(curr) {
 			
 		/* handle mask input */
-		if(strstr(curr->value, "mask")) {									//check for mask input 
-			int indexOfMask = indexOfChar(curr->value, '=', 0) + 2; 					//get index of start of substring
-			char * newMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1);	//get mask substring
-			memcpy(currentMask, newMask, strlength(newMask) + 1); 						//copy new mask into masks memory 
-			free(newMask);
+		if(strstr(curr->value, "mask")) {									                                //check for mask input
+			int indexOfMask = indexOfChar(curr->value, '=', 0) + 2; 					                        //get index of start of substring
+			char * newMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1); 	//get mask substring
+			memcpy(currentMask, newMask, strlength(newMask) + 1); 						                        //copy new mask into masks memory
+			free(newMask);                                                                                      //free substring memory
 		} 
 
 		/* handle memory input */
 		else {
-			int frontOfMem = indexOfChar(curr->value, '[', 0) + 1;				//get index of memory address
-			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);			//get index of end of memory address
+			int frontOfMem = indexOfChar(curr->value, '[', 0) + 1;				        //get index of memory address
+			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);          			//get index of end of memory address
 			char * memAddy = substring(curr->value, frontOfMem, endOfMem - frontOfMem);	//get substring of memory address
-			int memAddress = atoi(memAddy);							//get in rep of memory address		
-			free(memAddy);									//free substring memory 
+			int memAddress = atoi(memAddy);												//get in rep of memory address
+			free(memAddy);																//free substring memory
 			
-			int indexOfValue = indexOfChar(curr->value, '=', endOfMem) + 1; 		//get index of start of substring
-			int l = strlength(curr->value) - 1;
+			int indexOfValue = indexOfChar(curr->value, '=', endOfMem) + 1; 				//get index of start of substring
+			int l = strlength(curr->value) - 1;												//get length of input string
 			char * valueString = substring(curr->value, indexOfValue, l - indexOfValue);	//get substring
-			int value = atoi(valueString);							//get int rep of value
-			free(valueString);								//free substring memory 
+			int value = atoi(valueString);													//get int rep of value
+			free(valueString);																//free substring memory
 			
-			char * newValue = applyMask(currentMask, value);				//apply mask to value provided
+			char * newValue = applyMask(currentMask, value);								//apply mask to value provided
 			
 			/* Handle adding to list/updating node */
-			struct MemoryData * currMem = firstMemoryData;					//get pointer to head of list
+			struct node * currMem = firstMem;					//get pointer to head of list
 			int updatedFlag = 0;								//flag for if memory was updated or not
 			while(currMem) {
 				if(currMem->key == memAddress) {		
