@@ -9,6 +9,7 @@ struct input {
 };
 
 struct node {
+	int key;
 	void * value;
 	struct node * next;
 };
