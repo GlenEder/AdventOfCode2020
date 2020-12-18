@@ -24,7 +24,20 @@
  * Part 2 I read wrong so this is going to 
  * take a bit longer than I want it to. The 
  * value is set to all the memory addresses 
- * that the mask emits.  
+ * that the mask emits.
+ *
+ * What a journey this day was. Part 1 was
+ * pretty straight forward to implement.
+ * However, I misunderstood what Part 2 was
+ * asking us to find, and spent a good chunk
+ * of time calculating the wrong results. Post
+ * this complication, I implemented a key in my
+ * node struct to make them work almost like
+ * a hash map, but in linked list form. This
+ * worked great and was worth the time. My
+ * solution doesn't run in the greatest time
+ * complexity, but it is nowhere as bad as
+ * yesterday's first implementation.
  */
 
 struct node * firstMem = NULL;
@@ -323,7 +336,7 @@ void part2() {
 		currMem = currMem->next;			//go to next node
 	}
 
-	//print results 
+	//print results
 	printf("Part 2 Total: %lu\n", sum);
 
 }
