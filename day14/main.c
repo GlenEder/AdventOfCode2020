@@ -199,7 +199,7 @@ char * applyMaskV2(char * mask, int value) {
 //@param mems -- address mask to find addresses with
 //@param value -- value to set addresses values to
 void setMemory(char * mems, int value) {
-	printf("Setting memory: %s to value %d\n", mems, value);
+	//printf("Setting memory: %s to value %d\n", mems, value);
 	unsigned long start = 0;											//starting value of head node
 	struct node * head = createList(&start, sizeof(unsigned long));		//create head node of new list
 	int power = 35;														//starting power to decrement
@@ -236,13 +236,13 @@ void setMemory(char * mems, int value) {
 		mems++;							//go to next char in string
 	}
 
-	/* print memorys to update for debugging */
-	printf("===Memories to Set===\n");
 	struct node * curr = head;
-	while(curr) {
-		printf("Address: %lu\n", *(unsigned long *)curr->value);
-		curr = curr->next;
-	}
+//	/* print memorys to update for debugging */
+//	printf("===Memories to Set===\n");
+//	while(curr) {
+//		printf("Address: %lu\n", *(unsigned long *)curr->value);
+//		curr = curr->next;
+//	}
 
 
 	/* update and add new mem blocks to mem list */
@@ -316,13 +316,14 @@ void part2() {
 		curr = curr->next;			//go to next input
 	}
 
-	unsigned long sum = 0;
-	struct node * currMem = firstMem;
+	unsigned long sum = 0;					//sum of memory values
+	struct node * currMem = firstMem;		//get pointer to first memory block
 	while(currMem) {
-		sum += *(int *)currMem->value;
-		currMem = currMem->next;
+		sum += *(int *)currMem->value;		//add value to sum
+		currMem = currMem->next;			//go to next node
 	}
 
+	//print results 
 	printf("Part 2 Total: %lu\n", sum);
 
 }
