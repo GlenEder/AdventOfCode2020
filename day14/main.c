@@ -196,6 +196,26 @@ char * applyMaskV2(char * mask, int value) {
 
 void setMemory(char * mems, int value) {
 	printf("Setting memory: %s to value %d\n", mems, value);
+	unsigned long start = 0;
+	struct node * head = createList(&start, sizeof(unsigned long));
+	int power = 35;
+	while(power >= 0) {
+		char c = *mems;
+
+		if(c == '1') {
+			struct node * curr = head;
+			unsigned long toAdd = pow(2, power);
+			printf("\tAdding %lu\n", toAdd);
+			while(curr) {
+				unsigned long * currValue = (unsigned long *)curr->value;
+				*currValue += toAdd;
+				curr = curr->next;
+			}
+		}
+		power--;
+		mems++;
+	}
+
 }
 
 void part2() {
@@ -228,7 +248,7 @@ void part2() {
 
 			char * newValue = applyMaskV2(currentMask, memAddress);								//apply mask to address
 			setMemory(newValue, value);
-
+			return;
 		}
 		curr = curr->next;			//go to next input
 	}
