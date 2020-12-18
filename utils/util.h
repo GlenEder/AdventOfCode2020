@@ -1,6 +1,9 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+#define TRUE 1
+#define FALSE 0
+
 struct input {
 	char * value;		//value of input field
 	int visited;		//if node has been visited before or not
@@ -31,10 +34,13 @@ int 	addIntNode(int);
 
 /* node list methods */
 struct node * 	createList(void *, size_t);
+struct node * 	createKeyedList(void *, void *, size_t, size_t);
 struct node * 	addNewNode(struct node *, void *, size_t);
+struct node * 	addNewKeyedNode(struct node *, void *, void *, size_t, size_t);
 struct node * 	prependNewNode(struct node *, void *, size_t);
+struct node * 	prependNewKeyedNode(struct node *, void *, void *, size_t, size_t);
 struct node * 	removeFirstNode(struct node *);
-void 		deleteList(struct node *);
+void 			deleteList(struct node *);
 
 //Global Variables
 extern struct input * inputList; 

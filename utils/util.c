@@ -175,6 +175,24 @@ struct node * createList(void * value, size_t size) {
 	return newNode;							//return pointer to new node
 }
 
+//Creates a new keyed head node
+//@param key -- value of key for node
+//@param value -- value of new node
+//@param keySize -- size of key
+//@param valueSize -- size of value to store
+//
+//@return pointer to new node, null on error
+struct node * createKeyedList(void * key, void * value, size_t keySize, size_t valueSize) {
+
+	struct node * newNode = createList(value, valueSize);	//use legacy code to create node
+	if(newNode == NULL) return NULL;						//error check
+	newNode->key = malloc(keySize);							//get memory for key
+	if(newNode->key == NULL) return NULL;					//memory check
+	memcpy(newNode->key, key, keySize);						//copy key data into new memory
+
+	return newNode;											//return the new keyed node
+}
+
 //Adds a new node to the end of the list provided 
 //@param list -- linked list to add node to
 //@param value -- value of new node

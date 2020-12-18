@@ -71,7 +71,7 @@ unsigned long getSum() {
 	struct node * curr = firstMem;
 	while(curr) {
 		unsigned long val = 0;		
-		int l = strlength((char *)curr->value);
+		int l = strlen((char *)curr->value);
 		for(int i = 0; i < l; i++) {
 			if(*((char *)curr->value + i) == '1') {
 				val += pow(2, l - i - 1); 
@@ -105,7 +105,7 @@ void part1() {
 			int frontOfMem = indexOfChar(curr->value, '[', 0) + 1;				        //get index of memory address
 			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);          			//get index of end of memory address
 			char * memAddy = substring(curr->value, frontOfMem, endOfMem - frontOfMem);	//get substring of memory address
-			int memAddress = atoi(memAddy);												//get in rep of memory address
+			unsigned long memAddress = atoi(memAddy);												//get in rep of memory address
 			free(memAddy);																//free substring memory
 			
 			int indexOfValue = indexOfChar(curr->value, '=', endOfMem) + 1; 				//get index of start of substring
@@ -118,36 +118,31 @@ void part1() {
 			
 			/* Handle adding to list/updating node */
 			struct node * currMem = firstMem;					//get pointer to head of list
-			int updatedFlag = 0;								//flag for if memory was updated or not
+			int updated = FALSE;								//updated flag
 			while(currMem) {
-				if(currMem->key == memAddress) {		
-					memcpy(currMem->value, newValue, strlength(newValue) + 1);	//update value stored 
-					free(newValue);							//free new value memory 
-					updatedFlag++;							//set updated flag
-					break;
+				unsigned long currKey = *(unsigned long *)currMem->key;			//get key of current node
+				if(currKey == memAddress) {										//check key against new memory slot
+					memcpy(currMem->value, newValue, strlen(newValue) + 1);		//copy new value into nodes memory
+					free(newValue);												//free newValues memory
+					updated = TRUE;												//set updated flag
 				}
-				
-				currMem = currMem->next;						//go to next memory node
-			}				
 
-			if(!updatedFlag) {
-				struct MemoryData * newData = malloc(sizeof(struct MemoryData));	//create memory for new node
-				newData->key = memAddress;						//set key
-				newData->next = NULL;							//set next to null
-				newData->value = malloc(sizeof(char) * (strlength(newValue) + 1));	//create memory for value string
-				memcpy(newData->value, newValue, strlength(newValue) + 1);		//copy value info 
-				free(newValue);								//free newValue memory				
+				//go to next node
+				currMem = currMem->next;
+			}
 
-				if(firstMemoryData) {
-					currMem = firstMemoryData;					//set to head node
-					while(currMem->next) { currMem = currMem->next; }		//go to end of list
-					currMem->next = newData;					//add to end
+
+			if(!updated) {
+				/* Create a new node */
+				if(firstMem) {
+					addNewKeyedNode(firstMem, &memAddress, newValue, sizeof(unsigned long), sizeof(char) * strlen(newValue) + 1);
 				}
 				else {
-					firstMemoryData = newData;					//init head node
+					firstMem = createKeyedList(&memAddress, newValue, sizeof(unsigned  long), sizeof(char) * strlen(newValue) + 1);
 				}
 			}
-		}	
+
+		}
 		curr = curr->next;			//go to next input 
 	}
 
