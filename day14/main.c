@@ -216,6 +216,14 @@ void setMemory(char * mems, int value) {
 		mems++;
 	}
 
+	/* print memorys to update for debugging */
+	printf("===Memories to Set===\n");
+	struct node * curr = head;
+	while(curr) {
+		printf("Address: %lu\n", *(unsigned long *)curr->value);
+		curr = curr->next;
+	}
+
 }
 
 void part2() {
