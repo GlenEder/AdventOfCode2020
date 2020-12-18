@@ -154,6 +154,7 @@ void part1() {
 	}
 */
 	printf("Total Sum: %lu\n", getSum());
+	deleteList(firstMem);
 }
 
 
@@ -165,7 +166,7 @@ void part1() {
 //@return bit string result of mask on value
 char * applyMaskV2(char * mask, int value) {	
 	
-	printf("Val: %d\n", value);	
+	//printf("Val: %d\n", value);
 	char * result = malloc(sizeof(char) * 37);		//create memory for new value  
 	char passedVal[37] = {0};				//create temp array for storing value bits
 	for(int i = 0; i < 4; i++) { passedVal[i] = '0'; }	//init extra four to 0
@@ -185,15 +186,53 @@ char * applyMaskV2(char * mask, int value) {
 
 	*(result + 36) = 0;
 
-	printf("\nValue: %s\n", passedVal);	
-	printf("Mask:  %s\n", mask);
-	printf("Result:%s\n", result);
+	//printf("\nValue: %s\n", passedVal);
+	//printf("Mask:  %s\n", mask);
+	//printf("Result:%s\n", result);
 
 	return result;	
 	
 }
 
+void setMemory(char * mems, int value) {
+	printf("Setting memory: %s to value %d\n", mems, value);
+}
+
 void part2() {
+
+	struct input * curr = inputList;			        //get pointer to first input node
+	char * currentMask = malloc(sizeof(char) * 38);		//pointer to current mask
+	while(curr) {
+
+		/* handle mask input */
+		if(strstr(curr->value, "mask")) {									                                //check for mask input
+			int indexOfMask = indexOfChar(curr->value, '=', 0) + 2; 					                        //get index of start of substring
+			char * newMask = substring(curr->value, indexOfMask, strlength(curr->value) - indexOfMask - 1); 	//get mask substring
+			memcpy(currentMask, newMask, strlength(newMask) + 1); 						                        //copy new mask into masks memory
+			free(newMask);                                                                                      //free substring memory
+		}
+
+			/* handle memory input */
+		else {
+			int frontOfMem = indexOfChar(curr->value, '[', 0) + 1;				        //get index of memory address
+			int endOfMem = indexOfChar(curr->value, ']', frontOfMem);          			//get index of end of memory address
+			char * memAddy = substring(curr->value, frontOfMem, endOfMem - frontOfMem);	//get substring of memory address
+			int memAddress = atoi(memAddy);												//get in rep of memory address
+			free(memAddy);																//free substring memory
+
+			int indexOfValue = indexOfChar(curr->value, '=', endOfMem) + 1; 				//get index of start of substring
+			int l = strlength(curr->value) - 1;												//get length of input string
+			char * valueString = substring(curr->value, indexOfValue, l - indexOfValue);	//get substring
+			int value = atoi(valueString);													//get int rep of value
+			free(valueString);																//free substring memory
+
+			char * newValue = applyMaskV2(currentMask, memAddress);								//apply mask to address
+			setMemory(newValue, value);
+
+		}
+		curr = curr->next;			//go to next input
+	}
+
 
 }
 
