@@ -155,6 +155,7 @@ void part1() {
 */
 	printf("Total Sum: %lu\n", getSum());
 	deleteList(firstMem);
+	firstMem = NULL;		//set to null so we can use it in part 2
 }
 
 
@@ -194,43 +195,45 @@ char * applyMaskV2(char * mask, int value) {
 	
 }
 
+//Sets memory address to the value provided
+//@param mems -- address mask to find addresses with
+//@param value -- value to set addresses values to
 void setMemory(char * mems, int value) {
 	printf("Setting memory: %s to value %d\n", mems, value);
-	unsigned long start = 0;
-	struct node * head = createList(&start, sizeof(unsigned long));
-	int power = 35;
+	unsigned long start = 0;											//starting value of head node
+	struct node * head = createList(&start, sizeof(unsigned long));		//create head node of new list
+	int power = 35;														//starting power to decrement
 	while(power >= 0) {
-		char c = *mems;
+		char c = *mems;													//char at current position in mask
 
 		if(c == '1') {
-			struct node * curr = head;
-			unsigned long toAdd = pow(2, power);
-			printf("\tAdding %lu\n", toAdd);
+			struct node * curr = head;									//get pointer to head of list
+			unsigned long toAdd = pow(2, power);						//calculate value to add to nodes
 			while(curr) {
-				unsigned long * currValue = (unsigned long *)curr->value;
-				*currValue += toAdd;
-				curr = curr->next;
+				unsigned long * currValue = (unsigned long *)curr->value;		//get current node's value
+				*currValue += toAdd;											//update node's value
+				curr = curr->next;												//go to next node
 			}
 		}
 		else if(c == 'X') {
 			/* must make duplicates of all current nodes */
-			struct node * curr = head;
-			unsigned long toAdd = pow(2, power);
+			struct node * curr = head;													//get pointer to head of list
+			unsigned long toAdd = pow(2, power);										//calculate value to add
 			while(curr) {
-				unsigned long * currValue = (unsigned long *)curr->value;
+				unsigned long * currValue = (unsigned long *)curr->value;				//get current nodes value
 
-				//create copy where we don't add to and add to front of list to not infi loop
-				struct node * newNode = createList(currValue, sizeof(unsigned long));
-				newNode->next = head;
-				head = newNode;
+				/* create copy where we don't add to its value */
+				struct node * newNode = createList(currValue, sizeof(unsigned long));	//create new node
+				newNode->next = head;													//add to front of list so that we dont check it again in this loop
+				head = newNode;															//update head node
 
-				*currValue += toAdd;
-				curr = curr->next;
+				*currValue += toAdd;													//add value to current node
+				curr = curr->next;														//go to next node
 			}
 
 		}
-		power--;
-		mems++;
+		power--;						//decrement power
+		mems++;							//go to next char in string
 	}
 
 	/* print memorys to update for debugging */
@@ -241,6 +244,38 @@ void setMemory(char * mems, int value) {
 		curr = curr->next;
 	}
 
+
+	/* update and add new mem blocks to mem list */
+	curr = head;															//get pointer to head node
+	while(curr) {
+
+		//check if memory needs updated
+		struct node * toUpdate = firstMem;									//get pointer to head of existing memory blocks
+		int updated = FALSE;												//update flag
+		while(toUpdate) {
+			unsigned long address = *(unsigned long *)toUpdate->key;		//get memory blocks address
+			if(*(unsigned long *)(curr->value) == address) {				//compare addresses
+				*(int *)toUpdate->value = value;							//update memory's value
+				updated = TRUE;												//set updated flag
+				break;														//get out of loop
+			}
+
+			toUpdate = toUpdate->next;										//go to next memory block
+		}
+
+
+		/* create new memory block if not updated */
+		if(!updated){
+			if(firstMem) {
+				addNewKeyedNode(firstMem, curr->value, &value, sizeof(unsigned long), sizeof(int));
+			}
+			else {
+				firstMem = createKeyedList(curr->value, &value, sizeof(unsigned long), sizeof(int));
+			}
+		}
+
+		curr = curr->next;						//go to next memory to set
+	}
 
 
 	//free memory of list
@@ -277,11 +312,18 @@ void part2() {
 
 			char * newValue = applyMaskV2(currentMask, memAddress);								//apply mask to address
 			setMemory(newValue, value);
-			return;
 		}
 		curr = curr->next;			//go to next input
 	}
 
+	unsigned long sum = 0;
+	struct node * currMem = firstMem;
+	while(currMem) {
+		sum += *(int *)currMem->value;
+		currMem = currMem->next;
+	}
+
+	printf("Part 2 Total: %lu\n", sum);
 
 }
 
