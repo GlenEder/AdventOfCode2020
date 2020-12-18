@@ -212,6 +212,23 @@ void setMemory(char * mems, int value) {
 				curr = curr->next;
 			}
 		}
+		else if(c == 'X') {
+			/* must make duplicates of all current nodes */
+			struct node * curr = head;
+			unsigned long toAdd = pow(2, power);
+			while(curr) {
+				unsigned long * currValue = (unsigned long *)curr->value;
+
+				//create copy where we don't add to and add to front of list to not infi loop
+				struct node * newNode = createList(currValue, sizeof(unsigned long));
+				newNode->next = head;
+				head = newNode;
+
+				*currValue += toAdd;
+				curr = curr->next;
+			}
+
+		}
 		power--;
 		mems++;
 	}
