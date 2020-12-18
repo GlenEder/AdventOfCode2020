@@ -241,6 +241,10 @@ void setMemory(char * mems, int value) {
 		curr = curr->next;
 	}
 
+
+
+	//free memory of list
+	deleteList(head);
 }
 
 void part2() {

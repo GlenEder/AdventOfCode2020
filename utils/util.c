@@ -170,6 +170,7 @@ struct node * createList(void * value, size_t size) {
 		newNode->value = malloc(size);				//get memory for value
 		if(newNode->value == NULL) return NULL;			//memory check 
 		memcpy(newNode->value, value, size);			//init value
+		newNode->key = NULL;					//init key
 		newNode->next = NULL;					//init next
 	}
 	return newNode;							//return pointer to new node
@@ -254,6 +255,7 @@ struct node * prependNewNode(struct node * head, void * value, size_t size) {
 	newNode->value = malloc(size);					//get memory for value
 	if(newNode->value == NULL) return NULL;				//memory check 
 	memcpy(newNode->value, value, size);				//init value
+	newNode->key = NULL;						//init key to null
 	newNode->next = head;						//add to front of list
 		
 	return newNode;							//return pointer to new node
@@ -297,7 +299,7 @@ void deleteList(struct node * list) {
 	while(list) {
 		struct node * toFree = list;		//get pointer to current node
 		list = list->next;					//move to next node
-		free(toFree->key);					//free this node's key memory
+		free(toFree->key);					//free this node's key memory if key was used
 		free(toFree->value);				//free this node's value memory
 		free(toFree);						//free node memory
 	}
