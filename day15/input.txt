@@ -1,0 +1,1 @@
+This is not used for day 15, but to follow suit with the readme this is here to make stuff consistent 
