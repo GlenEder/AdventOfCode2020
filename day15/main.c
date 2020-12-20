@@ -17,13 +17,15 @@
  * 30,000,000.
  */
 
+/*
 int input[] = {9,6,0,10,18,2,1};		//input for day 15
 int inputLength = 7;
+*/
 
-/*
+
 int input[] = {0, 3, 6};				//test input for day 15
 int inputLength = 3;					//should result in 436
-*/
+
 
 void part1() {
 
@@ -61,37 +63,47 @@ void part2() {
 
 	int turn = 0;						//turn tracker
 	int maxTurn = 30000000;				//max turn for part 2
-	int output[maxTurn];				//outputs for each turn
 
-	/* insert our input to output array */
-	for(int i = 0; i < inputLength; i++, turn++) {
-		output[turn] = input[i];
+	struct node * headOutput = createKeyedList(&turn, &input[0], sizeof(int), sizeof(int));
+	//printf("Created head output %d, %d", *(int *)headOutput->key, *(int *)headOutput->value);
+
+	/* insert our input to output linked list */
+	for(int i = 1; i < inputLength; i++) {
+		turn++;
+		headOutput = prependNewKeyedNode(headOutput, &turn, &input[i], sizeof(int), sizeof(int));
 	}
 
+	//printf("Input took us to turn %d\n", turn);
+
+	turn++;											//increment turn before loop
 	while(turn < maxTurn) {
 
-		int lastPos = turn - 1;			//get last position filled
-		int prev = output[lastPos];		//get previous value
-		int valSet = FALSE;				//set in for loop flag
-
-		for(int i = lastPos - 1; i >= 0; i--) {
-			if(output[i] == prev) {
-				//printf("Found %d at pos %d\n", prev, i);
-				output[turn] = lastPos - i;			//calculate difference in position
-				valSet = TRUE;						//set flag
-				break;								//get out of loop
+		int prev = *(int *)headOutput->value;		//get previous output value
+		struct node * curr = headOutput->next;			//get previous output node
+		int newValue = 0;							//new value to add to output list
+		//printf("\nTurn %d, Checking for %d -- ", turn, prev);
+		while(curr) {
+			int val = *(int *)curr->value;					//get current nodes value
+			//printf("%d,", val);
+			if(val == prev) {
+				int lastSeen = *(int *)curr->key;			//get key of last seen value
+				//printf(" Found @ pos %d ", lastSeen);
+				newValue = turn - lastSeen - 1;					//calc difference between nodes keys
+				break;
 			}
+
+			curr = curr->next;								//go to next node
 		}
 
-		if(!valSet){ output[turn] = 0; }			//set output to 0 if value was not set before
-
-		//printf("%d,", output[turn]);
-		turn++;							//go to next turn
+		headOutput = prependNewKeyedNode(headOutput, &turn, &newValue, sizeof(int), sizeof(int));
+		//printf(" ====> Added output %d %d\n", *(int *)headOutput->key, *(int *)headOutput->value);
+		printf("\rTurn: %d", turn);
+		turn++;							//increment turn counter
 	}
 
 
 	//print last turns value
-	printf("Value at %d: %d\n", maxTurn, output[maxTurn - 1]);
+	printf("\nValue at %d: %d\n", maxTurn, *(int *)headOutput->value);
 }
 
 int main(int argc, char *argv[]) {
@@ -100,7 +112,7 @@ int main(int argc, char *argv[]) {
 	if(argc != 2) {
 		printf("Ussage: <program> <input file>\n");
 		return -1;
-	}	
+	}
 
 	//read the input file
 	readInput(argv[1]);
