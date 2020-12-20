@@ -17,15 +17,15 @@
  * 30,000,000.
  */
 
-/*
+
 int input[] = {9,6,0,10,18,2,1};		//input for day 15
 int inputLength = 7;
-*/
 
 
+/*
 int input[] = {0, 3, 6};				//test input for day 15
 int inputLength = 3;					//should result in 436
-
+*/
 
 void part1() {
 
@@ -61,49 +61,41 @@ void part1() {
 
 void part2() {
 
-	int turn = 0;						//turn tracker
-	int maxTurn = 30000000;				//max turn for part 2
+	int * latest = malloc(sizeof(int) * 30000000);
+	int * oldest = malloc(sizeof(int) * 30000000);
 
-	struct node * headOutput = createKeyedList(&turn, &input[0], sizeof(int), sizeof(int));
-	//printf("Created head output %d, %d", *(int *)headOutput->key, *(int *)headOutput->value);
-
-	/* insert our input to output linked list */
-	for(int i = 1; i < inputLength; i++) {
-		turn++;
-		headOutput = prependNewKeyedNode(headOutput, &turn, &input[i], sizeof(int), sizeof(int));
+	//intialize values
+	for(int i = 0; i < 30000000; i++) {
+		latest[i] = -1;
+		oldest[i] = -1;
+	}
+	for(int i = 0; i < inputLength; i++) {
+		latest[input[i]] = i;
 	}
 
-	//printf("Input took us to turn %d\n", turn);
+	//initalize next turn
+	int turn = inputLength;
+	int maxTurn = 30000000;
+	int lastValueStated = input[inputLength - 1];
 
-	turn++;											//increment turn before loop
-	while(turn < maxTurn) {
-
-		int prev = *(int *)headOutput->value;		//get previous output value
-		struct node * curr = headOutput->next;			//get previous output node
-		int newValue = 0;							//new value to add to output list
-		//printf("\nTurn %d, Checking for %d -- ", turn, prev);
-		while(curr) {
-			int val = *(int *)curr->value;					//get current nodes value
-			//printf("%d,", val);
-			if(val == prev) {
-				int lastSeen = *(int *)curr->key;			//get key of last seen value
-				//printf(" Found @ pos %d ", lastSeen);
-				newValue = turn - lastSeen - 1;					//calc difference between nodes keys
-				break;
-			}
-
-			curr = curr->next;								//go to next node
+	for(turn; turn < maxTurn; turn++) {
+		int turnDif = turn - latest[lastValueStated] - 1;
+		if(turnDif == 0) {
+			int old = oldest[lastValueStated];
+			turnDif = old == -1 ? -1 : turn - old - 1;
 		}
+		//printf("Turn %d, Looking For %d, Val @Loc %d, Dif in Turn %d\n", turn, lastValueStated, latest[lastValueStated], turnDif);
 
-		headOutput = prependNewKeyedNode(headOutput, &turn, &newValue, sizeof(int), sizeof(int));
-		//printf(" ====> Added output %d %d\n", *(int *)headOutput->key, *(int *)headOutput->value);
-		printf("\rTurn: %d", turn);
-		turn++;							//increment turn counter
+		if(turnDif < 0) lastValueStated = 0;
+		else lastValueStated = turnDif;
+
+		//printf("\tSetting %d to turn %d\n", lastValueStated, turn);
+
+		oldest[lastValueStated] = latest[lastValueStated];
+		latest[lastValueStated] = turn;
 	}
 
-
-	//print last turns value
-	printf("\nValue at %d: %d\n", maxTurn, *(int *)headOutput->value);
+	printf("Last Value: %d\n", lastValueStated);
 }
 
 int main(int argc, char *argv[]) {
