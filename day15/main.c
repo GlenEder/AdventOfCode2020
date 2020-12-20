@@ -14,7 +14,21 @@
  * number - the last turn it was stated.
  *
  * Part 2 wants us to find the value at turn
- * 30,000,000.
+ * 30,000,000. This seemed easy at first but
+ * the method I used for part 1 is O(n^2).
+ * That's pretty scary now that we are looking
+ * at such large numbers. So I looked around at
+ * what others were doing and hashmaps were
+ * common but C does not have a hashmap library
+ * and I'm already days behind now so I saw that
+ * others used some big boy arrays.
+ *
+ * After today's challenge, I can say that I
+ * will be much more aware of the optimization
+ * of my algorithms. Such a simple problem tanked
+ * my computer because of an O(n^2) solution.
+ * Never again will I let this happen
+ * 				-Glen, Probably
  */
 
 
@@ -61,41 +75,44 @@ void part1() {
 
 void part2() {
 
-	int * latest = malloc(sizeof(int) * 30000000);
-	int * oldest = malloc(sizeof(int) * 30000000);
+	int * latest = malloc(sizeof(int) * 30000000);				//array that holds the last spoken turn of a value
+	int * oldest = malloc(sizeof(int) * 30000000);				//array that holds the next oldest turn of a value
 
-	//intialize values
+	//intialize values to -1
 	for(int i = 0; i < 30000000; i++) {
 		latest[i] = -1;
 		oldest[i] = -1;
 	}
+
+	//initalize input
 	for(int i = 0; i < inputLength; i++) {
-		latest[input[i]] = i;
+		latest[input[i]] = i;						//sets array[value] to turn number
 	}
 
 	//initalize next turn
-	int turn = inputLength;
-	int maxTurn = 30000000;
-	int lastValueStated = input[inputLength - 1];
+	int turn = inputLength;							//adjust turn counter for input
+	int maxTurn = 30000000;							//max turns
+	int lastValueStated = input[inputLength - 1];	//last value stated
 
+	//loop through number of turns desired
 	for(turn; turn < maxTurn; turn++) {
-		int turnDif = turn - latest[lastValueStated] - 1;
-		if(turnDif == 0) {
-			int old = oldest[lastValueStated];
-			turnDif = old == -1 ? -1 : turn - old - 1;
+		int turnDif = turn - latest[lastValueStated] - 1;				//calculate turn diff
+		if(turnDif == 0) {												//if 0, check for older location
+			int old = oldest[lastValueStated];							//get older location
+			turnDif = old == -1 ? -1 : turn - old - 1;					//calc turn diff, set to -1 if new number
 		}
 		//printf("Turn %d, Looking For %d, Val @Loc %d, Dif in Turn %d\n", turn, lastValueStated, latest[lastValueStated], turnDif);
 
-		if(turnDif < 0) lastValueStated = 0;
-		else lastValueStated = turnDif;
+		if(turnDif < 0) lastValueStated = 0;							//set 0 if new number is stated
+		else lastValueStated = turnDif;									//set new value to turn diff
 
 		//printf("\tSetting %d to turn %d\n", lastValueStated, turn);
 
-		oldest[lastValueStated] = latest[lastValueStated];
-		latest[lastValueStated] = turn;
+		oldest[lastValueStated] = latest[lastValueStated];				//update oldest location
+		latest[lastValueStated] = turn;									//update latest location
 	}
 
-	printf("Last Value: %d\n", lastValueStated);
+	printf("Last Value: %d\n", lastValueStated);					//print the last value stated for our output
 }
 
 int main(int argc, char *argv[]) {
