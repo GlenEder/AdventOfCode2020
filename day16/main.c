@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../utils/util.h"
 
 /*
@@ -11,6 +12,17 @@
  * the invalid numbers in the tickets.
  */
 
+int isValidNumber(int number, struct node * firstRange) {
+
+	while(firstRange) {
+		if(number >= *(int *)firstRange->key && number <= *(int *)firstRange->value) {
+			firstRange = firstRange->next;
+		}
+		else return FALSE;
+	}
+
+	return TRUE;
+}
 
 struct node * addRange(char * inputSegment, struct node * firstRange) {
 
@@ -57,14 +69,34 @@ void part1() {
 		curr = curr->next;																			//go to next input node
 	}
 
-	/* print list for debugging */
-	struct node * currRange = firstRange;
+	//print list for debugging
+/*	struct node * currRange = firstRange;
 	while(currRange) {
 		printf("Range: %d - %d\n", *(int *)currRange->key, *(int *)currRange->value);
 		currRange = currRange->next;
 	}
+*/
+
+	/* Get to nearby tickets to check */
+	while(*curr->value != 'n') { curr = curr->next; }			//skip to line 'nearby tickets'
+	curr = curr->next;											//to to next to start checking the first ticket
+
+	/* loop through tickets and check for bad values */
+	int sumOfBadNums = 0;
+	while(curr) {
+
+		char * token = strtok(curr->value, ",");
+		while(token) {
+			int number = atoi(token);
+			if(!isValidNumber(number, firstRange)) { sumOfBadNums += number; }
+			token = strtok(NULL, ",");
+		}
 
 
+		curr = curr->next;
+	}
+
+	printf("Sum of bad values: %d\n", sumOfBadNums);
 	deleteList(firstRange);																			//free list memory
 }
 
