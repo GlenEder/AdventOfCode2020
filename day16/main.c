@@ -25,7 +25,15 @@ void part1() {
 		int firstLower = atoi(fNumString);										//int rep of substring value
 		free(fNumString);														//free substring memory
 
-		printf("Number %d\n", firstLower);
+		int sNumIndex = indexOfNumber(curr->value, fDiv);
+		int sEnd = indexOfChar(curr->value, ' ', sNumIndex);
+		char * sNumString = positionsSubstring(curr->value, sNumIndex, sEnd);
+
+		int secLower = atoi(sNumString);
+		free(sNumString);
+
+
+		printf("Numbers %d - %d\n", firstLower, secLower);
 
 
 		curr = curr->next;														//go to next input node
