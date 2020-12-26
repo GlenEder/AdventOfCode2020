@@ -3,10 +3,23 @@
 #include "../utils/util.h"
 
 /*
- * 
+ * For day 16 we are at first checking for
+ * invalid numbers on our tickets. The ranges
+ * for valid inputs are contained in the first
+ * segment of the input file. Ignoring our
+ * ticket, we are to find the sum of of all
+ * the invalid numbers in the tickets.
  */
 
 void part1() {
+
+	struct input * curr = inputList;
+
+	/* get ranges from input file */
+	while(strcompare(curr->value, "\n")) {
+		printf("%s", curr->value);
+		curr = curr->next;
+	}
 
 }
 
