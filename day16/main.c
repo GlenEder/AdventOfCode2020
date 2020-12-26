@@ -12,9 +12,13 @@
  * the invalid numbers in the tickets.
  */
 
+
+//Checks if the number is within a range
+//@param number -- value to check
+//@param firstRange -- first range node in ranges list
+//
+//@return TRUE if valid, FALSE otherwise
 int isValidNumber(int number, struct node * firstRange) {
-
-
 
 	while(firstRange) {
 		if(number >= *(int *)firstRange->key && number <= *(int *)firstRange->value)
@@ -25,6 +29,12 @@ int isValidNumber(int number, struct node * firstRange) {
 	return FALSE;
 }
 
+
+//Adds range to ranges list given the input string
+//@param inputSegment -- string to find range in
+//@param firstRange -- pointer to head of range list
+//
+//@return pointer to head of updated range list
 struct node * addRange(char * inputSegment, struct node * firstRange) {
 
 	int fNumIndex = indexOfNumber(inputSegment, 0);							//get index of first number in string
