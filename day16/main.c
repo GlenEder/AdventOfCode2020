@@ -14,14 +14,15 @@
 
 int isValidNumber(int number, struct node * firstRange) {
 
+
+
 	while(firstRange) {
-		if(number >= *(int *)firstRange->key && number <= *(int *)firstRange->value) {
-			firstRange = firstRange->next;
-		}
-		else return FALSE;
+		if(number >= *(int *)firstRange->key && number <= *(int *)firstRange->value)
+			return TRUE;
+		firstRange = firstRange->next;
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 struct node * addRange(char * inputSegment, struct node * firstRange) {
