@@ -18,13 +18,17 @@ void part1() {
 	/* get ranges from input file */
 	while(strcompare(curr->value, "\n")) {
 
-		int fNumIndex = indexOfNumber(curr->value, 0);
-		int fDiv = indexOfChar(curr->value, '-', fNumIndex);
-		char * fNumString = positionsSubstring(curr->value, fNumIndex, fDiv);
+		int fNumIndex = indexOfNumber(curr->value, 0);							//get index of first number in string
+		int fDiv = indexOfChar(curr->value, '-', fNumIndex);					//get index of first '-'
+		char * fNumString = positionsSubstring(curr->value, fNumIndex, fDiv);	//get substring of lower value
 
-		printf("%s\n", fNumString);
+		int firstLower = atoi(fNumString);										//int rep of substring value
+		free(fNumString);														//free substring memory
 
-		curr = curr->next;
+		printf("Number %d\n", firstLower);
+
+
+		curr = curr->next;														//go to next input node
 	}
 
 }
