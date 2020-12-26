@@ -105,6 +105,18 @@ char * substring(char * string, int start, int length) {
 	return toReturn;
 }
 
+//Returns pointer to c string that is substring of provided string
+//@param string -- pointer to character array to get substring of
+//@param start -- index of array to start at
+//@param end -- position of end  of substring
+//
+//@return pointer to desired substring
+char * positionsSubstring(char * string, int start, int end) {
+	int length = end - start;										//calc length to use legacy substring method
+	if(length < 0) return NULL;										//error check on length
+	return substring(string, start, length);						//call legacy substring method
+}
+
 //Returns index of character in string 
 //@param string -- string to look in 
 //@param toFind -- character looking for 
@@ -165,18 +177,17 @@ int strcompare(char * s1, char * s2) {
 //@return index of first number occurrence in string, -1 if none found
 int indexOfNumber(char * s, int start) {
 
-	s = s + start;
-	int pos = start;
+	s = s + start;							//start position to look at
+	int pos = start;						//position tracker
 	while(*s) {
-		if(*s < '0' || *s > '9') {
-			pos++;
-			s++;
-			continue;
+		if(*s < '0' || *s > '9') {			//check if not number
+			pos++;							//increase position tracker
+			s++;							//go to next char
 		}
-		else return pos;
+		else return pos;					//return position of number
 	}
 
-	return -1;
+	return -1;								//no number found, signal error
 }
 
 //Creates a new node and returns pointer to node

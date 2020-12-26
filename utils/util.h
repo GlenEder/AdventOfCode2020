@@ -26,7 +26,8 @@ struct intNode {
 //Methods 
 void 	cleanup(void);
 int 	readInput(char *);
-char *	substring(char *, int, int);	
+char *	substring(char *, int, int);
+char * 	positionsSubstring(char *, int, int);
 int 	indexOfChar(char *, char, int);
 int 	strlength(char *);
 int 	strcompare(char *, char *);

@@ -17,7 +17,13 @@ void part1() {
 
 	/* get ranges from input file */
 	while(strcompare(curr->value, "\n")) {
-		printf("%s", curr->value);
+
+		int fNumIndex = indexOfNumber(curr->value, 0);
+		int fDiv = indexOfChar(curr->value, '-', fNumIndex);
+		char * fNumString = positionsSubstring(curr->value, fNumIndex, fDiv);
+
+		printf("%s\n", fNumString);
+
 		curr = curr->next;
 	}
 
