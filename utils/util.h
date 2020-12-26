@@ -30,6 +30,7 @@ char *	substring(char *, int, int);
 int 	indexOfChar(char *, char, int);
 int 	strlength(char *);
 int 	strcompare(char *, char *);
+int 	indexOfNumber(char *, int);
 int 	addIntNode(int);
 
 /* node list methods */

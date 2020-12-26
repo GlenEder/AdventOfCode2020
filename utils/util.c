@@ -158,6 +158,27 @@ int strcompare(char * s1, char * s2) {
 
 }
 
+//Finds the index of the first number in the given string after the starting value
+//@param s -- string to look in for number
+//@param start -- starting location in string to look at
+//
+//@return index of first number occurrence in string, -1 if none found
+int indexOfNumber(char * s, int start) {
+
+	s = s + start;
+	int pos = start;
+	while(*s) {
+		if(*s < '0' || *s > '9') {
+			pos++;
+			s++;
+			continue;
+		}
+		else return pos;
+	}
+
+	return -1;
+}
+
 //Creates a new node and returns pointer to node
 //@param value -- void pointer to value 
 //@param size -- size of value to store
