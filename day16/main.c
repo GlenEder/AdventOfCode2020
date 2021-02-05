@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../utils/util.h"
 
 /*
@@ -11,6 +12,9 @@
  * ticket, we are to find the sum of of all
  * the invalid numbers in the tickets.
  */
+
+
+int myTicket[] = {109,199,223,179,97,227,197,151,73,79,211,181,71,139,53,149,137,191,83,193};
 
 /* Ticket Section code was made during Part 2*/
 struct ticketSection {
@@ -64,6 +68,7 @@ void addTicketSectionData(int id, int low, int high, int isUpperRange) {
 	struct ticketSection * newSection = (struct ticketSection *)malloc(sizeof(struct ticketSection));
 	newSection->id = id;
 	newSection->validPositions = 1048575;	//decimal equal of 20 1's in binary
+	newSection->next = NULL;
 	//add range
 	if(isUpperRange) {
 		newSection->upperRange[0] = low;
@@ -106,10 +111,13 @@ int isValidNumber(int number, struct node * firstRange) {
 //Adds range to ranges list given the input string
 //@param inputSegment -- string to find range in
 //@param firstRange -- pointer to head of range list
-//@param sectionId -- id of section to add data to			/* Part 2 addition */
+
+/* Part 2 addition */
+//@param sectionId -- id of section to add data to
+//@parma isUpperRange -- if range is the upper range for the section
 //
 //@return pointer to head of updated range list
-struct node * addRange(char * inputSegment, struct node * firstRange, int sectionId) {
+struct node * addRange(char * inputSegment, struct node * firstRange, int sectionId, int isUpperRange) {
 
 	int fNumIndex = indexOfNumber(inputSegment, 0);							//get index of first number in string
 	int fDiv = indexOfChar(inputSegment, '-', fNumIndex);					//get index of first '-'
@@ -127,6 +135,9 @@ struct node * addRange(char * inputSegment, struct node * firstRange, int sectio
 	int secLower = atoi(sNumString);										//convert to int
 	free(sNumString);														//free substring memory
 
+	//Part 2
+	addTicketSectionData(sectionId, firstLower, secLower, isUpperRange);
+
 	/* Add range to ranges list */
 	if(firstRange) {
 		addNewKeyedNode(firstRange, &firstLower, &secLower, sizeof(int), sizeof(int));
@@ -140,6 +151,24 @@ struct node * addRange(char * inputSegment, struct node * firstRange, int sectio
 	return firstRange;
 }
 
+/*
+ * Checks if the number provided is valid for the section provided
+ * @param number -- number to check
+ * @param section -- section to check number against
+ *
+ * @return if number is valid in section or not
+ */
+int isValidSectionNumber(int number, struct ticketSection * section) {
+
+	if(number >= section->lowerRange[0] && number <= section->lowerRange[1]) {
+		if(number >= section->upperRange[0] && number <= section->upperRange[1]) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 void part1() {
 
 	struct input * curr = inputList;
@@ -148,10 +177,10 @@ void part1() {
 
 	/* get ranges from input file */
 	while(strcompare(curr->value, "\n")) {
-		firstRange = addRange(curr->value, firstRange, sectionCount);								//add first range
+		firstRange = addRange(curr->value, firstRange, sectionCount, FALSE);				//add first range
 		int backIndex = indexOfChar(curr->value, 'o', indexOfNumber(curr->value, 0));				//get index of o in or
 		char * secondRange = positionsSubstring(curr->value, backIndex, strlength(curr->value));	//get substring of second range
-		firstRange = addRange(secondRange, firstRange, sectionCount);								//add second range to list
+		firstRange = addRange(secondRange, firstRange, sectionCount, TRUE);							//add second range to list
 		curr = curr->next;																			//go to next input node
 		sectionCount++;																				//increment section id counter
 	}
@@ -170,21 +199,75 @@ void part1() {
 
 	/* loop through tickets and check for bad values */
 	int sumOfBadNums = 0;
+	int isValidTicket = TRUE;
 	while(curr) {
 
 		char * token = strtok(curr->value, ",");
 		while(token) {
 			int number = atoi(token);
-			if(!isValidNumber(number, firstRange)) { sumOfBadNums += number; }
+			if(!isValidNumber(number, firstRange)) {
+				sumOfBadNums += number;
+
+				//Flag as bad ticket for part 2
+				isValidTicket = FALSE;
+			}
 			token = strtok(NULL, ",");
 		}
 
+		/* Part 2 */
+		if(isValidTicket) {
+
+			char * token = strtok(curr->value, ",");
+			int column = 0;
+			while(token) {
+				int number = atoi(token);
+
+				//check for valid sections on number
+				struct ticketSection * currSection = firstTicketSection;
+				while(currSection) {
+
+					//check if number is not valid
+					if(!isValidSectionNumber(number, currSection)) {
+						//remove column from sections valid positions
+						currSection->validPositions = currSection->validPositions & (int)(pow(2, column));
+					}
+
+					//go to next section
+					currSection = currSection->next;
+					//increment column tracker
+					column++;
+				}
+
+				//go to next number in ticket
+				token = strtok(NULL, ",");
+			}
+		}
 
 		curr = curr->next;
 	}
 
 	printf("Sum of bad values: %d\n", sumOfBadNums);
-	deleteList(firstRange);																			//free list memory
+	//free list memory
+	deleteList(firstRange);
+
+	//print valid positions && calc part 2 answer
+	struct ticketSection * currSection = firstTicketSection;
+	double part2Val = 0;
+	while(currSection) {
+		printf("Section %d: %d\n", currSection->id, currSection->validPositions);
+
+		//check if valid position is departure section
+		int valPos = currSection->validPositions;
+		if(valPos & 1 || valPos & 2 || valPos & 4 || valPos & 8 || valPos & 16 || valPos & 32) {
+			if(part2Val) part2Val *= myTicket[currSection->id];
+			else part2Val = myTicket[currSection->id];
+		}
+
+		//go to next section
+		currSection = currSection->next;
+	}
+
+	printf("Part 2 Value: %f\n", part2Val);
 }
 
 int main(int argc, char *argv[]) {
