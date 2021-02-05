@@ -13,6 +13,38 @@
  */
 
 
+struct ticketSection {
+	int id;							//line number of section in input
+	int validPositions;				//using positions 0-19 for setting valid positions
+	int lowerRange[2];				//lower range of valid numbers
+	int upperRange[2];				//upper range of valid numbers
+	struct ticketSection * next;	//next section
+};
+
+struct ticketSection * firstTicketSection = NULL;
+
+void addTicketSection(int id, int lRange[2], int uRange[2]) {
+
+	struct ticketSection * newSection = (struct ticketSection *)malloc(sizeof(struct ticketSection));
+	newSection->id = id;
+	newSection->validPositions = 1048575;	//decimal equal of 20 1's in binary
+	memcpy(newSection->lowerRange, lRange, sizeof(int) * 2);
+	memcpy(newSection->upperRange, uRange, sizeof(int) * 2);
+
+	//assign first ticket
+	if(firstTicketSection == NULL) {
+		firstTicketSection = newSection;
+	}
+	else {
+		//Add to end of list
+		struct ticketSection * currSection = firstTicketSection;
+		while(currSection->next != NULL) { currSection = currSection->next; }
+		currSection->next = newSection;
+	}
+
+
+}
+
 //Checks if the number is within a range
 //@param number -- value to check
 //@param firstRange -- first range node in ranges list
@@ -111,10 +143,6 @@ void part1() {
 	deleteList(firstRange);																			//free list memory
 }
 
-void part2() {
-
-}
-
 int main(int argc, char *argv[]) {
 
 	//check program args
@@ -127,7 +155,7 @@ int main(int argc, char *argv[]) {
 	readInput(argv[1]);
 	
 	part1();
-	part2();	
+	//part2();
 
 	//free memory in input list
 	cleanup();
