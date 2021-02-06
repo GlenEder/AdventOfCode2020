@@ -35,8 +35,13 @@ int flipBit(int n, int k) {
 //Prints the bits of the number
 //@param n -- number to print
 void printBits(int n) {
-	for(int i = 0; i < sizeof(n); i++) {
-		printf("%d", n & (1 << i));
+	for(int i = 31; i >= 0; i--) {
+		if(n & (1 << i)) {
+			printf("1");
+		}
+		else {
+			printf("0");
+		}
 	}
 	printf("\n");
 }

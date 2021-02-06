@@ -254,7 +254,8 @@ void part1() {
 	struct ticketSection * currSection = firstTicketSection;
 	double part2Val = 0;
 	while(currSection) {
-		printf("Section %d: %d\n", currSection->id, currSection->validPositions);
+		printf("Section %d:\t", currSection->id);
+		printBits(currSection->validPositions);
 
 		//check if valid position is departure section
 		int valPos = currSection->validPositions;
