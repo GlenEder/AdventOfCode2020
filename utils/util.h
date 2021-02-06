@@ -27,6 +27,7 @@ struct intNode {
 int 	setBit(int, int);
 int 	clearBit(int, int);
 int 	flipBit(int, int);
+void 	printBits(int);
 void 	cleanup(void);
 int 	readInput(char *);
 char *	substring(char *, int, int);

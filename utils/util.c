@@ -32,6 +32,15 @@ int flipBit(int n, int k) {
 	return n ^ (1 << k);
 }
 
+//Prints the bits of the number
+//@param n -- number to print
+void printBits(int n) {
+	for(int i = 0; i < sizeof(n); i++) {
+		printf("%d", n & (1 << i));
+	}
+	printf("\n");
+}
+
 //Frees all memory taken in input list
 void cleanup() {
 	
