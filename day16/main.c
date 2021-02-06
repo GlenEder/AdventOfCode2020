@@ -161,9 +161,10 @@ struct node * addRange(char * inputSegment, struct node * firstRange, int sectio
 int isValidSectionNumber(int number, struct ticketSection * section) {
 
 	if(number >= section->lowerRange[0] && number <= section->lowerRange[1]) {
-		if(number >= section->upperRange[0] && number <= section->upperRange[1]) {
-			return TRUE;
-		}
+		return TRUE;
+	}
+	if(number >= section->upperRange[0] && number <= section->upperRange[1]) {
+		return TRUE;
 	}
 
 	return FALSE;
@@ -229,22 +230,43 @@ void part1() {
 					//check if number is not valid
 					if(!isValidSectionNumber(number, currSection)) {
 						//remove column from sections valid positions
+						printf("Clearing bit on section %d\n", currSection->id);
 						currSection->validPositions = clearBit(currSection->validPositions, column);
+					}
+					else {
+//						printf("Not clearing\n");
 					}
 
 					//go to next section
 					currSection = currSection->next;
-					//increment column tracker
-					column++;
 				}
 
+				//increment column tracker
+				column++;
 				//go to next number in ticket
 				token = strtok(NULL, ",");
 			}
 		}
 
+		isValidTicket = TRUE;
 		curr = curr->next;
 	}
+
+
+	/* filter on my ticket */
+	struct ticketSection * section = firstTicketSection;
+	while(section) {
+
+		for(int i = 0; i < 20; i++) {
+			if(!isValidSectionNumber(myTicket[i], section)) {
+				section->validPositions = clearBit(section->validPositions, i);
+			}
+		}
+
+		section = section->next;
+
+	}
+
 
 	printf("Sum of bad values: %d\n", sumOfBadNums);
 	//free list memory
@@ -281,7 +303,7 @@ int main(int argc, char *argv[]) {
 
 	//read the input file
 	readInput(argv[1]);
-	
+
 	part1();
 	//part2();
 
