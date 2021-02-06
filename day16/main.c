@@ -229,7 +229,7 @@ void part1() {
 					//check if number is not valid
 					if(!isValidSectionNumber(number, currSection)) {
 						//remove column from sections valid positions
-						currSection->validPositions = currSection->validPositions & (int)(pow(2, column));
+						currSection->validPositions = clearBit(currSection->validPositions, column);
 					}
 
 					//go to next section
