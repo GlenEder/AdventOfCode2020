@@ -5,6 +5,33 @@
 
 struct input * inputList = NULL;		//initalize inputList header
 
+//Sets bit at position k in number n to 1
+//@param n -- number to set bit
+//@param k -- position of bit in number to set
+//
+//@return value of n with bit k set
+int setBit(int n, int k) {
+	return n | (1 << k);
+}
+
+//Sets bit at position k to 0
+//@param n -- number to clear bit
+//@param k -- position of bit to clear
+//
+//@return value of n with bit k set to 0
+int clearBit(int n, int k) {
+	return n & ~(1 << k);
+}
+
+//Flips the bit in number at position k
+//@param n -- number to flip bit in
+//@param k -- position of bit to flip
+//
+//@return value of n with bit k flipped
+int flipBit(int n, int k) {
+	return n ^ (1 << k);
+}
+
 //Frees all memory taken in input list
 void cleanup() {
 	
