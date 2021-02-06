@@ -24,6 +24,9 @@ struct intNode {
 };	
 
 //Methods 
+int 	setBit(int, int);
+int 	clearBit(int, int);
+int 	flipBit(int, int);
 void 	cleanup(void);
 int 	readInput(char *);
 char *	substring(char *, int, int);
