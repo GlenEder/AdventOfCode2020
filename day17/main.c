@@ -28,7 +28,18 @@ void part1() {
 	//Set grid dimension based on input
 	gridDimension = strlength(inputList->value) - 1;
 
-	printf("%d\n", gridDimension);
+	//Preform boot up cycles
+	while(currentCycle++ < totalCycles) {
+
+		//check if odd cycle
+		if(currentCycle % 2) {
+
+		}
+		else {
+
+		}
+
+	}
 
 }
 
