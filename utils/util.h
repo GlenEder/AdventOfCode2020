@@ -31,8 +31,8 @@ struct coordinate {
 };
 
 struct gridItem {
-	struct coordinate * 	coordinate;			//coordinate of grid item
-	void * 					value;				//value of grid item
+	struct coordinate * coordinate;			//coordinate of grid item
+	int value;								//value of item
 };
 
 //Methods 
@@ -48,8 +48,9 @@ int 	addIntNode(int);
 
 /* coordinate/grid methods */
 struct coordinate * 	createCoordinate(int, int, int);
-struct gridItem *		createGridItem(struct coordinate *, void *, size_t);
+struct gridItem *		createGridItem(struct coordinate *, int);
 void 					printCoordinate(struct coordinate *);
+void 					printGridItem(struct gridItem *);
 
 /* node list methods */
 struct node * 	createList(void *, size_t);

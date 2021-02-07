@@ -360,10 +360,9 @@ struct coordinate * createCoordinate(int x, int y, int z) {
 //Creates a new gridItem struct in memory
 //@param cord -- coordinate struct with location of grid item
 //@param value -- value to store in grid item
-//@param valueSize -- size of item to store in gridItem
 //
 //@return pointer to new gridItem in memory
-struct gridItem * createGridItem(struct coordinate * cord, void * value, size_t valueSize)  {
+struct gridItem * createGridItem(struct coordinate * cord, int value)  {
 	//allocate memory for gridItem
 	struct gridItem * newItem = (struct gridItem *)malloc(sizeof(struct gridItem));
 	//error check on malloc
@@ -371,21 +370,24 @@ struct gridItem * createGridItem(struct coordinate * cord, void * value, size_t 
 
 	//set values
 	newItem->coordinate = cord;
-	newItem->value = malloc(valueSize);
-	//malloc error check
-	if(newItem->value == NULL) return NULL;
-	//copy value data
-	memcpy(newItem->value, value, valueSize);
+	newItem->value = value;
+
 
 	//return pointer to new gridItem
 	return newItem;
-
 }
 
 //Prints the coordinate to stdout
 //@param cord -- coordinate to print
 void printCoordinate(struct coordinate * cord) {
 	printf("(%d, %d, %d)\n", cord->x, cord->y, cord->z);
+}
+
+//Prints the data in the grid item
+//@param item -- grid item to print data
+void printGridItem(struct gridItem * item) {
+	printf("Val: %d, Coordinate: ", item->value);
+	printCoordinate(item->coordinate);
 }
 
 

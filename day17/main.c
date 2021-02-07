@@ -40,15 +40,15 @@ void part1() {
 			//set active value based on input
 			int active = *c == '#' ? 1 : 0;
 			//create grid item with coordinate and active value
-			struct gridItem * item = createGridItem(cord, &active, sizeof(int));
+			struct gridItem * item = createGridItem(cord, active);
 
 			//add to cords list
 			if(cords) {
-				addNewNode(cords, item, sizeof(item));
+				struct node * newNode = addNewNode(cords, item, sizeof(struct gridItem));
 			}
 			//create first node in list
 			else {
-				cords = createList(item, sizeof(item));
+				cords = createList(item, sizeof(struct gridItem));
 			}
 
 			//increase x
@@ -64,15 +64,11 @@ void part1() {
 		currInput = currInput->next;
 	}
 
-	//print cords for debugging
-	struct node * currCord = cords;
-	while(currCord) {
-		struct gridItem * currItem = (struct gridItem *)currCord->value;
-		printf("%d -- ", *(int *)currItem->value);
-		printCoordinate(currItem->coordinate);
-		currCord = currCord->next;
+	struct node * currNode = cords;
+	while(currNode) {
+		printGridItem(currNode->value);
+		currNode = currNode->next;
 	}
-
 
 	//Preform boot up cycles
 	while(currentCycle++ < totalCycles) {
