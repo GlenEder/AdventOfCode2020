@@ -17,15 +17,8 @@ const int totalCycles = 6;
 int currentCycle = 0;
 //current number of z layers
 int numberOfLayers = 1;
-//current dimension (set based on input)
-int gridDimension = 0;
-
-
 
 void part1() {
-
-	//Set grid dimension based on input
-	gridDimension = strlength(inputList->value) - 1;
 
 	//Preform boot up cycles
 	while(currentCycle++ < totalCycles) {

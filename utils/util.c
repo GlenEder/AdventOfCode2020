@@ -347,6 +347,7 @@ struct coordinate * createCoordinate(int x, int y, int z) {
 
 	//allocate memory for coordinate struct
 	struct coordinate * cord = (struct coordinate *)malloc(sizeof(struct coordinate));
+	if(cord == NULL) return NULL;
 	//set coordinate values
 	cord->x = x;
 	cord->y = y;
