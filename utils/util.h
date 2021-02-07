@@ -49,6 +49,7 @@ int 	addIntNode(int);
 /* coordinate/grid methods */
 struct coordinate * 	createCoordinate(int, int, int);
 struct gridItem *		createGridItem(struct coordinate *, void *, size_t);
+void 					printCoordinate(struct coordinate *);
 
 /* node list methods */
 struct node * 	createList(void *, size_t);

@@ -20,6 +20,60 @@ int numberOfLayers = 1;
 
 void part1() {
 
+	//list of grid items
+	struct node * cords = NULL;
+
+	//x and y trackers for creating cords
+	int x = 0;
+	int y = 0;
+
+	//read input data in
+	struct input * currInput = inputList;
+	while(currInput) {
+
+		//get first character in input line
+		char * c = currInput->value;
+		//loop till hit end of line
+		while(*c) {
+			if(*c == '\n') break;
+			struct coordinate * cord = createCoordinate(x, y, 0);
+			//set active value based on input
+			int active = *c == '#' ? 1 : 0;
+			//create grid item with coordinate and active value
+			struct gridItem * item = createGridItem(cord, &active, sizeof(int));
+
+			//add to cords list
+			if(cords) {
+				addNewNode(cords, item, sizeof(item));
+			}
+			//create first node in list
+			else {
+				cords = createList(item, sizeof(item));
+			}
+
+			//increase x
+			x++;
+			//go to next char
+			c++;
+		}
+		//reset x value and increase y value
+		x = 0;
+		y++;
+
+		//go to next input line
+		currInput = currInput->next;
+	}
+
+	//print cords for debugging
+	struct node * currCord = cords;
+	while(currCord) {
+		struct gridItem * currItem = (struct gridItem *)currCord->value;
+		printf("%d -- ", *(int *)currItem->value);
+		printCoordinate(currItem->coordinate);
+		currCord = currCord->next;
+	}
+
+
 	//Preform boot up cycles
 	while(currentCycle++ < totalCycles) {
 

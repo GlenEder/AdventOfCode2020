@@ -382,7 +382,11 @@ struct gridItem * createGridItem(struct coordinate * cord, void * value, size_t 
 
 }
 
-
+//Prints the coordinate to stdout
+//@param cord -- coordinate to print
+void printCoordinate(struct coordinate * cord) {
+	printf("(%d, %d, %d)\n", cord->x, cord->y, cord->z);
+}
 
 
 
