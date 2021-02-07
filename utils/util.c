@@ -337,9 +337,24 @@ void deleteList(struct node * list) {
 	}
 }
 
+//Creates coordinate struct in memory
+//@param x -- x axis value
+//@param y -- y axis value
+//@param z -- z axis value
+//
+//@return pointer to new coordinate
+struct coordinate * createCoordinate(int x, int y, int z) {
 
+	//allocate memory for coordinate struct
+	struct coordinate * cord = (struct coordinate *)malloc(sizeof(struct coordinate));
+	//set coordinate values
+	cord->x = x;
+	cord->y = y;
+	cord->z = z;
 
-
+	//return pointer to coordinate
+	return cord;
+}
 
 
 

@@ -21,7 +21,14 @@ struct node {
 struct intNode {
 	int  value;		//value of node
 	struct intNode * next;	//next node in list  
-};	
+};
+
+//3 dimension coordinate struct
+struct coordinate {
+	int x;			//x axis value
+	int y;			//y axis value
+	int z;			//z axis value
+};
 
 //Methods 
 void 	cleanup(void);
@@ -33,6 +40,9 @@ int 	strlength(char *);
 int 	strcompare(char *, char *);
 int 	indexOfNumber(char *, int);
 int 	addIntNode(int);
+
+/* coordinate methods */
+struct coordinate * 	createCoordinate(int, int, int);
 
 /* node list methods */
 struct node * 	createList(void *, size_t);

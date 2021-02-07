@@ -13,15 +13,14 @@
 
 //Total number of cycles to go through
 const int totalCycles = 6;
-
 //Current cycle tracker
 int currentCycle = 0;
-
 //current number of z layers
 int numberOfLayers = 1;
-
 //current dimension (set based on input)
 int gridDimension = 0;
+
+
 
 void part1() {
 
@@ -33,9 +32,12 @@ void part1() {
 
 		//check if odd cycle
 		if(currentCycle % 2) {
+			//odd cycle increases in z direction
+
 
 		}
 		else {
+			//even cycle increases grid dimension
 
 		}
 
