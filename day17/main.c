@@ -64,11 +64,12 @@ void part1() {
 		currInput = currInput->next;
 	}
 
-	struct node * currNode = cords;
-	while(currNode) {
-		printGridItem(currNode->value);
-		currNode = currNode->next;
-	}
+
+//	struct node * currNode = cords;
+//	while(currNode) {
+//		printGridItem(currNode->value);
+//		currNode = currNode->next;
+//	}
 
 	//Preform boot up cycles
 	while(currentCycle++ < totalCycles) {
