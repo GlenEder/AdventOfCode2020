@@ -11,11 +11,24 @@
  * six cycles of this boot cycle.
  */
 
+//Total number of cycles to go through
+const int totalCycles = 6;
 
+//Current cycle tracker
+int currentCycle = 0;
+
+//current number of z layers
+int numberOfLayers = 1;
+
+//current dimension (set based on input)
+int gridDimension = 0;
 
 void part1() {
 
+	//Set grid dimension based on input
+	gridDimension = strlength(inputList->value) - 1;
 
+	printf("%d\n", gridDimension);
 
 }
 
