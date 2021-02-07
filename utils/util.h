@@ -30,6 +30,11 @@ struct coordinate {
 	int z;			//z axis value
 };
 
+struct gridItem {
+	struct coordinate * 	coordinate;			//coordinate of grid item
+	void * 					value;				//value of grid item
+};
+
 //Methods 
 void 	cleanup(void);
 int 	readInput(char *);
@@ -41,8 +46,9 @@ int 	strcompare(char *, char *);
 int 	indexOfNumber(char *, int);
 int 	addIntNode(int);
 
-/* coordinate methods */
+/* coordinate/grid methods */
 struct coordinate * 	createCoordinate(int, int, int);
+struct gridItem *		createGridItem(struct coordinate *, void *, size_t);
 
 /* node list methods */
 struct node * 	createList(void *, size_t);

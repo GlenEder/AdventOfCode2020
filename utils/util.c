@@ -357,7 +357,30 @@ struct coordinate * createCoordinate(int x, int y, int z) {
 	return cord;
 }
 
+//Creates a new gridItem struct in memory
+//@param cord -- coordinate struct with location of grid item
+//@param value -- value to store in grid item
+//@param valueSize -- size of item to store in gridItem
+//
+//@return pointer to new gridItem in memory
+struct gridItem * createGridItem(struct coordinate * cord, void * value, size_t valueSize)  {
+	//allocate memory for gridItem
+	struct gridItem * newItem = (struct gridItem *)malloc(sizeof(struct gridItem));
+	//error check on malloc
+	if(newItem == NULL) return NULL;
 
+	//set values
+	newItem->coordinate = cord;
+	newItem->value = malloc(valueSize);
+	//malloc error check
+	if(newItem->value == NULL) return NULL;
+	//copy value data
+	memcpy(newItem->value, value, valueSize);
+
+	//return pointer to new gridItem
+	return newItem;
+
+}
 
 
 
