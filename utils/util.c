@@ -14,7 +14,8 @@ void cleanup() {
 		free(toFree->value);			//free value memory 
 		free(toFree);				//free nodes memory 
 	}
-	
+
+    inputList = NULL;
 }
 
 //Creates new input node and adds to end of input list
@@ -71,19 +72,40 @@ int readInput(char * inputfile) {
 
 	//printf("File <%s> opened\n", inputfile);
 	
-	char * line;					//current line being read from file
+	char * line = NULL;					//current line being read from file
 	size_t length = 0;				//holds address of variable that holds input buffer size	 	
 	ssize_t lLength = 0;				//size of input
 
 	//read file line by line 
 	while((lLength = getline(&line, &length, fp)) != -1) {
-		//printf("Read line(%ld): %s", lLength, line);	//print read line for debugging		
+		//printf("Read line(%ld): %s", lLength, line);	//print read line for debugging
 		addInputToList(line, lLength);
 	} 	
 	
-	free(line);			//free memory 
+	free(line);			//free memory
 	fclose(fp);			//close file reader
 	return 1;			//return success signal 
+}
+
+//Prints input list to console
+void printInput() {
+    printf("===Input===\n");
+    struct input * curr = inputList;
+    while(curr) {
+        printf("%s\n", curr->value);
+        curr = curr->next;
+    }
+}
+
+//Creates a copy of string in memory
+//@param string -- string to copy
+//
+//@return pointer to new string
+char * copyString(char * string) {
+    int length = strlength(string);
+    char * copy = (char *)calloc(length + 1, sizeof(char *));
+    memcpy(copy, string, length);
+    return copy;
 }
 
 //Returns pointer to c string that is substring of provided string 
@@ -325,7 +347,21 @@ struct node * removeFirstNode(struct node * head) {
 	return toReturn;							//return new heads pointer
 }
 
-//Frees memory of all nodes in providied list 
+//Finds the length of the provided linked list
+//@param start -- node to start counting from
+//
+//@return length of list from head
+int lengthOfList(struct node * start) {
+    if(start == NULL) return 0;             //NULL check
+    int l = 0;                              //length counter
+    while(start) {                          //loop through node list
+        l++;
+        start = start->next;
+    }
+    return l;                               //return length
+}
+
+//Frees memory of all nodes in provided list
 //@param list -- first node to delete in list
 void deleteList(struct node * list) {
 	while(list) {
@@ -338,12 +374,120 @@ void deleteList(struct node * list) {
 }
 
 
+// Function to set the kth bit of n to 1
+//@param n -- number to shift bit in
+//@param k -- position in number to set bit
+//
+//@return resulting number with bit set
+int setBit(int n, int k) {
+    return (n | (1 << k));
+}
 
+// Function to set the kth bit of n to 0
+//@param n -- number to shift bit in
+//@param k -- position in number to set bit
+//
+//@return resulting number with bit set to 0
+int clearBit(int n, int k) {
+    return (n & (~(1 << k)));
+}
 
+// Function to set the kth bit of n to 1
+//@param n -- number to toggle bit in
+//@param k -- position in number to set bit
+//
+//@return resulting number with bit flipped
+int toggleBit(int n, int k) {
+    return (n ^ (1 << k));
+}
 
+//Finds the bit in the kth spot to return
+//@param n -- number to search in
+//@param k -- position in number
+//
+//@return the bit at the kth position
+int getBit(int n, int k) {
+    return (n & (1 << k));
+}
 
+//Counts number of bits in n that are set to 1
+//@param n -- number to check
+//
+//@return number of bits set to 1 in n
+int countSetBits(int n) {
+    //counter for set bits
+    int count = 0;
+    //loop through number till no 1's remain
+    for(int i = 0; i < 32; i++) {
+        if(n & 1) count++;
+        n >>= 1;
+    }
+    return count;
+}
 
+//Returns the position of the first bit found from the left
+//@param n -- number to check
+//
+//@return position of bit in number
+int getFirstBitPos(int n) {
+    //counter for set bits
+    int count = 0;
+    //loop through number till no 1's remain
+    for(int i = 0; i < 32; i++) {
+        if(!(n & 1)) count++;
+        else return count;
+        n >>= 1;
+    }
+    // number had no bits set
+    return -1;
+}
 
+//Creates binary string of the number in memory
+//@param n -- number to convert to binary
+//
+//@return pointer to string in memory
+char * toBinaryString(int n) {
+    //calc size of string
+    int buffer_size = sizeof(n) * 8 + 1;
+    //get memory for string
+    char * buffer = (char *)calloc(buffer_size, sizeof(char));
+    //error check on malloc
+    if(buffer == NULL) return NULL;
+    //loop through int printing bits to buffer
+    for (int i = 31; i >= 0; i--) {
+        buffer[i] = (n & 1) + '0';
+        n >>= 1;
+    }
+    //return pointer to string
+    return buffer;
+}
+
+//Puts the binary rep of n into buffer
+//@param buffer -- buffer of size 33 min
+//@param n -- number to convert to binary
+void setBinaryString(char * buffer, int n) {
+    if(buffer == NULL) return;
+    //loop through int printing bits to buffer
+    for (int i = 31; i >= 0; i--) {
+        buffer[i] = (n & 1) + '0';
+        n >>= 1;
+    }
+}
+
+//Sets terminal output to red
+void red() {
+    printf("\033[1;31m");
+}
+
+//Sets terminal output to yellow
+void green() {
+    printf("\033[1;32m");
+}
+
+//Resets terminal output color
+void reset () {
+    printf("\033[0m");
+}
 
 
 

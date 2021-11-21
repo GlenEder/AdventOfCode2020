@@ -26,6 +26,8 @@ struct intNode {
 //Methods 
 void 	cleanup(void);
 int 	readInput(char *);
+void    printInput(void);
+char *  copyString(char *);
 char *	substring(char *, int, int);
 char * 	positionsSubstring(char *, int, int);
 int 	indexOfChar(char *, char, int);
@@ -42,7 +44,23 @@ struct node * 	addNewKeyedNode(struct node *, void *, void *, size_t, size_t);
 struct node * 	prependNewNode(struct node *, void *, size_t);
 struct node * 	prependNewKeyedNode(struct node *, void *, void *, size_t, size_t);
 struct node * 	removeFirstNode(struct node *);
+int             lengthOfList(struct node *);
 void 			deleteList(struct node *);
+
+/* Bit Shifting Methods */
+int     setBit(int, int);
+int     clearBit(int, int);
+int     toggleBit(int, int);
+int     getBit(int, int);
+int     countSetBits(int);
+int     getFirstBitPos(int);
+char *  toBinaryString(int);
+void    setBinaryString(char *, int);
+
+/* Color Printing */
+void    red();
+void    green();
+void    reset();
 
 //Global Variables
 extern struct input * inputList; 
